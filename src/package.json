@@ -6,10 +6,13 @@
     "npm": "^7.20.6"
   },
   "scripts": {
-    "build": "npm run --ws build",
+    "build": "npm run build-server && npm run build-web",
+    "build-server": "npm run -w server build",
+    "build-web": "npx web-build -o dist -t \"PorkBelly CRM\"",
     "start": "npm start -w server"
   },
   "workspaces": [
-    "server"
+    "server",
+    "web"
   ]
 }
