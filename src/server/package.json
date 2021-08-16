@@ -1,0 +1,11 @@
+{
+  "name": "@porkbellypro/crm-server",
+  "scripts": {
+    "build": "tsc -p src",
+    "start": "node ./build/start.js"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "typescript": "^4.3.5"
+  }
+}

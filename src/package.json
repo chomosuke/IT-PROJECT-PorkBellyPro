@@ -1,0 +1,15 @@
+{
+  "name": "@porkbellypro/crm",
+  "private": true,
+  "engines": {
+    "node": "^14.17.5",
+    "npm": "^7.20.6"
+  },
+  "scripts": {
+    "build": "npm run --ws build",
+    "start": "npm start -w server"
+  },
+  "workspaces": [
+    "server"
+  ]
+}
