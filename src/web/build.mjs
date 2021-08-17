@@ -49,7 +49,8 @@ webpack({
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: args.title
+      title: args.title,
+      template: src('index.ejs')
     })
   ]
 }, /** @param err {any} */(err, stats) => {

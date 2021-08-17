@@ -1,4 +1,8 @@
+import { initializeIcons } from '@fluentui/react';
 import React from 'react';
 import { render } from 'react-dom';
+import { App } from './App';
 
-render(<p>Hello world!</p>, document.body);
+initializeIcons();
+
+render(<App />, document.getElementById('app-root'));
