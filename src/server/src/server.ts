@@ -4,8 +4,8 @@ import { resolve } from 'path';
 import { env } from 'process';
 
 interface IArgs {
-    dist: string;
-    port: number;
+  dist: string;
+  port: number;
 }
 
 const parser = new ArgumentParser();

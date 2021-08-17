@@ -9,6 +9,7 @@
     "build": "npm run build-server && npm run build-web",
     "build-server": "npm run -w server build",
     "build-web": "npx web-build -o dist -t \"PorkBelly CRM\"",
+    "lint": "npm run --ws lint",
     "start": "npx server -d dist"
   },
   "workspaces": [
