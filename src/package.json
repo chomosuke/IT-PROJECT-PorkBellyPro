@@ -14,10 +14,10 @@
   "scripts": {
     "build": "npm run build-server && npm run build-web",
     "build-server": "npm run -w server build",
-    "build-web": "npx web-build -o dist -t \"PorkBelly CRM\"",
+    "build-web": "web-build -o dist -t \"PorkBelly CRM\"",
     "lint": "npm run --ws lint",
     "postinstall": "node-git-hooks",
-    "start": "npx server -d dist"
+    "start": "server -d dist"
   },
   "workspaces": [
     "server",
