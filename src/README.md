@@ -25,3 +25,17 @@ This subdirectory holds the source code for our CRM.
   ```
   npm start -- -c mongodb://... -p <port>
   ```
+
+## Contributing
+This codebase has a linter set up to automatically run upon Git commit.
+If your code fails to commit and you see a line like
+```
+npm ERR! Lifecycle script `lint:nofix` failed with error: 
+```
+in your console, this means the linter spotted code style errors.
+Fix them before committing your changes.
+Small errors may be automatically fixable with
+```
+npm run lint
+```
+so try that first.
