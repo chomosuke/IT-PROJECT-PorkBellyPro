@@ -2,6 +2,7 @@ import { ArgumentParser } from 'argparse';
 import express from 'express';
 import { resolve } from 'path';
 import { env } from 'process';
+import { ApiRouter } from './api/api-router';
 
 interface IArgs {
   dist: string;
@@ -16,7 +17,9 @@ const { dist: distPath, port } = parser.parse_args() as IArgs;
 
 const app = express();
 const dist = express.static(resolve(distPath));
+const apiRouter = new ApiRouter();
 
+app.use('/api', apiRouter.router);
 app.use(dist);
 
 console.log(`Listening on port ${port}...`);
