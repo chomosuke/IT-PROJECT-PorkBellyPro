@@ -19,7 +19,7 @@ const buttonStyles: IButtonStyles = {
   },
 };
 
-export const App: React.VoidFunctionComponent = () => {
+export const App: React.VoidFunctionComponent = function App() {
   const { divStyles, iconStyles } = getClassName();
   return (
     <RootFrame>
