@@ -19,9 +19,9 @@ This subdirectory holds the source code for our CRM.
 ## Running
 - With default port 80
   ```
-  npm start
+  npm start -- -c mongodb://...
   ```
 - With a specific port
   ```
-  npm start -- -p <port>
+  npm start -- -c mongodb://... -p <port>
   ```
