@@ -16,6 +16,7 @@
     "build-server": "npm run -w server build",
     "build-web": "web-build -o dist -t \"PorkBelly CRM\"",
     "lint": "npm run --ws lint",
+    "lint:nofix": "npm run --ws lint:nofix",
     "postinstall": "node-git-hooks",
     "start": "server -d dist"
   },

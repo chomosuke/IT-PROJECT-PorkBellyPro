@@ -5,7 +5,8 @@
   },
   "scripts": {
     "build": "node ./build.mjs",
-    "lint": "eslint src --ext .ts,.tsx --fix"
+    "lint": "eslint src --ext .ts,.tsx --fix",
+    "lint:nofix": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
     "@fluentui/react": "^8.28.2",
