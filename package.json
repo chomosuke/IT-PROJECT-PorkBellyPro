@@ -8,9 +8,6 @@
     "node": ">=14.17",
     "npm": ">=7.20"
   },
-  "node-git-hooks": {
-    "repo-path": "../"
-  },
   "scripts": {
     "build": "npm run build-server && npm run build-web",
     "build-server": "npm run -w server build",

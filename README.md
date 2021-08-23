@@ -1,12 +1,41 @@
-# IT-PROJECT-PorkBellyProooo
+# Source code
+This subdirectory holds the source code for our CRM.
 
-We need to do some stuff:<br>
-- decide on our workflow (i.e. all the pull request, branches and stuff, some of our member (such as me), needs to be briefed on how pull request work).<br>
-- We'll decide on our tech stack once client give us the requirement.<br>
-- After that we should also decide on different roles if people want to be in charge of one single thing.<br>
+## Building
+- Clone the repository
+  ```
+  git clone https://github.com/chomosuke/IT-PROJECT-PorkBellyPro.git
+  cd IT-PROJECT-PorkBellyPro
+  ```
+- Install dependencies
+  ```
+  npm install
+  ```
+- Build monorepo
+  ```
+  npm run build
+  ```
 
-## Roles and Responsibilities
+## Running
+- With default port 80
+  ```
+  npm start -- -c mongodb://...
+  ```
+- With a specific port
+  ```
+  npm start -- -c mongodb://... -p <port>
+  ```
 
-|Role|Responsibilities|Person|
-|:-|-|-|
-|Project MGR|Represent team, leading meeting etc|Richard|
+## Contributing
+This codebase has a linter set up to automatically run upon Git commit.
+If your code fails to commit and you see a line like
+```
+npm ERR! Lifecycle script `lint:nofix` failed with error: 
+```
+in your console, this means the linter spotted code style errors.
+Fix them before committing your changes.
+Small errors may be automatically fixable with
+```
+npm run lint
+```
+so try that first.
