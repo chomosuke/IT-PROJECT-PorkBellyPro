@@ -1,0 +1,27 @@
+{
+  "name": "@porkbellypro/crm",
+  "private": true,
+  "devDependencies": {
+    "node-git-hooks": "^1.0.6"
+  },
+  "engines": {
+    "node": ">14.17",
+    "npm": ">7.20"
+  },
+  "node-git-hooks": {
+    "repo-path": "../"
+  },
+  "scripts": {
+    "build": "npm run build-server && npm run build-web",
+    "build-server": "npm run -w server build",
+    "build-web": "web-build -o dist -t \"PorkBelly CRM\"",
+    "lint": "npm run --ws lint",
+    "lint:nofix": "npm run --ws lint:nofix",
+    "postinstall": "node-git-hooks",
+    "start": "server -d dist"
+  },
+  "workspaces": [
+    "server",
+    "web"
+  ]
+}
