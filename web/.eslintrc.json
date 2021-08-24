@@ -21,6 +21,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "@typescript-eslint/member-delimiter-style": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
