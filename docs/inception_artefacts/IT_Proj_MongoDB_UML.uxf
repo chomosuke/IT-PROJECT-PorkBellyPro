@@ -1,0 +1,59 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;10&lt;/x&gt;&lt;y&gt;10&lt;/y&gt;&lt;w&gt;220&lt;/w&gt;&lt;h&gt;50&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=-
+m1=1
+m2=0..*
+own &amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;20;200;20&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;10&lt;/x&gt;&lt;y&gt;10&lt;/y&gt;&lt;w&gt;220&lt;/w&gt;&lt;h&gt;50&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=-
+m1=1
+m2=0..*
+own &amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;20;200;20&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>70</x><y>200</y><w>380</w><h>190</h></coordinates><panel_attributes>&lt;&lt;User&gt;&gt;
+--
+-UserId: String
+-Password: String
+-Setting: Setting
+-Cards: {BusinessCard}
+-Tags: {Tag}
+--
+
+--
+Responsibilities
+*- Storing user information and user's business cards*
+- Handle card search function
+- Handle tags management
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>200</y><w>380</w><h>250</h></coordinates><panel_attributes>&lt;&lt;BusinessCard&gt;&gt;
+--
+-CardId: String
+-Favourite: Bool
+-Picture: String
+-Name: String
+-PhoneNum: String
+-EMail: String
+-JobTitle: String
+-Company: String
+-Tags: {ObjectId}
+-Notes: String
+--
+
+--
+Responsibilities
+*- Handle storing business card related information*
+- Handle card editing
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>520</y><w>380</w><h>130</h></coordinates><panel_attributes>&lt;&lt;Tag&gt;&gt;
+--
+-TagId: String
+-TagName: String
+-Color: String
+--
+
+--
+Responsibilities
+*- Storing tags related information*
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>438</x><y>290</y><w>220</w><h>50</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=0..*
+own &gt;</panel_attributes><additional_attributes>10;20;200;20</additional_attributes></element><element><id>Relation</id><coordinates><x>248</x><y>380</y><w>90</w><h>160</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=0..*
+manage &gt;</panel_attributes><additional_attributes>10;10;10;140</additional_attributes></element><element><id>Relation</id><coordinates><x>438</x><y>440</y><w>400</w><h>190</h></coordinates><panel_attributes>lt=-
+m1=0..*
+m2=0..*
+Tag &gt;</panel_attributes><additional_attributes>10;160;360;160;360;10</additional_attributes></element></diagram>
