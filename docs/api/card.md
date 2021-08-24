@@ -14,3 +14,18 @@ Response body:
 import type { Card } from './Card';
 type CardPutResponse = Card;
 ```
+
+## DELETE
+- Authenticated
+- 410 Gone if card does not exist.
+
+Request body:
+```ts
+import type { ObjectId } from './ObjectId';
+
+interface CardDeleteRequest {
+  id: ObjectId;
+}
+```
+
+Response body: None
