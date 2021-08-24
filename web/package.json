@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fluentui/react": "^8.28.2",
+    "@porkbellypro/crm-shared": "file:shared",
     "@tsconfig/recommended": "^1.0.1",
     "@types/react-dom": "^17.0.9",
     "@types/react": "^17.0.18",
