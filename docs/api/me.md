@@ -6,34 +6,9 @@ Request body: None
 
 Response body:
 ```ts
-interface CardField {
-  key: string;
-  value: string;
-}
-
-type ObjectId = string;
-
-interface Card {
-  id: ObjectId;
-  favorite: boolean;
-  name: string;
-  phone: string;
-  email: string;
-  jobTitle: string;
-  company: string;
-  fields: CardField[];
-  tags: ObjectId[];
-}
-
-interface Tag {
-  id: ObjectId;
-  label: string;
-  color: string;
-}
-
-interface Settings {
-  // TODO:
-}
+import type { Card } from './Card';
+import type { Settings } from './Settings';
+import type { Tag } from './Tag';
 
 interface User {
   username: string;

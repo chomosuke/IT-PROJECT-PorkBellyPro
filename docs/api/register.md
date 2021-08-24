@@ -5,7 +5,7 @@
 
 Request body:
 ```ts
-type Hashed = string;
+import type { Hashed } from './Hashed';
 
 interface RegisterRequest {
   username: string;
