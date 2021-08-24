@@ -10,7 +10,7 @@ import type { Card } from './Card';
 import type { Settings } from './Settings';
 import type { Tag } from './Tag';
 
-interface User {
+interface MeResponse {
   username: string;
   settings: Settings;
   cards: Card[];
