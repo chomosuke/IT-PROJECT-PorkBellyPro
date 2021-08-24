@@ -14,6 +14,7 @@ export interface ICard {
   company: string;
   fields: ICardField[];
   tags: ObjectId[];
+  image?: Buffer
 }
 
 export const cardSchema = new Schema<ICard>({
@@ -21,6 +22,7 @@ export const cardSchema = new Schema<ICard>({
   name: { type: String, require: true },
   phone: { type: String, require: true },
   email: { type: String, require: true },
+  image: Buffer,
   jobTitle: { type: String, require: true },
   company: { type: String, require: true },
   fields: {
