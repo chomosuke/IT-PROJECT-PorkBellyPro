@@ -29,3 +29,21 @@ interface CardDeleteRequest {
 ```
 
 Response body: None
+
+## PATCH
+- Authenticated
+- 410 Gone if card does not exist.
+
+Request body:
+```ts
+import type { Card } from './Card';
+
+type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+```
+
+Response body:
+```ts
+import type { Card } from './Card';
+
+type CardPatchResponse = Card;
+```
