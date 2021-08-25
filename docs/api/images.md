@@ -22,11 +22,3 @@ interface ImagePostResponse {
 Request body: None
 
 Response body: Image binary
-
-# /api/image/prune
-## GET
-- Authenticated
-
-Request body: None
-
-Response body: None
