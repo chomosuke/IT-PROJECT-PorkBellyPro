@@ -1,4 +1,4 @@
-import { Router, RequestHandler } from 'express';
+import { RequestHandler, Router } from 'express';
 import { Connection } from 'mongoose';
 import { helloHandler } from './hello';
 
@@ -19,7 +19,7 @@ export class ApiRouter {
     return this.dbPrivate;
   }
 
-  get router() {
+  get router(): Router {
     return this.routerPrivate;
   }
 

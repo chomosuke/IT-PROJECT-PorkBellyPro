@@ -1,5 +1,5 @@
 import {
-  IButtonStyles, Icon, makeStyles, PrimaryButton,
+  IButtonStyles, Icon, PrimaryButton, makeStyles,
 } from '@fluentui/react';
 import React from 'react';
 import { RootFrame } from './components/RootFrame';
@@ -26,7 +26,7 @@ export const App: React.VoidFunctionComponent = function App() {
       <div className={divStyles}>
         <PrimaryButton styles={buttonStyles}>
           Hello world!
-          <Icon iconName="Album" className={iconStyles} />
+          <Icon iconName='Album' className={iconStyles} />
         </PrimaryButton>
       </div>
     </RootFrame>
