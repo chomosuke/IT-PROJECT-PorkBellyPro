@@ -10,6 +10,7 @@
     "start": "node ./build/start.js"
   },
   "dependencies": {
+    "@porkbellypro/crm-shared": "file:shared",
     "argparse": "^2.0.1",
     "express": "^4.17.1",
     "mongoose": "^5.13.7"
