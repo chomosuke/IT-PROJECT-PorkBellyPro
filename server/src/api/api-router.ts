@@ -1,6 +1,7 @@
-import { RequestHandler, Router } from 'express';
+import { RequestHandler, Router, json } from 'express';
 import { Connection, Model } from 'mongoose';
 import { helloHandler } from './hello';
+import { login } from './login';
 import { IUser, userSchema } from '../models/user';
 
 export interface IApiRouter {
@@ -24,9 +25,11 @@ export class ApiRouter implements IApiRouter {
 
   constructor(secret: Readonly<Buffer>, db: Connection) {
     this.secret = Buffer.alloc(secret.length, secret);
-
     this.dbPrivate = db;
+
+    const jsonMiddleware = json();
     this.routerPrivate.get('/hello', this.bind(helloHandler));
+    this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
   }
