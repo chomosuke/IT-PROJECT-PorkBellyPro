@@ -20,7 +20,7 @@ export interface ICard {
 const cardFieldSchema = new Schema<ICardField>({
   key: { type: String, require: true },
   value: { type: String, require: true },
-})
+});
 
 export const cardSchema = new Schema<ICard>({
   favorite: { type: Boolean, require: true, default: false },
