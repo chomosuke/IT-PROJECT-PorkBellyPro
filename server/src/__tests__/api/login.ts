@@ -1,16 +1,17 @@
 import { hashSync } from 'bcrypt';
 import { NextFunction } from 'express';
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 import { IApiRouter } from '../../api/api-router';
 import { HttpStatusError } from '../../api/HttpStatusError';
 import { login } from '../../api/login';
+import { decryptSession, sessionMaxAge } from '../../api/Session';
 import {
   DeepPartial, mock, mockRequest, mockResponse,
 } from '../helpers';
 
 describe('login unit tests', () => {
   test('Success test', async () => {
-    const id = new Schema.Types.ObjectId('0');
+    const id = Types.ObjectId();
     const username = 'a';
     const password = 'b';
 
@@ -48,6 +49,11 @@ describe('login unit tests', () => {
       secure: true,
     });
     expect(res.cookie).toBeCalledTimes(1);
+    const token = (res.cookie as jest.MockedFunction<typeof res.cookie>).mock.calls[0][1];
+    expect(typeof token).toBe('string');
+    const session = decryptSession(router.secretKey, token);
+    expect(session.userId).toStrictEqual(id);
+    expect((session.expires.getTime() - Date.now()) / sessionMaxAge).toBeCloseTo(1);
     expect(res.sendStatus).toBeCalledWith(200);
     expect(res.sendStatus).toBeCalledTimes(1);
   });
