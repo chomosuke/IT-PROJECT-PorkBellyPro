@@ -4,6 +4,7 @@ import { helloHandler } from './hello';
 import { IUser, userSchema } from '../models/user';
 
 export interface IApiRouter {
+  get secretKey(): Readonly<Buffer>;
   get db(): Connection;
   get router(): Router;
   get users(): Model<IUser>;
@@ -13,17 +14,25 @@ export type ApiRequestHandler
   = (this: IApiRouter, ...params: Parameters<RequestHandler>) => ReturnType<RequestHandler>;
 
 export class ApiRouter implements IApiRouter {
+  private secret: Readonly<Buffer>;
+
   private dbPrivate: Connection;
 
   private routerPrivate: Router = Router();
 
   private usersPrivate: Model<IUser>;
 
-  constructor(db: Connection) {
+  constructor(secret: Readonly<Buffer>, db: Connection) {
+    this.secret = Buffer.alloc(secret.length, secret);
+
     this.dbPrivate = db;
     this.routerPrivate.get('/hello', this.bind(helloHandler));
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
+  }
+
+  get secretKey(): Readonly<Buffer> {
+    return this.secret;
   }
 
   get db(): Connection {
