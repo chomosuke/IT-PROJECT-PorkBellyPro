@@ -17,8 +17,10 @@ export function mockResponse(props?: Partial<Response>): Response {
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export function mock<Fn extends (...args: any) => any>(implementation?: Fn)
-  : jest.Mock<ReturnType<Fn>, Parameters<Fn>> {
-  return jest.fn(implementation);
+  : jest.MockedFunction<Fn> {
+  const fn = jest.fn() as unknown as jest.MockedFunction<Fn>;
+  fn.mockImplementation(implementation);
+  return fn;
 }
 
 export function returnSelf<T>(this: T): T {
