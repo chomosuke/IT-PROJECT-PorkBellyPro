@@ -4,7 +4,9 @@
     "es2021": true
   },
   "extends": [
+    "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "airbnb-typescript"
   ],
   "parser": "@typescript-eslint/parser",
@@ -21,10 +23,27 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/member-delimiter-style": "error",
+    "array-bracket-newline": "error",
+    "array-element-newline": "error",
+    "function-call-argument-newline": "error",
+    "func-name-matching": "error",
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
+    "jsx-quotes": [
+      "error",
+      "prefer-single"
+    ],
     "linebreak-style": "off",
+    "line-comment-position": "error",
+    "max-statements-per-line": "error",
+    "multiline-comment-style": "error",
+    "multiline-ternary": [
+      "error",
+      "always-multiline"
+    ],
+    "no-console": "off",
+    "no-inline-comments": "error",
     "no-use-before-define": "off",
     "react/jsx-filename-extension": [
       1,
@@ -32,6 +51,12 @@
         "extensions": [
           ".tsx"
         ]
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
       }
     ]
   }

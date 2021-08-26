@@ -6,12 +6,16 @@
   "scripts": {
     "build": "node ./build.mjs",
     "lint": "eslint src --ext .ts,.tsx --fix",
-    "lint:nofix": "eslint src --ext .ts,.tsx"
+    "lint:nofix": "eslint src --ext .ts,.tsx",
+    "test": "jest"
   },
   "dependencies": {
     "@fluentui/react": "^8.28.2",
+    "@porkbellypro/crm-shared": "file:shared",
     "@tsconfig/recommended": "^1.0.1",
+    "@types/jest": "^27.0.1",
     "@types/react-dom": "^17.0.9",
+    "@types/react-test-renderer": "^17.0.1",
     "@types/react": "^17.0.18",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
@@ -23,9 +27,12 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint": "^7.32.0",
     "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.0.6",
     "prop-types": "^15.7.2",
     "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
     "react": "^17.0.2",
+    "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.5",
     "typescript": "^4.3.5",
     "webpack": "^5.50.0"

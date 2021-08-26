@@ -1,8 +1,8 @@
-import { Schema, ObjectId } from 'mongoose';
+import { ObjectId, Schema } from 'mongoose';
 
 export interface ICardField {
-  key: string,
-  value: string
+  key: string;
+  value: string;
 }
 
 export interface ICard {
@@ -14,7 +14,7 @@ export interface ICard {
   company: string;
   fields: ICardField[];
   tags: ObjectId[];
-  image?: Buffer
+  image?: Buffer;
 }
 
 export const cardSchema = new Schema<ICard>({
