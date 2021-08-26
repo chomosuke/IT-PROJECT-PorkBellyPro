@@ -1,7 +1,6 @@
 # /api/card
 ## PUT
 - Authenticated
-- 413 Payload Too Large if image string is larger than 1 MB
 
 Request body:
 ```ts
@@ -38,7 +37,6 @@ Response body: None
 ## PATCH
 - Authenticated
 - 410 Gone if card does not exist.
-- 413 Payload Too Large if image string is larger than 1 MB
 
 Request body:
 ```ts
