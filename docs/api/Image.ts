@@ -1,1 +1,1 @@
-type Image = string;
+export type Image = string;
