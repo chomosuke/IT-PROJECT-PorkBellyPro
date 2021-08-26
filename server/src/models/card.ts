@@ -17,6 +17,11 @@ export interface ICard {
   tags: ObjectId[];
 }
 
+const cardFieldSchema = new Schema<ICardField>({
+  key: { type: String, require: true },
+  value: { type: String, require: true },
+});
+
 export const cardSchema = new Schema<ICard>({
   favorite: { type: Boolean, require: true, default: false },
   name: { type: String, require: true },
@@ -26,10 +31,7 @@ export const cardSchema = new Schema<ICard>({
   company: { type: String, require: true },
   image: Buffer,
   fields: {
-    type: [new Schema<ICardField>({
-      key: { type: String, require: true },
-      value: { type: String, require: true },
-    })],
+    type: [cardFieldSchema],
     require: true,
     default: [],
   },
