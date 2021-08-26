@@ -43,7 +43,7 @@ Request body:
 import type { Card } from './Card';
 
 interface CardPatchRequest extends Pick<Card, 'id'> & Partial<Omit<Card, 'id' | 'hasImage'>> {
-  image?: Image;
+  image?: Image | null;
 }
 ```
 
