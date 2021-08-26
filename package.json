@@ -16,7 +16,8 @@
     "lint": "npm run --ws lint",
     "lint:nofix": "npm run --ws lint:nofix",
     "postinstall": "node-git-hooks",
-    "start": "server -d dist"
+    "start": "server -d dist",
+    "test": "npm test --ws"
   },
   "workspaces": [
     "server",

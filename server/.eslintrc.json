@@ -4,6 +4,8 @@
     "node": true
   },
   "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "airbnb-typescript/base"
   ],
   "parser": "@typescript-eslint/parser",
@@ -17,9 +19,31 @@
   ],
   "rules": {
     "@typescript-eslint/member-delimiter-style": "error",
-    "no-console": "off",
+    "array-bracket-newline": "error",
+    "array-element-newline": "error",
+    "function-call-argument-newline": "error",
+    "func-name-matching": "error",
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
-    "linebreak-style": "off"
+    "jsx-quotes": [
+      "error",
+      "prefer-single"
+    ],
+    "linebreak-style": "off",
+    "line-comment-position": "error",
+    "max-statements-per-line": "error",
+    "multiline-comment-style": "error",
+    "multiline-ternary": [
+      "error",
+      "always-multiline"
+    ],
+    "no-console": "off",
+    "no-inline-comments": "error",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ]
   }
 }
