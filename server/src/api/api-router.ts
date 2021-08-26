@@ -1,10 +1,12 @@
 import { RequestHandler, Router } from 'express';
-import { Connection } from 'mongoose';
+import { Connection, Model } from 'mongoose';
 import { helloHandler } from './hello';
+import { IUser, userSchema } from '../models/user';
 
 export interface IApiRouter {
   get db(): Connection;
   get router(): Router;
+  get users(): Model<IUser>;
 }
 
 export type ApiRequestHandler
@@ -15,9 +17,13 @@ export class ApiRouter implements IApiRouter {
 
   private routerPrivate: Router = Router();
 
+  private usersPrivate: Model<IUser>;
+
   constructor(db: Connection) {
     this.dbPrivate = db;
     this.routerPrivate.get('/hello', this.bind(helloHandler));
+
+    this.usersPrivate = db.model<IUser>('User', userSchema);
   }
 
   get db(): Connection {
@@ -26,6 +32,10 @@ export class ApiRouter implements IApiRouter {
 
   get router(): Router {
     return this.routerPrivate;
+  }
+
+  get users(): Model<IUser> {
+    return this.usersPrivate;
   }
 
   private bind(handler: ApiRequestHandler): RequestHandler {
