@@ -6,6 +6,6 @@ export interface ITag {
 }
 
 export const tagSchema = new Schema<ITag>({
-  tagName: String,
-  colour: String,
+  label: String,
+  color: String,
 });
