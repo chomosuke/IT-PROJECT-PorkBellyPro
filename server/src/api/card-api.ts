@@ -1,7 +1,7 @@
 import { Document, ObjectId } from 'mongoose';
-import { ApiRequestHandler } from './api-router';
 import { IUser } from '../models/user';
-import { ICardField } from '../models/card';
+import { ICard, ICardField } from '../models/card';
+import { ApiRequestHandler } from './api-router';
 
 /*
  * test interface to allow user information to be passed
@@ -27,59 +27,106 @@ interface CardDeleteRequest {
 
 type CardPutRequest = Omit<Card, 'id' | 'favorite'>;
 
-type CardPutResponse = Card;
+// type CardPutResponse = Card;
 
-// type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+// type CardPatchResponse = Card;
+
+type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
 
 // dummy type to assist in accessing user.
 type RequestWithUser<Type> = Type & { user: IUser & Document };
 
+function createCardResponse(card: ICard & Document): Card {
+  return {
+    id: card.id,
+    favorite: card.favorite,
+    name: card.name,
+    phone: card.phone,
+    email: card.email,
+    jobTitle: card.jobTitle,
+    company: card.company,
+    fields: card.fields,
+    tags: card.tags,
+  };
+}
+
 export const createCard: ApiRequestHandler = async function createCard(
   _req: { body: RequestWithUser<CardPutRequest> }, res,
 ) {
-  // create card
-  const newCard = new this.Cards({
-    name: _req.body.name,
-    phone: _req.body.phone,
-    email: _req.body.email,
-    jobTitle: _req.body.jobTitle,
-    company: _req.body.company,
-    fields: _req.body.fields,
-    tags: _req.body.tags,
-  });
+  /*
+   * create card
+   * because I put in userDocument with the body, there's a need to split
+   */
+  const { user, ...details } = _req.body;
+  const newCard = new this.Cards(details);
 
   // assuming that the user exists
-  const { user } = _req.body;
   user.cards.push(newCard);
-  await user.save((error) => {
+  user.save((error, result) => {
     if (error) {
-      res.status(500).send('Internal Error');
       console.log(error);
+      res.status(500).send('Saved incorrectly');
     } else {
-      const replyBody : CardPutResponse = {
-        id: newCard.id,
-        favorite: newCard.favorite,
-        name: newCard.name,
-        phone: newCard.phone,
-        email: newCard.email,
-        jobTitle: newCard.jobTitle,
-        company: newCard.company,
-        fields: newCard.fields,
-        tags: newCard.tags,
-      };
-
-      res.status(201).json(replyBody);
+      const card = result.cards.at(-1);
+      if (card?.equals(newCard)) {
+        const cardResponse = createCardResponse(card);
+        res.status(201).json(cardResponse);
+      } else {
+        // card is not saved or incorrect?
+        res.status(500).send('Failed to save correctly');
+      }
     }
   });
 };
 
-export const updateCard: ApiRequestHandler = function updateCard(_req, res) {
-  // TODO: accept api
-  res.send('Cards updated');
+export const updateCard: ApiRequestHandler = async function updateCard(
+  _req: { body: RequestWithUser<CardPatchRequest> }, res,
+) {
+  // fetch the card from the user
+  const { id, user, ...newDetails } = _req.body;
+  // assuming user exists
+  const index = user.cards.findIndex((card) => card.id === id);
+  if (index === -1) {
+    res.status(404).send('Resource not found');
+  } else {
+    const cardCopy = Object.assign(user.cards[index], newDetails);
+    user.save((error, result) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send('Internal Error');
+      } else {
+        const card = result.cards.at(index);
+        if (card?.equals(cardCopy)) {
+          const cardResponse = createCardResponse(card);
+          res.status(200).json(cardResponse);
+        } else {
+          // card at the index is not the same
+          res.status(500).send('Failed to save correctly');
+        }
+      }
+    });
+  }
 };
 
 export const deleteCard: ApiRequestHandler = async function deleteCard(
   _req: { body: RequestWithUser<CardDeleteRequest> }, res,
 ) {
-  res.send('Card deleted');
+  const { id, user } = _req.body;
+  const index = user.cards.findIndex((card) => card.id === id);
+  if (index === -1) {
+    res.status(410).send('Card does not exist');
+  } else {
+    user.cards.splice(index, 1);
+    user.save((error, result) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send('Internal Error');
+      } else if (result.cards.find((card) => card.id === id)) {
+        // card still exists!
+        res.status(500).send('Failed to delete card');
+      } else {
+        res.status(204).end();
+      }
+    });
+  }
 };

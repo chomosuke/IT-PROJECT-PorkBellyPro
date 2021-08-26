@@ -1,12 +1,12 @@
-import { Schema } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 import { ITag, tagSchema } from './tag';
 import { ICard, cardSchema } from './card';
 
 export interface IUser {
   username: string;
   password: string;
-  cards: ICard[];
-  tags: ITag[];
+  cards: (ICard & Document)[];
+  tags: (ITag & Document)[];
 }
 
 export const userSchema = new Schema<IUser>({
