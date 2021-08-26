@@ -5,9 +5,15 @@ export type AsyncApiRequestHandler = (
   ...args: Parameters<ApiRequestHandler>)
 => Promise<ReturnType<ApiRequestHandler>>;
 
-export function asyncRouteHandler(handler: AsyncApiRequestHandler): ApiRequestHandler {
-  return function asyncHandler(this, ...args) {
+export type ApiRequestHandlerAsync = ApiRequestHandler & {
+  implementation: AsyncApiRequestHandler;
+};
+
+export function asyncRouteHandler(handler: AsyncApiRequestHandler): ApiRequestHandlerAsync {
+  const asyncHandler: ApiRequestHandlerAsync = function asyncHandler(this, ...args) {
     const next = args[2];
     handler.call(this, ...args).catch((reason) => next(reason));
   };
+  asyncHandler.implementation = handler;
+  return asyncHandler;
 }

@@ -18,9 +18,7 @@ export function mockResponse(props?: Partial<Response>): Response {
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export function mock<Fn extends (...args: any) => any>(implementation?: Fn)
   : jest.MockedFunction<Fn> {
-  const fn = jest.fn() as unknown as jest.MockedFunction<Fn>;
-  fn.mockImplementation(implementation);
-  return fn;
+  return jest.fn(implementation) as unknown as jest.MockedFunction<Fn>;
 }
 
 export function returnSelf<T>(this: T): T {
@@ -28,3 +26,5 @@ export function returnSelf<T>(this: T): T {
 }
 
 export function next(): void { }
+
+export type DeepPartial<T> = { [k in keyof T]?: DeepPartial<T[k]>; };
