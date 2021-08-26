@@ -1,12 +1,16 @@
 # /api/card
 ## PUT
 - Authenticated
+- 413 Payload Too Large if image string is larger than 1 MB
 
 Request body:
 ```ts
 import type { Card } from './Card';
+import type { Image } from './Image';
 
-type CardPutRequest = Omit<Card, 'id' | 'favorite'>;
+interface CardPutRequest extends Omit<Card, 'id' | 'favorite' | 'hasImage'> {
+  image?: Image;
+}
 ```
 
 Response body:
@@ -34,12 +38,15 @@ Response body: None
 ## PATCH
 - Authenticated
 - 410 Gone if card does not exist.
+- 413 Payload Too Large if image string is larger than 1 MB
 
 Request body:
 ```ts
 import type { Card } from './Card';
 
-type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+interface CardPatchRequest extends Pick<Card, 'id'> & Partial<Omit<Card, 'id' | 'hasImage'>> {
+  image?: Image;
+}
 ```
 
 Response body:

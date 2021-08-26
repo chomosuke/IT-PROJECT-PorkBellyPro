@@ -9,7 +9,7 @@ export interface Card {
   email: string;
   jobTitle: string;
   company: string;
-  imageUrl?: string;
+  hasImage: boolean;
   fields: CardField[];
   tags: ObjectId[];
 }
