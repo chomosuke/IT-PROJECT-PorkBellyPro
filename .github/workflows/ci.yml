@@ -1,0 +1,37 @@
+name: ci
+on:
+  - push
+  - pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17'
+      - run: ./.github/scripts/update-npm.js
+      - run: npm install
+      - run: npm run build
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17'
+      - run: ./.github/scripts/update-npm.js
+      - run: npm install
+      - run: npm run lint:nofix
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17'
+      - run: ./.github/scripts/update-npm.js
+      - run: npm install
+      - run: npm test

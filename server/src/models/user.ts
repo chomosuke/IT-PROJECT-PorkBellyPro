@@ -3,10 +3,10 @@ import { ITag, tagSchema } from './tag';
 import { ICard, cardSchema } from './card';
 
 export interface IUser {
-  username: string,
-  password: string,
-  cards: ICard[],
-  tags: ITag[],
+  username: string;
+  password: string;
+  cards: ICard[];
+  tags: ITag[];
 }
 
 export const userSchema = new Schema<IUser>({

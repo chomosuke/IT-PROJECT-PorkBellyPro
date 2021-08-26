@@ -9,16 +9,19 @@
     "npm": ">=7.20"
   },
   "scripts": {
-    "build": "npm run build-server && npm run build-web",
+    "build": "npm run build-shared && npm run build-server && npm run build-web",
     "build-server": "npm run -w server build",
+    "build-shared": "npm run -w shared build",
     "build-web": "web-build -o dist -t \"PorkBelly CRM\"",
     "lint": "npm run --ws lint",
     "lint:nofix": "npm run --ws lint:nofix",
     "postinstall": "node-git-hooks",
-    "start": "server -d dist"
+    "start": "server -d dist",
+    "test": "npm test --ws"
   },
   "workspaces": [
     "server",
+    "shared",
     "web"
   ]
 }
