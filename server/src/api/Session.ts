@@ -57,7 +57,7 @@ export function decryptSession(secret: Readonly<Buffer>, token: string): Session
   const parsed = JSON.parse(json);
   if (typeof parsed.userId === 'string' && typeof parsed.expires === 'string') {
     const expires = new Date(parsed.expires);
-    if (expires.getTime() - Date.now() < sessionMaxAge) {
+    if (expires.getTime() - Date.now() <= sessionMaxAge) {
       const userId = Types.ObjectId(parsed.userId);
       return {
         userId,
