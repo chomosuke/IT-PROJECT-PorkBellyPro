@@ -4,22 +4,22 @@
  */
 
 export interface CardField {
-    key: string;
-    value: string;
+  key: string;
+  value: string;
 }
 
 export type ObjectId = string;
 
 export interface Card {
-    id: ObjectId;
-    favorite: boolean;
-    name: string;
-    phone: string;
-    email: string;
-    jobTitle: string;
-    company: string;
-    fields: CardField[];
-    tags: ObjectId[];
+  id: ObjectId;
+  favorite: boolean;
+  name: string;
+  phone: string;
+  email: string;
+  jobTitle: string;
+  company: string;
+  fields: CardField[];
+  tags: ObjectId[];
 }
 
 /*
@@ -27,7 +27,7 @@ export interface Card {
  * mongoose.Types.ObjectId(<id>) is not of this type.
  */
 export interface CardDeleteRequest {
-    id: ObjectId;
+  id: ObjectId;
 }
 
 export type CardPutRequest = Omit<Card, 'id' | 'favorite'>;

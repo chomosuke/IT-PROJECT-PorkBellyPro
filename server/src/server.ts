@@ -9,6 +9,7 @@ interface IArgs {
   dist: string;
   conn: string;
   port: number;
+  secret: string;
 }
 
 async function main() {
@@ -16,8 +17,14 @@ async function main() {
   parser.add_argument('-d', '--dist');
   parser.add_argument('-c', '--conn');
   parser.add_argument('-p', '--port', { type: 'int', default: env.PORT ?? 80 });
+  parser.add_argument('-s', '--secret');
 
-  const { dist: distPath, conn, port } = parser.parse_args() as IArgs;
+  const {
+    dist: distPath, conn, port, secret,
+  } = parser.parse_args() as IArgs;
+
+  const secretBuffer = Buffer.from(secret, 'base64');
+  if (secretBuffer.length !== 32) throw new Error('Invalid key length');
 
   const app = express();
   const dist = express.static(resolve(distPath));
@@ -25,7 +32,7 @@ async function main() {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-  const apiRouter = new ApiRouter(db);
+  const apiRouter = new ApiRouter(secretBuffer, db);
 
   app.use('/api', apiRouter.router);
   app.use(dist);

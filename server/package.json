@@ -13,12 +13,16 @@
   "dependencies": {
     "@porkbellypro/crm-shared": "file:shared",
     "argparse": "^2.0.1",
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "mongoose": "^5.13.7"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
     "@types/argparse": "^2.0.10",
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
