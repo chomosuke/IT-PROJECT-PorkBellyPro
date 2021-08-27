@@ -9,7 +9,7 @@ export const auth: ApiRequestHandlerAsync = asyncRouteHandler(async function aut
       const { token } = req.cookies;
       const session = decryptSession(this.secretKey, token);
       if (session.expires.getTime() - Date.now() > 0) {
-        const user = await this.users.findById(session.userId);
+        const user = await this.Users.findById(session.userId);
         if (user != null) {
           (req as AuthenticatedRequest).user = user;
           next();

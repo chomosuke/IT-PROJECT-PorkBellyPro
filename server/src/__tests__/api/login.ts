@@ -17,7 +17,7 @@ describe('login unit tests', () => {
 
     const routerPartial: DeepPartial<IApiRouter> = {
       secretKey: Buffer.alloc(32),
-      users: {
+      Users: {
         find: mock().mockResolvedValue([{
           id,
           password: hashSync(password, 10),
@@ -41,8 +41,8 @@ describe('login unit tests', () => {
     await expect(login.implementation.call(router, req, res, next))
       .resolves.toBeUndefined();
 
-    expect(router.users.find).toBeCalledTimes(1);
-    expect(router.users.find).toBeCalledWith({ username });
+    expect(router.Users.find).toBeCalledTimes(1);
+    expect(router.Users.find).toBeCalledWith({ username });
     expect(res.cookie).toBeCalledWith('token', expect.any(String), {
       expires: expect.any(Date),
       httpOnly: true,
@@ -63,7 +63,7 @@ describe('login unit tests', () => {
     const password = 'b';
 
     const routerPartial: DeepPartial<IApiRouter> = {
-      users: {
+      Users: {
         find: mock().mockResolvedValue([{
           password: hashSync(password, 10),
         }]),
@@ -83,8 +83,8 @@ describe('login unit tests', () => {
     await expect(login.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(401));
 
-    expect(router.users.find).toBeCalledTimes(1);
-    expect(router.users.find).toBeCalledWith({ username });
+    expect(router.Users.find).toBeCalledTimes(1);
+    expect(router.Users.find).toBeCalledWith({ username });
   });
 
   test('Fail test: no user', async () => {
@@ -92,7 +92,7 @@ describe('login unit tests', () => {
     const password = 'b';
 
     const routerPartial: DeepPartial<IApiRouter> = {
-      users: {
+      Users: {
         find: mock().mockResolvedValue([]),
       },
     };
@@ -111,8 +111,8 @@ describe('login unit tests', () => {
       .rejects
       .toStrictEqual(new HttpStatusError(401));
 
-    expect(router.users.find).toBeCalledTimes(1);
-    expect(router.users.find).toBeCalledWith({ username });
+    expect(router.Users.find).toBeCalledTimes(1);
+    expect(router.Users.find).toBeCalledWith({ username });
   });
 
   test('Fail test: bad request', async () => {

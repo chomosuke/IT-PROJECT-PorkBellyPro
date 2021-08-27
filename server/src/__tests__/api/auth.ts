@@ -16,7 +16,7 @@ type QueryResult<Q> =
     ? ResultType
     : never;
 
-type User = NonNullable<QueryResult<ReturnType<IApiRouter['users']['findById']>>>;
+type User = NonNullable<QueryResult<ReturnType<IApiRouter['Users']['findById']>>>;
 
 describe('auth tests', () => {
   test('Success test', async () => {
@@ -24,7 +24,7 @@ describe('auth tests', () => {
     const secretKey = randomBytes(32);
     const routerPartial: DeepPartial<IApiRouter> = {
       secretKey,
-      users: {
+      Users: {
         findById: mock().mockResolvedValue(mockUser),
       },
     };
@@ -43,8 +43,8 @@ describe('auth tests', () => {
 
     await auth.implementation.call(router, req, res, next);
 
-    expect(router.users.findById).toBeCalledTimes(1);
-    expect(router.users.findById).toBeCalledWith(session.userId);
+    expect(router.Users.findById).toBeCalledTimes(1);
+    expect(router.Users.findById).toBeCalledWith(session.userId);
     expect(req.user).toBe(mockUser);
     expect(next).toBeCalledTimes(1);
     expect(next).toBeCalledWith();

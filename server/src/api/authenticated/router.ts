@@ -9,7 +9,7 @@ type QueryResult<Q> =
     : never;
 
 export type AuthenticatedRequest = Parameters<RequestHandler>[0] & {
-  user: QueryResult<ReturnType<IApiRouter['users']['findById']>>;
+  user: QueryResult<ReturnType<IApiRouter['Users']['findById']>>;
 };
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */

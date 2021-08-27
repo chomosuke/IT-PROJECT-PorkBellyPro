@@ -7,7 +7,7 @@ export const login = asyncRouteHandler(async function login({ body }, res) {
   if (body != null) {
     const { username, password } = body;
     if (typeof username === 'string' && typeof password === 'string') {
-      const users = await this.users.find({ username });
+      const users = await this.Users.find({ username });
       if (users.length === 1) {
         const [user] = users;
         if (await compare(password, user.password)) {
