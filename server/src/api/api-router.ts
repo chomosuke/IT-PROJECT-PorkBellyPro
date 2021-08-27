@@ -1,6 +1,9 @@
+import cookieParser from 'cookie-parser';
 import { RequestHandler, Router, json } from 'express';
 import { Connection, Model } from 'mongoose';
 import { login } from './login';
+import { auth } from './auth';
+import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/router';
 import { IUser, userSchema } from '../models/user';
 
 export interface IApiRouter {
@@ -20,6 +23,8 @@ export class ApiRouter implements IApiRouter {
 
   private routerPrivate: Router = Router();
 
+  private authRouter: IAuthenticatedRouter = new AuthenticatedRouter(this);
+
   private usersPrivate: Model<IUser>;
 
   constructor(secret: Readonly<Buffer>, db: Connection) {
@@ -28,6 +33,9 @@ export class ApiRouter implements IApiRouter {
 
     const jsonMiddleware = json();
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+
+    const cookieParserMiddleware = cookieParser();
+    this.routerPrivate.use(cookieParserMiddleware, this.bind(auth), this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
   }
