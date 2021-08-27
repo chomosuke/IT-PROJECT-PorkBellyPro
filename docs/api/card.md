@@ -5,8 +5,11 @@
 Request body:
 ```ts
 import type { Card } from './Card';
+import type { Image } from './Image';
 
-type CardPutRequest = Omit<Card, 'id' | 'favorite'>;
+interface CardPutRequest extends Omit<Card, 'id' | 'favorite' | 'hasImage'> {
+  image?: Image;
+}
 ```
 
 Response body:
@@ -39,7 +42,9 @@ Request body:
 ```ts
 import type { Card } from './Card';
 
-type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+interface CardPatchRequest extends Pick<Card, 'id'> & Partial<Omit<Card, 'id' | 'hasImage'>> {
+  image?: Image | null;
+}
 ```
 
 Response body:
