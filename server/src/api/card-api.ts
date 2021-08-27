@@ -5,12 +5,12 @@ import { ApiRequestHandler } from './api-router';
 
 /*
  * test interface to allow user information to be passed
- * ADAPTED FROM docs/api/card.md
+ * ADAPTED FROM docs/api/card.md prior to PR
  */
 type CardField = ICardField;
 
-interface Card {
-  id: ObjectId;
+export interface Card {
+  id: ObjectId | string;
   favorite: boolean;
   name: string;
   phone: string;
@@ -21,20 +21,24 @@ interface Card {
   tags: ObjectId[];
 }
 
-interface CardDeleteRequest {
-  id: ObjectId;
+/*
+ * set to string because constructing
+ * mongoose.Types.ObjectId(<id>) is not of this type.
+ */
+export interface CardDeleteRequest {
+  id: ObjectId | string;
 }
 
-type CardPutRequest = Omit<Card, 'id' | 'favorite'>;
+export type CardPutRequest = Omit<Card, 'id' | 'favorite'>;
 
 // type CardPutResponse = Card;
 
 // type CardPatchResponse = Card;
 
-type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+export type CardPatchRequest = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
 
 // dummy type to assist in accessing user.
-type RequestWithUser<Type> = Type & { user: IUser & Document };
+export type RequestWithUser<Type> = Type & { user: IUser & Document };
 
 function createCardResponse(card: ICard & Document): Card {
   return {
@@ -125,7 +129,7 @@ export const deleteCard: ApiRequestHandler = async function deleteCard(
         // card still exists!
         res.status(500).send('Failed to delete card');
       } else {
-        res.status(204).end();
+        res.status(204).send();
       }
     });
   }

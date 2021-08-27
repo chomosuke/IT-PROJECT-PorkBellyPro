@@ -5,8 +5,8 @@ import { ICard, cardSchema } from './card';
 export interface IUser {
   username: string;
   password: string;
-  cards: (ICard & Document)[];
-  tags: (ITag & Document)[];
+  cards: (ICard & Document<ICard>)[];
+  tags: (ITag & Document<ITag>)[];
 }
 
 export const userSchema = new Schema<IUser>({
