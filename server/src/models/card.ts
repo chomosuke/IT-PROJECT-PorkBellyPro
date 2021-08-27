@@ -1,4 +1,4 @@
-import { ObjectId, Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 export interface ICardField {
   key: string;
@@ -6,6 +6,7 @@ export interface ICardField {
 }
 
 export interface ICard {
+  user: Types.ObjectId;
   favorite: boolean;
   name: string;
   phone: string;
@@ -14,7 +15,7 @@ export interface ICard {
   company: string;
   image?: Buffer;
   fields: ICardField[];
-  tags: ObjectId[];
+  tags: Types.ObjectId[];
 }
 
 const cardFieldSchema = new Schema<ICardField>({
@@ -23,6 +24,7 @@ const cardFieldSchema = new Schema<ICardField>({
 });
 
 export const cardSchema = new Schema<ICard>({
+  user: { type: Schema.Types.ObjectId, require: true, ref: 'User' },
   favorite: { type: Boolean, require: true, default: false },
   name: { type: String, require: true },
   phone: { type: String, require: true },
