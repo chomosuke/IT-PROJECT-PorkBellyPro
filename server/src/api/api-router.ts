@@ -6,13 +6,15 @@ import { auth } from './auth';
 import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/router';
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
+import { ITag, tagSchema } from '../models/tag';
 
 export interface IApiRouter {
   get secretKey(): Readonly<Buffer>;
   get db(): Connection;
   get router(): Router;
-  get users(): Model<IUser>;
+  get Users(): Model<IUser>;
   get Cards(): Model<ICard>;
+  get Tags(): Model<ITag>;
 }
 
 export type ApiRequestHandler
@@ -29,7 +31,9 @@ export class ApiRouter implements IApiRouter {
 
   private usersPrivate: Model<IUser>;
 
-  private cardPrivate: Model<ICard>;
+  private cardsPrivate: Model<ICard>;
+
+  private tagsPrivate: Model<ITag>;
 
   constructor(secret: Readonly<Buffer>, db: Connection) {
     this.secret = Buffer.alloc(secret.length, secret);
@@ -37,12 +41,14 @@ export class ApiRouter implements IApiRouter {
 
     const jsonMiddleware = json();
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+    this.routerPrivate.use(this.authRouter.router);
 
     const cookieParserMiddleware = cookieParser();
     this.routerPrivate.use(cookieParserMiddleware, this.bind(auth), this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
-    this.cardPrivate = db.model<ICard>('Card', cardSchema);
+    this.cardsPrivate = db.model<ICard>('Card', cardSchema);
+    this.tagsPrivate = db.model<ITag>('Tag', tagSchema);
   }
 
   get secretKey(): Readonly<Buffer> {
@@ -57,12 +63,16 @@ export class ApiRouter implements IApiRouter {
     return this.routerPrivate;
   }
 
-  get users(): Model<IUser> {
+  get Users(): Model<IUser> {
     return this.usersPrivate;
   }
 
   get Cards(): Model<ICard> {
-    return this.cardPrivate;
+    return this.cardsPrivate;
+  }
+
+  get Tags(): Model<ITag> {
+    return this.tagsPrivate;
   }
 
   private bind(handler: ApiRequestHandler): RequestHandler {

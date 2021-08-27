@@ -1,10 +1,9 @@
-import type { ApiRequestHandler } from './api-router';
-import { asyncRouteHandler } from './asyncRouteHandler';
-import { AuthenticatedRequest } from './authenticated/router';
-import { HttpStatusError } from './HttpStatusError';
-import { decryptSession } from './Session';
+import { ApiRequestHandlerAsync, asyncRouteHandler } from '../asyncRouteHandler';
+import type { AuthenticatedRequest } from './router';
+import { HttpStatusError } from '../HttpStatusError';
+import { decryptSession } from '../Session';
 
-export const auth: ApiRequestHandler = asyncRouteHandler(async function auth(req, _res, next) {
+export const auth: ApiRequestHandlerAsync = asyncRouteHandler(async function auth(req, _res, next) {
   try {
     if (req.cookies && typeof req.cookies.token === 'string') {
       const { token } = req.cookies;
@@ -18,6 +17,7 @@ export const auth: ApiRequestHandler = asyncRouteHandler(async function auth(req
         }
       }
     }
+    throw new Error();
   } catch {
     throw new HttpStatusError(401);
   }
