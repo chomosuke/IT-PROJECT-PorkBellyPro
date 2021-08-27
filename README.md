@@ -17,13 +17,22 @@ This subdirectory holds the source code for our CRM.
   ```
 
 ## Running
+First choose a secret key to be used with encryption on the server.
+The server uses the AES256 encryption algorithm so the key must be 32 bytes long.
+Use the `-s` or `--secret` command line argument to provide the key in **base64** encoding.
+
+One easy way to obtain a secret key is using Node's own crypto API to generate one:
+```
+crypto.randomBytes(32).toString('base64');
+```
+
 - With default port 80
   ```
-  npm start -- -c mongodb://...
+  npm start -- -s <secret> -c mongodb://...
   ```
 - With a specific port
   ```
-  npm start -- -c mongodb://... -p <port>
+  npm start -- -s <secret> -c mongodb://... -p <port>
   ```
 
 ## Contributing

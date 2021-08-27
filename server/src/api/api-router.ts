@@ -1,11 +1,13 @@
-import { RequestHandler, Router } from 'express';
+import { RequestHandler, Router, json } from 'express';
 import { Connection, Model } from 'mongoose';
-import { helloHandler } from './hello';
+import { login } from './login';
+import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/router';
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
 import { ITag, tagSchema } from '../models/tag';
 
 export interface IApiRouter {
+  get secretKey(): Readonly<Buffer>;
   get db(): Connection;
   get router(): Router;
   get Users(): Model<IUser>;
@@ -17,9 +19,13 @@ export type ApiRequestHandler
   = (this: IApiRouter, ...params: Parameters<RequestHandler>) => ReturnType<RequestHandler>;
 
 export class ApiRouter implements IApiRouter {
+  private secret: Readonly<Buffer>;
+
   private dbPrivate: Connection;
 
   private routerPrivate: Router = Router();
+
+  private authRouter: IAuthenticatedRouter = new AuthenticatedRouter(this);
 
   private usersPrivate: Model<IUser>;
 
@@ -27,13 +33,21 @@ export class ApiRouter implements IApiRouter {
 
   private tagsPrivate: Model<ITag>;
 
-  constructor(db: Connection) {
+  constructor(secret: Readonly<Buffer>, db: Connection) {
+    this.secret = Buffer.alloc(secret.length, secret);
     this.dbPrivate = db;
-    this.routerPrivate.get('/hello', this.bind(helloHandler));
+
+    const jsonMiddleware = json();
+    this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+    this.routerPrivate.use(this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
     this.cardsPrivate = db.model<ICard>('Card', cardSchema);
     this.tagsPrivate = db.model<ITag>('Tag', tagSchema);
+  }
+
+  get secretKey(): Readonly<Buffer> {
+    return this.secret;
   }
 
   get db(): Connection {
