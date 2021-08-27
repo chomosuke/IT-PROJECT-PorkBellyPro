@@ -1,7 +1,7 @@
-import { ApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
-import { AuthenticatedRequest } from './authenticated/router';
-import { HttpStatusError } from './HttpStatusError';
-import { decryptSession } from './Session';
+import { ApiRequestHandlerAsync, asyncRouteHandler } from '../asyncRouteHandler';
+import type { AuthenticatedRequest } from './router';
+import { HttpStatusError } from '../HttpStatusError';
+import { decryptSession } from '../Session';
 
 export const auth: ApiRequestHandlerAsync = asyncRouteHandler(async function auth(req, _res, next) {
   try {

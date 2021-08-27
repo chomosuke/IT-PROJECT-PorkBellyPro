@@ -1,14 +1,14 @@
 import { randomBytes } from 'crypto';
 import { NextFunction } from 'express-serve-static-core';
 import { Query, Types } from 'mongoose';
-import { IApiRouter } from '../../api/api-router';
-import { auth } from '../../api/auth';
-import { AuthenticatedRequest } from '../../api/authenticated/router';
-import { HttpStatusError } from '../../api/HttpStatusError';
-import { Session, encryptSession, sessionMaxAge } from '../../api/Session';
+import { IApiRouter } from '../../../api/api-router';
+import { auth } from '../../../api/authenticated/auth';
+import { AuthenticatedRequest } from '../../../api/authenticated/router';
+import { HttpStatusError } from '../../../api/HttpStatusError';
+import { Session, encryptSession, sessionMaxAge } from '../../../api/Session';
 import {
   DeepPartial, mock, mockRequest, mockResponse,
-} from '../helpers';
+} from '../../helpers';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
