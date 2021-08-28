@@ -286,65 +286,7 @@ describe('cardPut unit tests', () => {
       id: Types.ObjectId().toString(),
     } as User;
 
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
-
-    const cardId = Types.ObjectId().toString();
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              image,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              image,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
-        },
-      },
-    };
+    const routerPartial: DeepPartial<IAuthenticatedRouter> = {};
     const router = routerPartial as IAuthenticatedRouter;
 
     const request: CardPutRequest = {
@@ -356,7 +298,7 @@ describe('cardPut unit tests', () => {
       fields: [
         { key: 'height', value: '10cm' }, { key: 'weight', value: 'fat' },
       ],
-      tags: tags.map((t) => t.id),
+      tags: [],
       // swap last 4 char to simulate corruption
       image: `${imageUri.substr(0, imageUri.length - 4)}oops`,
     };
@@ -365,10 +307,7 @@ describe('cardPut unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
+    const res = mockResponse();
 
     const next = mock<NextFunction>();
 
@@ -381,65 +320,7 @@ describe('cardPut unit tests', () => {
       id: Types.ObjectId().toString(),
     } as User;
 
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
-
-    const cardId = Types.ObjectId().toString();
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              image,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              image,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
-        },
-      },
-    };
+    const routerPartial: DeepPartial<IAuthenticatedRouter> = {};
     const router = routerPartial as IAuthenticatedRouter;
 
     const request: CardPutRequest = {
@@ -451,7 +332,7 @@ describe('cardPut unit tests', () => {
       fields: [
         { key: 'height', value: '10cm' }, { key: 'weight', value: 'fat' },
       ],
-      tags: tags.map((t) => t.id),
+      tags: [],
       image: `data:text/plain;base64,${imageUri.substr(dataURIPrefix.length, imageUri.length - dataURIPrefix.length)}`,
     };
     const req = mockRequest({
@@ -459,10 +340,7 @@ describe('cardPut unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
+    const res = mockResponse();
 
     const next = mock<NextFunction>();
 
@@ -496,8 +374,6 @@ describe('cardPut unit tests', () => {
       },
     ];
 
-    const cardId = Types.ObjectId().toString();
-
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         db: {
@@ -505,30 +381,6 @@ describe('cardPut unit tests', () => {
         },
         Tags: {
           findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
         },
       },
     };
@@ -550,10 +402,7 @@ describe('cardPut unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
+    const res = mockResponse();
 
     const next = mock<NextFunction>();
 
@@ -589,8 +438,6 @@ describe('cardPut unit tests', () => {
       },
     ];
 
-    const cardId = Types.ObjectId().toString();
-
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         db: {
@@ -598,30 +445,6 @@ describe('cardPut unit tests', () => {
         },
         Tags: {
           findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
         },
       },
     };
@@ -643,10 +466,7 @@ describe('cardPut unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
+    const res = mockResponse();
 
     const next = mock<NextFunction>();
 
@@ -679,10 +499,7 @@ describe('cardPut unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
+    const res = mockResponse();
 
     const next = mock<NextFunction>();
 
