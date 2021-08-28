@@ -4,6 +4,7 @@ import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
 import { cardPut } from './cardPut';
+import { image } from './image';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -44,6 +45,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
 
     const jsonMiddleware = json();
     this.routerPrivate.put('/card', jsonMiddleware, this.auth, this.bind(cardPut));
+    this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
   get router(): Router {
