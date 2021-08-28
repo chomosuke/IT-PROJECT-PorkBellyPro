@@ -1,8 +1,11 @@
 import {
   CardPutResponse,
 } from '@porkbellypro/crm-shared';
+import Jimp from 'jimp';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
+
+export const dataURIPrefix = 'data:image/jpeg;base64,';
 
 export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
   async function cardPut(req, res) {
@@ -17,7 +20,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       company,
       tags,
     } = body;
-    let { fields } = body;
+    let { fields, image } = body;
 
     if (typeof name !== 'string'
     || typeof phone !== 'string'
@@ -43,6 +46,20 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         throw new HttpStatusError(400);
       }
     });
+
+    if (image !== undefined) {
+      // sanatize image
+      if (typeof image !== 'string'
+      || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
+        throw new HttpStatusError(400);
+      }
+      try {
+        image = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
+      } catch (e) {
+        throw new HttpStatusError(400);
+      }
+      image = await image.getBufferAsync(Jimp.MIME_JPEG);
+    }
 
     // now do the actual thing.
     const dbs = await this.parent.db.startSession();
@@ -70,6 +87,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           company,
           fields,
           tags,
+          image,
         });
 
         const response: CardPutResponse = {
