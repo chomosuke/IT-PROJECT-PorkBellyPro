@@ -1,30 +1,31 @@
 import { asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from './HttpStatusError';
-import { userSchema } from '../models/user';
-import { model } from 'mongoose';
 
-const User = model('User', userSchema);
-
-export const register =  asyncRouteHandler(async function login({ body }, res) {
-    if (body != null) { // ensure no null body
+export const register = asyncRouteHandler(async function register({ body }, res) {
+    // ensure no null body
+    if (body != null) {
         const { username, password } = body;
-        if (typeof username === 'string' && typeof password === 'string') { // ensure username and password is in a correct type
-            
+        // ensure username and password is in a correct type
+        if (typeof username === 'string' && typeof password === 'string') {
+            // transaction start here !!!!!!!!
             const users = await this.Users.find({ username });
-            if (users.length === 0) { // ensure there is no existing identical username
+            // ensure there is no existing identical username
+            if (users.length === 0) {
                 // generate a new user document in the user collection
-                const nUser = new User({
+                await this.Users.create({
                     username,
                     password,
                     // add setting here
-                })
-                // save the result
-                await nUser.save()
-                await res.sendStatus(201); // send respond 201 on successful save
+                });
+                // send respond 201 on successful save
+                res.sendStatus(201);
                 return;
+                // end transaction here by using "finally"
             }
-            throw new HttpStatusError(409); // throw conflict
+            // throw conflict
+            throw new HttpStatusError(409);
         }
     }
-    throw new HttpStatusError(400); // throw bad request
+    // throw bad request
+    throw new HttpStatusError(400);
 });
