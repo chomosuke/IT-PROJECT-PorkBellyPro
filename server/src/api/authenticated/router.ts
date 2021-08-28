@@ -3,7 +3,7 @@ import { RequestHandler, Router, json } from 'express';
 import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
-import { putCard } from './cardPut';
+import { cardPut } from './cardPut';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -43,7 +43,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.authorize = auth.bind(this.parentPrivate);
 
     const jsonMiddleware = json();
-    this.routerPrivate.put('/card', jsonMiddleware, this.auth, this.bind(putCard));
+    this.routerPrivate.put('/card', jsonMiddleware, this.auth, this.bind(cardPut));
   }
 
   get router(): Router {

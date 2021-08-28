@@ -4,8 +4,8 @@ import {
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 
-export const putCard: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
-  async function putCard(req, res) {
+export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
+  async function cardPut(req, res) {
     const { user, body } = req;
 
     // sanatization
@@ -55,11 +55,13 @@ export const putCard: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
             const tag = await this.parent.Tags.findById(id);
             if (tag == null) {
               throw new HttpStatusError(400);
+            } else if (tag.user.toString() !== user.id) {
+              throw new HttpStatusError(401);
             }
           }),
         );
 
-        const cardDoc = new this.parent.Cards({
+        const cardDoc = await this.parent.Cards.create({
           user: user.id,
           name,
           phone,
@@ -69,8 +71,6 @@ export const putCard: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           fields,
           tags,
         });
-
-        await cardDoc.save();
 
         const response: CardPutResponse = {
           id: cardDoc.id,
@@ -85,7 +85,7 @@ export const putCard: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           tags: cardDoc.tags.map((t) => t.toString()),
         };
 
-        res.status(200).json(response);
+        res.status(201).json(response);
       });
     } finally {
       dbs.endSession();
