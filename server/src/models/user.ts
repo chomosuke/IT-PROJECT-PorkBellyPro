@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 export interface IUser {
   username: string;
@@ -9,3 +9,5 @@ export const userSchema = new Schema<IUser>({
   username: { type: String, require: true },
   password: { type: String, require: true },
 });
+
+export default model<IUser>('User', userSchema);
