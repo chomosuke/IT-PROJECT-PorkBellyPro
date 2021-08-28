@@ -1,12 +1,11 @@
 import { compare } from 'bcrypt';
-import { LoginRequest } from '@porkbellypro/crm-shared';
 import { asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from './HttpStatusError';
 import { Session, encryptSession, sessionMaxAge } from './Session';
 
 export const login = asyncRouteHandler(async function login({ body }, res) {
   if (body != null) {
-    const { username, password } = body as LoginRequest;
+    const { username, password } = body;
     if (typeof username === 'string' && typeof password === 'string') {
       const users = await this.Users.find({ username });
       if (users.length === 1) {
