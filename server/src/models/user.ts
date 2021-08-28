@@ -9,5 +9,3 @@ export const userSchema = new Schema<IUser>({
   username: { type: String, require: true },
   password: { type: String, require: true },
 });
-
-export default model<IUser>('User', userSchema);
