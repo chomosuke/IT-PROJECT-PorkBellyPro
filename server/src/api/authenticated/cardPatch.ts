@@ -4,6 +4,7 @@ import {
 import Jimp from 'jimp';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
+import { ICardField } from '../../models/card';
 
 export const dataURIPrefix = 'data:image/jpeg;base64,';
 
@@ -32,21 +33,21 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
      * in the body
      */
     if (typeof id !== 'string'
-      || (favorite !== undefined && typeof favorite !== 'string')
+      || (favorite !== undefined && typeof favorite !== 'boolean')
       || (name !== undefined && typeof name !== 'string')
       || (phone !== undefined && typeof phone !== 'string')
       || (email !== undefined && typeof email !== 'string')
       || (jobTitle !== undefined && typeof jobTitle !== 'string')
       || (company !== undefined && typeof company !== 'string')
-      || (image !== undefined && typeof image !== 'string')
-      || (!Array.isArray(fields))
-      || (!Array.isArray(tags))) {
+      || (fields !== undefined && !Array.isArray(fields))
+      || (tags !== undefined && !Array.isArray(tags))) {
       // bad request
+      console.log('triggered!');
       throw new HttpStatusError(400);
     }
 
     // transform fields and tags (if any)
-    fields = fields?.map((f) => {
+    fields = fields?.map((f: ICardField) => {
       const { key, value } = f;
       if (typeof key !== 'string'
         || typeof value !== 'string') {
@@ -55,7 +56,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       return { key, value };
     });
 
-    tags?.forEach((t) => {
+    tags?.forEach((t: string) => {
       if (typeof t !== 'string') {
         throw new HttpStatusError(400);
       }
@@ -107,32 +108,34 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
          * inside transaction.
          * validating that the tags are in db
          */
-        await Promise.all(
-          // maps tags into array of promises
-          tags.map(async (tagId: string) => {
-            const tag = await this.parent.Tags.findById(tagId);
-            if (tag == null) {
-              throw new HttpStatusError(400);
-            } else if (tag.user.toString() !== user.id) {
-              throw new HttpStatusError(401);
-            }
-          }),
-        );
+        if (tags) {
+          await Promise.all(
+            // maps tags into array of promises
+            tags.map(async (tagId: string) => {
+              const tag = await this.parent.Tags.findById(tagId);
+              if (tag == null) {
+                throw new HttpStatusError(400);
+              } else if (tag.user.toString() !== user.id) {
+                throw new HttpStatusError(401);
+              }
+            }),
+          );
+        }
         /*
          * tags are fine
          * fetch update clause
          * for undefined things, they will be interpreted as not needing to update
          * such details from cards
          */
-        const updatedCard = await this.parent.Cards.findByIdAndUpdate(id,
-          {
-            $set: { ...updateDetails },
-          },
-          // ensures updated card is returned
-          { new: true });
+        const updatedCard = await this.parent.Cards.findById(id);
         // if card is not found
         if (!updatedCard) {
           throw new HttpStatusError(404);
+        } else if (updatedCard.user.toString() !== user.id) {
+          throw new HttpStatusError(401);
+        } else {
+          updatedCard.set(updateDetails);
+          await updatedCard.save();
         }
 
         const response: CardPatchResponse = {
