@@ -4,7 +4,7 @@ import { register } from '../../api/register';
 import { HttpStatusError } from '../../api/HttpStatusError';
 import { IApiRouter } from '../../api/api-router';
 import {
-  DeepPartial, mock, mockRequest, mockResponse,
+  DeepPartial, mock, mockRequest, mockResponse, mockStartSession
 } from '../helpers';
 
 describe('register unit tests', () => {
@@ -15,6 +15,9 @@ describe('register unit tests', () => {
 
     // simulate 0 existed user in the database
     const routerPartial: DeepPartial<IApiRouter> = {
+      db: {
+        startSession: mockStartSession,
+      },
       Users: {
         find: mock().mockResolvedValue([]),
         create: mock().mockResolvedValue([]),
@@ -37,7 +40,6 @@ describe('register unit tests', () => {
     const next = mock<NextFunction>();
     // begin testing
     await expect(register.implementation.call(router, req, res, next))
-    // ???
       .resolves.toBeUndefined();
 
     // check existing user
@@ -58,6 +60,9 @@ describe('register unit tests', () => {
 
     // simulate 1 existed user with the same username
     const routerPartial: DeepPartial<IApiRouter> = {
+      db: {
+        startSession: mockStartSession,
+      },
       Users: {
         find: mock().mockResolvedValue([{
           username,
