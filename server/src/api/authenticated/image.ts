@@ -11,7 +11,7 @@ export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       throw new HttpStatusError(404);
     }
     const imageData = cardDoc.image;
-    if (imageData === undefined) {
+    if (imageData == null) {
       throw new HttpStatusError(404);
     }
     if (cardDoc.user.toString() !== user.id) {
