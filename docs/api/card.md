@@ -41,8 +41,9 @@ Response body: None
 Request body:
 ```ts
 import type { Card } from './Card';
+import type { Image } from './Image';
 
-interface CardPatchRequest extends Pick<Card, 'id'> & Partial<Omit<Card, 'id' | 'hasImage'>> {
+interface CardPatchRequest extends Pick<Card, 'id'>, Partial<Omit<Card, 'id' | 'hasImage'>> {
   image?: Image | null;
 }
 ```
