@@ -7,31 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14.17.0'
-      - run: ./.github/scripts/update-npm.js
-      - run: npm install
+      - uses: ./.github/actions/setup
       - run: npm run build
   lint:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14.17.0'
-      - run: ./.github/scripts/update-npm.js
-      - run: npm install
+      - uses: ./.github/actions/setup
       - run: npm run lint:nofix
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14.17.0'
-      - run: ./.github/scripts/update-npm.js
-      - run: npm install
+      - uses: ./.github/actions/setup
       - run: npm test
