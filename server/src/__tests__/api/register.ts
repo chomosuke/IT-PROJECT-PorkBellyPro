@@ -4,7 +4,7 @@ import { register } from '../../api/register';
 import { HttpStatusError } from '../../api/HttpStatusError';
 import { IApiRouter } from '../../api/api-router';
 import {
-  DeepPartial, mock, mockRequest, mockResponse, mockStartSession
+  DeepPartial, mock, mockRequest, mockResponse, mockStartSession,
 } from '../helpers';
 
 describe('register unit tests', () => {

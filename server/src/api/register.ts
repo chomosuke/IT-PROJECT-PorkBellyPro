@@ -23,14 +23,11 @@ export const register = asyncRouteHandler(async function register({ body }, res)
             });
             // send respond 201 on successful save
             res.sendStatus(201);
-            return;
-          }
-          else {
+          } else {
             // throw conflict
             throw new HttpStatusError(409);
           }
-        })
-
+        });
       } finally {
         // make sure the session end
         dbs.endSession();
