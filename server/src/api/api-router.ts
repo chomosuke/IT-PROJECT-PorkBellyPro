@@ -5,7 +5,6 @@ import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/route
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
 import { ITag, tagSchema } from '../models/tag';
-import { requestLimiter } from './requestLimiter';
 
 export interface IApiRouter {
   get secretKey(): Readonly<Buffer>;
@@ -39,8 +38,6 @@ export class ApiRouter implements IApiRouter {
     this.dbPrivate = db;
 
     const jsonMiddleware = json();
-    const limiter = requestLimiter();
-    this.routerPrivate.use(limiter);
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
     this.routerPrivate.use(this.authRouter.router);
 
