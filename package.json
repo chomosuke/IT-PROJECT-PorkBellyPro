@@ -23,9 +23,5 @@
     "server",
     "shared",
     "web"
-  ],
-  "dependencies": {
-    "jimp": "^0.16.1",
-    "mongodb": "^4.1.1"
-  }
+  ]
 }
