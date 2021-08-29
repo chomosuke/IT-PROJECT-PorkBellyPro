@@ -19,23 +19,23 @@ export interface ICard {
 }
 
 const cardFieldSchema = new Schema<ICardField>({
-  key: { type: String, require: true },
-  value: { type: String, require: true },
+  key: { type: String, required: true },
+  value: { type: String, required: true },
 });
 
 export const cardSchema = new Schema<ICard>({
-  user: { type: Schema.Types.ObjectId, require: true, ref: 'User' },
-  favorite: { type: Boolean, require: true, default: false },
-  name: { type: String, require: true },
-  phone: { type: String, require: true },
-  email: { type: String, require: true },
-  jobTitle: { type: String, require: true },
-  company: { type: String, require: true },
+  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  favorite: { type: Boolean, required: true, default: false },
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: { type: String, required: true },
+  jobTitle: { type: String, required: true },
+  company: { type: String, required: true },
   image: Buffer,
   fields: {
     type: [cardFieldSchema],
-    require: true,
+    required: true,
     default: [],
   },
-  tags: { type: [Schema.Types.ObjectId], require: true, default: [] },
+  tags: { type: [Schema.Types.ObjectId], required: true, default: [] },
 });

@@ -7,7 +7,7 @@ export interface ITag {
 }
 
 export const tagSchema = new Schema<ITag>({
-  user: { type: Schema.Types.ObjectId, require: true, ref: 'User' },
+  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   label: String,
   color: String,
 });
