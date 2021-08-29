@@ -34,8 +34,8 @@ export const register = asyncRouteHandler(async function register({ body }, res)
       } finally {
         // make sure the session end
         dbs.endSession();
-        
       }
+      return;
     }
   }
   // throw bad request
