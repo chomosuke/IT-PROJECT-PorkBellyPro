@@ -10,7 +10,7 @@ import {
 import { User } from './auth';
 import { mockRequest } from './helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
-import { imageUri } from './imageUri';
+import { imageUri } from './imageUri.helpers';
 
 describe('cardPut unit tests', () => {
   test('Success test: without image', async () => {
