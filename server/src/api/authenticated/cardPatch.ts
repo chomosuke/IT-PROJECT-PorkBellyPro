@@ -13,7 +13,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     // user has been validated by middleware
     const { user, body } = req;
 
-    // extract present card information
+    // extract query information
     const {
       id,
       favorite,
@@ -32,15 +32,15 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
      * in the body
      */
     if (typeof id !== 'string'
-            || (favorite !== undefined && typeof favorite !== 'string')
-            || (name !== undefined && typeof name !== 'string')
-            || (phone !== undefined && typeof phone !== 'string')
-            || (email !== undefined && typeof email !== 'string')
-            || (jobTitle !== undefined && typeof jobTitle !== 'string')
-            || (company !== undefined && typeof company !== 'string')
-            || (image !== undefined && typeof image !== 'string')
-            || (!Array.isArray(fields))
-            || (!Array.isArray(tags))) {
+      || (favorite !== undefined && typeof favorite !== 'string')
+      || (name !== undefined && typeof name !== 'string')
+      || (phone !== undefined && typeof phone !== 'string')
+      || (email !== undefined && typeof email !== 'string')
+      || (jobTitle !== undefined && typeof jobTitle !== 'string')
+      || (company !== undefined && typeof company !== 'string')
+      || (image !== undefined && typeof image !== 'string')
+      || (!Array.isArray(fields))
+      || (!Array.isArray(tags))) {
       // bad request
       throw new HttpStatusError(400);
     }
@@ -49,7 +49,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     fields = fields?.map((f) => {
       const { key, value } = f;
       if (typeof key !== 'string'
-                || typeof value !== 'string') {
+        || typeof value !== 'string') {
         throw new HttpStatusError(400);
       }
       return { key, value };
@@ -65,7 +65,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     if (image !== undefined) {
       // sanatize image
       if (typeof image !== 'string'
-                || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
+        || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
         throw new HttpStatusError(400);
       }
       try {
@@ -79,6 +79,26 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         throw new HttpStatusError(400);
       }
     }
+
+    /*
+     * removed undefined fields :: undefined fields are fields that
+     * do not require an update.
+     * Programmer's note: Leaving a "" in fields will overwrite the fields
+     */
+    const updateDetails = Object.fromEntries(
+      Object.entries({
+        id,
+        favorite,
+        name,
+        phone,
+        email,
+        jobTitle,
+        company,
+        image,
+        tags,
+        fields,
+      }).filter(([, val]) => val !== undefined),
+    );
 
     const dbs = await this.parent.db.startSession();
     try {
@@ -101,23 +121,13 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         /*
          * tags are fine
          * fetch update clause
-         * for undefined things, they will be interpreted as removing
+         * for undefined things, they will be interpreted as not needing to update
          * such details from cards
          */
+        // TODO: get implement no change policy
         const updatedCard = await this.parent.Cards.findByIdAndUpdate(id,
           {
-            $set: {
-              id,
-              favorite,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              tags,
-              fields,
-              image,
-            },
+            $set: { ...updateDetails },
           },
           // ensures updated card is returned
           { new: true });
