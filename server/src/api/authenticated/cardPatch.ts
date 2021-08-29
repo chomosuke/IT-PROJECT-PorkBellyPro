@@ -88,7 +88,6 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
      */
     const updateDetails = Object.fromEntries(
       Object.entries({
-        id,
         favorite,
         name,
         phone,
