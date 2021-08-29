@@ -12,7 +12,7 @@ export const register = asyncRouteHandler(async function register({ body }, res)
       try {
         await dbs.withTransaction(async () => {
           const users = await this.Users.find({ username });
-          console.log(users.length);
+
           // ensure there is no existing identical username
           if (users.length === 0) {
             // generate a new user document in the user collection
