@@ -12,7 +12,7 @@ import { mockRequest } from './helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 import { imageUri } from './imageUri.helpers';
 
-describe('cardPut unit tests', () => {
+describe('PUT /api/card unit tests', () => {
   test('Success test: without image', async () => {
     const user = {
       id: Types.ObjectId().toString(),
