@@ -1,0 +1,21 @@
+name: build
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup
+    - uses: actions/cache@v2
+      id: cache-build
+      with:
+        key: cache-${{ runner.os }}-build-${{ github.sha }}
+        path: |
+          ./dist
+          ./server/bin/
+          ./shared/lib/
+    - run: |
+        if echo ${{ steps.cache-build.outputs.cache-hit }} | grep -c 'true'
+        then
+          echo 'Cache hit - skipping build'
+        else
+          npm run build
+        fi
+      shell: bash
