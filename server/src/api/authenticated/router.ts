@@ -43,8 +43,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.parentPrivate = parent;
     this.authorize = auth.bind(this.parentPrivate);
 
-    const jsonMiddleware = json();
-    this.routerPrivate.put('/card', jsonMiddleware, this.auth, this.bind(cardPut));
+    this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
     this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
