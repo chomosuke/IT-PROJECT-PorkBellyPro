@@ -5,11 +5,7 @@ runs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14.17.0'
-    - uses: actions/cache@v2
-      with:
-        key: cache-${{ runner.os }}-setup-${{ hashFiles('**/package-lock.json') }}
-        path: |
-          ~/.npm
+        cache: 'npm'
     - run: ./.github/scripts/update-npm.js
       shell: bash
     - run: npm install
