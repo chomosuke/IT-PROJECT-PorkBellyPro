@@ -48,7 +48,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       }
     });
 
-    let imageBuffer: Buffer | undefined = undefined;
+    let imageBuffer: Buffer | undefined;
     if (image !== undefined) {
       // sanatize image
       if (typeof image !== 'string'
@@ -101,7 +101,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: cardDoc.email,
           jobTitle: cardDoc.jobTitle,
           company: cardDoc.company,
-          hasImage: !!cardDoc.image,
+          hasImage: cardDoc.image != null,
           fields: cardDoc.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: cardDoc.tags.map((t) => t.toString()),
         };
