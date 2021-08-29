@@ -124,7 +124,6 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
          * for undefined things, they will be interpreted as not needing to update
          * such details from cards
          */
-        // TODO: get implement no change policy
         const updatedCard = await this.parent.Cards.findByIdAndUpdate(id,
           {
             $set: { ...updateDetails },

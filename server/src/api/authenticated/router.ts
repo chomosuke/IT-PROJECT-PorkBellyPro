@@ -3,6 +3,8 @@ import { RequestHandler, Router, json } from 'express';
 import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
+import { cardDelete } from './cardDelete';
+import { cardPatch } from './cardPatch';
 import { cardPut } from './cardPut';
 import { image } from './image';
 
@@ -45,6 +47,8 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
 
     const jsonMiddleware = json();
     this.routerPrivate.put('/card', jsonMiddleware, this.auth, this.bind(cardPut));
+    this.routerPrivate.delete('/card', jsonMiddleware, this.auth, this.bind(cardDelete));
+    this.routerPrivate.patch('/card', jsonMiddleware, this.auth, this.bind(cardPatch));
     this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
