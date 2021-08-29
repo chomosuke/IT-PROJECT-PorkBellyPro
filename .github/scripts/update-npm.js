@@ -12,7 +12,7 @@ exec('which node', (err, stdout) => {
   if (err)
     exit(1);
   chdir(resolve(dirname(stdout), '..', 'lib'));
-  exec('npm install npm@latest', (err) => {
+  exec('npm install npm@7.20.0', (err) => {
     if (err)
       exit(1);
   });
