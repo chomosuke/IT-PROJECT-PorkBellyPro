@@ -8,9 +8,8 @@ export function requestLimiter(): RequestHandler {
 
     if (length != null && Number(length) > 1048576) {
       next(new HttpStatusError(413));
-      return;
+    } else {
+      next();
     }
-
-    next();
   };
 }
