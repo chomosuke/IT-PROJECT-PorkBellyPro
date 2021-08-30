@@ -7,7 +7,7 @@ import { DeepPartial, mock, mockResponse } from '../../helpers';
 import { User } from './auth';
 import { mockRequest } from './helpers';
 
-describe('image unit tests', () => {
+describe('/api/image unit tests', () => {
   test('Success test', async () => {
     const cardId = Types.ObjectId();
 

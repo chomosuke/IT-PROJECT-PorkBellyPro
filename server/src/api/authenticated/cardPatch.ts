@@ -24,9 +24,10 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       jobTitle,
       company,
       tags,
+      image,
     } = body;
     // will transform
-    let { fields, image } = body;
+    let { fields } = body;
 
     /*
      * check for types. details left as undefined if it is not found
@@ -63,20 +64,22 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     });
 
     // image validation
+    let imageBuffer: Buffer | undefined;
     if (image !== undefined) {
       // sanatize image
       if (typeof image !== 'string'
         || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
         throw new HttpStatusError(400);
       }
+      let jimpImage;
       try {
-        image = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
+        jimpImage = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
       } catch (e) {
         throw new HttpStatusError(400);
       }
-      image = await image.getBufferAsync(Jimp.MIME_JPEG);
+      imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
       // check for buffer size -- set limit to 1MB may hoist to env variable
-      if (image.length >= 2 ** 20) {
+      if (imageBuffer.length >= 2 ** 20) {
         throw new HttpStatusError(400);
       }
     }
@@ -94,7 +97,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         email,
         jobTitle,
         company,
-        image,
+        image: imageBuffer,
         tags,
         fields,
       }).filter(([, val]) => val !== undefined),
@@ -145,7 +148,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: updatedCard.email,
           jobTitle: updatedCard.jobTitle,
           company: updatedCard.company,
-          hasImage: !!updatedCard.image,
+          hasImage: updatedCard.image != null,
           fields: updatedCard.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: updatedCard.tags.map((t) => t.toString()),
         };

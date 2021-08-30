@@ -6,7 +6,6 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: [
-    'src/__tests__/(.*\.)?helpers.[jt]sx?$',
-    'src/__tests__/api/authenticated/imageUri.ts'
+    'src/__tests__/(.*\.)?helpers.[jt]sx?$'
   ],
 };

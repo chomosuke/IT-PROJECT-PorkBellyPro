@@ -19,8 +19,9 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       jobTitle,
       company,
       tags,
+      image,
     } = body;
-    let { fields, image } = body;
+    let { fields } = body;
 
     if (typeof name !== 'string'
     || typeof phone !== 'string'
@@ -47,18 +48,20 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       }
     });
 
+    let imageBuffer: Buffer | undefined;
     if (image !== undefined) {
       // sanatize image
       if (typeof image !== 'string'
       || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
         throw new HttpStatusError(400);
       }
+      let jimpImage;
       try {
-        image = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
+        jimpImage = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
       } catch (e) {
         throw new HttpStatusError(400);
       }
-      image = await image.getBufferAsync(Jimp.MIME_JPEG);
+      imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
     }
 
     // now do the actual thing.
@@ -87,7 +90,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           company,
           fields,
           tags,
-          image,
+          image: imageBuffer,
         });
 
         const response: CardPutResponse = {
@@ -98,7 +101,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: cardDoc.email,
           jobTitle: cardDoc.jobTitle,
           company: cardDoc.company,
-          hasImage: !!cardDoc.image,
+          hasImage: cardDoc.image != null,
           fields: cardDoc.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: cardDoc.tags.map((t) => t.toString()),
         };
