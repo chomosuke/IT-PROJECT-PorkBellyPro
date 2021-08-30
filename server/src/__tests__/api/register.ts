@@ -1,4 +1,4 @@
-import { hashSync } from 'bcrypt';
+import { compareSync, hashSync } from 'bcrypt';
 import { NextFunction } from 'express';
 import { register } from '../../api/register';
 import { HttpStatusError } from '../../api/HttpStatusError';
@@ -6,6 +6,7 @@ import { IApiRouter } from '../../api/api-router';
 import {
   DeepPartial, mock, mockRequest, mockResponse, mockStartSession,
 } from '../helpers';
+import { IUser } from '../../models/user';
 
 describe('register unit tests', () => {
   test('register successful', async () => {
@@ -50,6 +51,12 @@ describe('register unit tests', () => {
     expect(res.sendStatus).toBeCalledTimes(1);
     // check whether a new user is created in the db
     expect(router.Users.create).toBeCalledTimes(1);
+
+    const firstParameter = (
+      router.Users.create as jest.MockedFunction<typeof router.Users.create>
+    ).mock.calls[0][0] as IUser;
+    expect(compareSync(password, firstParameter.password)).toBeTruthy();
+    expect(firstParameter.username).toBe(username);
   });
 
   test('register failed, user already existed', async () => {
