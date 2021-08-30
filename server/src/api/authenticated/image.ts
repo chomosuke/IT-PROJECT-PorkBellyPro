@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { HttpStatusError } from '../HttpStatusError';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 
@@ -5,6 +6,12 @@ export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
   async function image(req, res) {
     const { user, params } = req;
     const { cardId } = params;
+
+    try {
+      Types.ObjectId(cardId);
+    } catch (e) {
+      throw new HttpStatusError(404);
+    }
 
     const cardDoc = await this.parent.Cards.findById(cardId);
     if (cardDoc === null) {
