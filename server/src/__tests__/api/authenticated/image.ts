@@ -45,7 +45,7 @@ describe('/api/image unit tests', () => {
       .resolves.toBeUndefined();
 
     expect(router.parent.Cards.findById).toBeCalledTimes(1);
-    expect(router.parent.Cards.findById).toBeCalledWith(cardId.toString());
+    expect(router.parent.Cards.findById).toBeCalledWith(cardId);
 
     expect(res.contentType).toBeCalledTimes(1);
     expect(res.contentType).toBeCalledWith('image/jpeg');
