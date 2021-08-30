@@ -7,13 +7,14 @@ export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     const { user, params } = req;
     const { cardId } = params;
 
+    let cardObjId;
     try {
-      Types.ObjectId(cardId);
+      cardObjId = Types.ObjectId(cardId);
     } catch (e) {
       throw new HttpStatusError(404);
     }
 
-    const cardDoc = await this.parent.Cards.findById(cardId);
+    const cardDoc = await this.parent.Cards.findById(cardObjId);
     if (cardDoc === null) {
       throw new HttpStatusError(404);
     }
