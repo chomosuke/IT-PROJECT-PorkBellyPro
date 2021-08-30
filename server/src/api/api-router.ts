@@ -6,6 +6,7 @@ import { logout } from './logout';
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
 import { ITag, tagSchema } from '../models/tag';
+import { register } from './register';
 
 export interface IApiRouter {
   get secretKey(): Readonly<Buffer>;
@@ -41,6 +42,8 @@ export class ApiRouter implements IApiRouter {
     const jsonMiddleware = json();
     this.routerPrivate.post('/logout', logout);
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+    // handle register request
+    this.routerPrivate.post('/register', jsonMiddleware, this.bind(register));
     this.routerPrivate.use(this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
