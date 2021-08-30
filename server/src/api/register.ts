@@ -21,7 +21,7 @@ export const register = asyncRouteHandler(async function register({ body }, res)
             await this.Users.create({
               username,
               // store the 2 layer hashed password
-              hashedPw,
+              password: hashedPw,
               // add setting here
             });
             // send respond 201 on successful save
