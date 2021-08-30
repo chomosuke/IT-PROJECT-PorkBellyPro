@@ -6,13 +6,14 @@ import { IApiRouter } from '../../api/api-router';
 import {
   DeepPartial, mock, mockRequest, mockResponse, mockStartSession,
 } from '../helpers';
-import { IUser } from '../../models/user';
 
 describe('register unit tests', () => {
   test('register successful', async () => {
     // simulate string username + hashed password
     const username = 'someUsername';
     const password = await hash('somePassword', 10);
+
+    const create = mock().mockResolvedValue([]);
 
     // simulate 0 existed user in the database
     const routerPartial: DeepPartial<IApiRouter> = {
@@ -21,7 +22,7 @@ describe('register unit tests', () => {
       },
       Users: {
         find: mock().mockResolvedValue([]),
-        create: mock().mockResolvedValue([]),
+        create,
       },
     };
     const router = routerPartial as IApiRouter;
@@ -49,12 +50,11 @@ describe('register unit tests', () => {
     // expect 201 respond, successfully created
     expect(res.sendStatus).toBeCalledWith(201);
     expect(res.sendStatus).toBeCalledTimes(1);
-    // check whether a new user is created in the db
-    expect(router.Users.create).toBeCalledTimes(1);
 
-    const firstParameter = (
-      router.Users.create as jest.MockedFunction<typeof router.Users.create>
-    ).mock.calls[0][0] as IUser;
+    // check whether a new user is created in the db
+    expect(create).toBeCalledTimes(1);
+
+    const firstParameter = create.mock.calls[0][0];
     expect(await compare(password, firstParameter.password)).toBeTruthy();
     expect(firstParameter.username).toBe(username);
   });
