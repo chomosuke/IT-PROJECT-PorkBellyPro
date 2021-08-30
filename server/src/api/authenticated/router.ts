@@ -3,11 +3,12 @@ import { RequestHandler, Router } from 'express';
 import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
+import { me } from './me';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   Q extends Query<infer ResultType, infer _DocType, infer _THelpers, infer _RawDocType>
-    ? ResultType
+    ? NonNullable<ResultType>
     : never;
 
 export type AuthenticatedRequest = Parameters<RequestHandler>[0] & {
@@ -40,6 +41,8 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
   constructor(parent: IApiRouter) {
     this.parentPrivate = parent;
     this.authorize = auth.bind(this.parentPrivate);
+
+    this.routerPrivate.get('/me', this.auth, this.bind(me));
   }
 
   get router(): Router {
@@ -48,6 +51,10 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
 
   get parent(): IApiRouter {
     return this.parentPrivate;
+  }
+
+  private bind(handler: AuthenticatedApiRequestHandler): RequestHandler {
+    return handler.bind(this) as RequestHandler;
   }
 
   private auth: RequestHandler = (req, res, next) => {
