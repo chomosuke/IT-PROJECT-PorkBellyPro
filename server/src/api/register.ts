@@ -1,3 +1,4 @@
+import { genSaltSync, hashSync } from 'bcrypt';
 import { asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from './HttpStatusError';
 
@@ -16,9 +17,11 @@ export const register = asyncRouteHandler(async function register({ body }, res)
           // ensure there is no existing identical username
           if (users.length === 0) {
             // generate a new user document in the user collection
+            const hashedPw = hashSync(password, genSaltSync());
             await this.Users.create({
               username,
-              password,
+              // store the 2 layer hashed password
+              hashedPw,
               // add setting here
             });
             // send respond 201 on successful save

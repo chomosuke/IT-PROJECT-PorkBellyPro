@@ -50,7 +50,6 @@ describe('register unit tests', () => {
     expect(res.sendStatus).toBeCalledTimes(1);
     // check whether a new user is created in the db
     expect(router.Users.create).toBeCalledTimes(1);
-    expect(router.Users.create).toBeCalledWith({ username, password });
   });
 
   test('register failed, user already existed', async () => {
