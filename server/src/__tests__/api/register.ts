@@ -1,4 +1,4 @@
-import { compareSync, hashSync } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { NextFunction } from 'express';
 import { register } from '../../api/register';
 import { HttpStatusError } from '../../api/HttpStatusError';
@@ -12,7 +12,7 @@ describe('register unit tests', () => {
   test('register successful', async () => {
     // simulate string username + hashed password
     const username = 'someUsername';
-    const password = hashSync('somePassword', 10);
+    const password = await hash('somePassword', 10);
 
     // simulate 0 existed user in the database
     const routerPartial: DeepPartial<IApiRouter> = {
@@ -55,14 +55,14 @@ describe('register unit tests', () => {
     const firstParameter = (
       router.Users.create as jest.MockedFunction<typeof router.Users.create>
     ).mock.calls[0][0] as IUser;
-    expect(compareSync(password, firstParameter.password)).toBeTruthy();
+    expect(await compare(password, firstParameter.password)).toBeTruthy();
     expect(firstParameter.username).toBe(username);
   });
 
   test('register failed, user already existed', async () => {
     // simulate string username + hashed password
     const username = 'someUsername';
-    const password = hashSync('somePassword', 10);
+    const password = await hash('somePassword', 10);
 
     // simulate 1 existed user with the same username
     const routerPartial: DeepPartial<IApiRouter> = {
@@ -72,7 +72,7 @@ describe('register unit tests', () => {
       Users: {
         find: mock().mockResolvedValue([{
           username,
-          password: hashSync('a', 10),
+          password: await hash('a', 10),
         }]),
       },
     };
