@@ -1,6 +1,7 @@
 import { RequestHandler, Router, json } from 'express';
 import { Connection, Model } from 'mongoose';
 import { login } from './login';
+import { register } from './register';
 import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/router';
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
@@ -39,6 +40,8 @@ export class ApiRouter implements IApiRouter {
 
     const jsonMiddleware = json();
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+    // handle register request
+    this.routerPrivate.post('/register', jsonMiddleware, this.bind(register));
     this.routerPrivate.use(this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);
