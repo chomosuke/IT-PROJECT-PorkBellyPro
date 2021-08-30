@@ -1,8 +1,10 @@
 import cookieParser from 'cookie-parser';
-import { RequestHandler, Router } from 'express';
+import { RequestHandler, Router, json } from 'express';
 import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
+import { cardPut } from './cardPut';
+import { image } from './image';
 import { me } from './me';
 
 type QueryResult<Q> =
@@ -43,6 +45,8 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.authorize = auth.bind(this.parentPrivate);
 
     this.routerPrivate.get('/me', this.auth, this.bind(me));
+    this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
+    this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
   get router(): Router {

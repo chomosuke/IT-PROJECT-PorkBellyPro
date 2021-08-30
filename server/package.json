@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "jimp": "^0.16.1",
     "@porkbellypro/crm-shared": "file:shared",
     "argparse": "^2.0.1",
     "bcrypt": "^5.0.1",
