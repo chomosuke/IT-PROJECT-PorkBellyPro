@@ -1,6 +1,6 @@
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
-import { CardDeleteRequest } from '../../../../../shared/lib';
+import { CardDeleteRequest } from '@porkbellypro/crm-shared';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
   DeepPartial, mock, mockResponse, mockStartSession,
