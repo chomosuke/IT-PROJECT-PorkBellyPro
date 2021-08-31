@@ -322,15 +322,14 @@ describe('PUT /api/card unit tests', () => {
     const tagsFindByIdWU = mock((id) => tagsWrongUser.find((t) => t.id === id.toString()));
 
     const { parent } = router;
-    const { Tags, ...rest } = parent;
     const TagsWU = {
       findById: tagsFindByIdWU,
     };
 
     const routerWUPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
+        ...parent,
         Tags: TagsWU,
-        ...rest,
       } as DeepPartial<IApiRouter>,
     };
     const routerWU = routerWUPartial as IAuthenticatedRouter;
