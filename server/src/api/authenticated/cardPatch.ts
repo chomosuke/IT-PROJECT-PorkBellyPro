@@ -43,7 +43,6 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       || (fields !== undefined && !Array.isArray(fields))
       || (tags !== undefined && !Array.isArray(tags))) {
       // bad request
-      console.log('triggered!');
       throw new HttpStatusError(400);
     }
 
