@@ -2,6 +2,7 @@ import {
   CardPutResponse,
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
+import { Types } from 'mongoose';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 
@@ -18,10 +19,9 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       email,
       jobTitle,
       company,
-      tags,
       image,
     } = body;
-    let { fields } = body;
+    let { fields, tags } = body;
 
     if (typeof name !== 'string'
     || typeof phone !== 'string'
@@ -42,8 +42,10 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       return { key, value };
     });
 
-    tags.forEach((t) => {
-      if (typeof t !== 'string') {
+    tags = tags.map((t) => {
+      try {
+        return Types.ObjectId(t);
+      } catch (e) {
         throw new HttpStatusError(400);
       }
     });
