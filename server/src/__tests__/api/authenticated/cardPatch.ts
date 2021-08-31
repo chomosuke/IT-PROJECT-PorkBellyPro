@@ -9,7 +9,6 @@ import {
 } from '../../helpers';
 import { User } from './auth';
 import { mockRequest } from './helpers';
-// import { HttpStatusError } from '../../../api/HttpStatusError';
 import { imageUri } from './imageUri.helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
@@ -44,7 +43,7 @@ const tags = [
 
 let imageBuffer: Buffer;
 
-const existingCards = [{
+const existingCardsConsts = [{
   id: Types.ObjectId().toString(),
   user: Types.ObjectId(user.id),
   favorite: true,
@@ -75,6 +74,8 @@ const existingCards = [{
   set: jest.fn(),
 }];
 
+let existingCards = existingCardsConsts.map((card) => ({ ...card }));
+
 function mockSet(this: typeof existingCards[0],
   obj: {
     [x: string]: unknown; save: jest.Mock; set: jest.Mock;
@@ -82,9 +83,6 @@ function mockSet(this: typeof existingCards[0],
   const { save, set, ...rest } = obj;
   Object.assign(this, rest);
 }
-existingCards.forEach((card) => {
-  card.set.mockImplementation(mockSet.bind(card));
-});
 
 // mock the router
 const mockTagFind = mock(mock((id) => tags.find((t) => t.id === id)));
@@ -116,9 +114,13 @@ describe('PATCH /api/card unit tests', () => {
 
   beforeEach(() => {
     next.mockClear();
-    existingCards.forEach((c) => {
+    existingCardsConsts.forEach((c) => {
       c.save.mockClear();
       c.set.mockClear();
+    });
+    existingCards = existingCardsConsts.map((card) => ({ ...card }));
+    existingCards.forEach((card) => {
+      card.set.mockImplementation(mockSet.bind(card));
     });
     mockTagFind.mockClear();
     mockCardFind.mockClear();
