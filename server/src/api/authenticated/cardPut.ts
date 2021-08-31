@@ -43,6 +43,9 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     });
 
     tags = tags.map((t) => {
+      if (typeof t !== 'string') {
+        throw new HttpStatusError(400);
+      }
       try {
         return Types.ObjectId(t);
       } catch (e) {
