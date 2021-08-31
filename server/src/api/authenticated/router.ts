@@ -47,7 +47,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.authorize = auth.bind(this.parentPrivate);
 
     this.routerPrivate.get('/me', this.auth, this.bind(me));
-    this.routerPrivate.delete('/card', json({ limit: '1mb' }), this.auth, this.bind(cardDelete));
+    this.routerPrivate.delete('/card', json(), this.auth, this.bind(cardDelete));
     this.routerPrivate.patch('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPatch));
     this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
     this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
