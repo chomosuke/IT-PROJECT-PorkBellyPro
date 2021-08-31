@@ -1,13 +1,16 @@
 import cookieParser from 'cookie-parser';
-import { RequestHandler, Router } from 'express';
+import { RequestHandler, Router, json } from 'express';
 import { Query } from 'mongoose';
 import type { IApiRouter } from '../api-router';
 import { auth } from './auth';
+import { cardPut } from './cardPut';
+import { image } from './image';
+import { me } from './me';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   Q extends Query<infer ResultType, infer _DocType, infer _THelpers, infer _RawDocType>
-    ? ResultType
+    ? NonNullable<ResultType>
     : never;
 
 export type AuthenticatedRequest = Parameters<RequestHandler>[0] & {
@@ -40,6 +43,10 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
   constructor(parent: IApiRouter) {
     this.parentPrivate = parent;
     this.authorize = auth.bind(this.parentPrivate);
+
+    this.routerPrivate.get('/me', this.auth, this.bind(me));
+    this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
+    this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
   get router(): Router {
@@ -48,6 +55,10 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
 
   get parent(): IApiRouter {
     return this.parentPrivate;
+  }
+
+  private bind(handler: AuthenticatedApiRequestHandler): RequestHandler {
+    return handler.bind(this) as RequestHandler;
   }
 
   private auth: RequestHandler = (req, res, next) => {

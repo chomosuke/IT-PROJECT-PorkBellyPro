@@ -1,7 +1,13 @@
 import { compare } from 'bcrypt';
+import { CookieOptions } from 'express';
 import { asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from './HttpStatusError';
 import { Session, encryptSession, sessionMaxAge } from './Session';
+
+export const tokenCookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+};
 
 export const login = asyncRouteHandler(async function login({ body }, res) {
   if (body != null) {
@@ -19,8 +25,7 @@ export const login = asyncRouteHandler(async function login({ body }, res) {
           const token = encryptSession(this.secretKey, session);
           res.cookie('token', token, {
             expires,
-            httpOnly: true,
-            secure: true,
+            ...tokenCookieOptions,
           }).sendStatus(200);
 
           return;

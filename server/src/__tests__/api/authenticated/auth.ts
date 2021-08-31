@@ -16,7 +16,7 @@ type QueryResult<Q> =
     ? ResultType
     : never;
 
-type User = NonNullable<QueryResult<ReturnType<IApiRouter['Users']['findById']>>>;
+export type User = NonNullable<QueryResult<ReturnType<IApiRouter['Users']['findById']>>>;
 
 describe('auth tests', () => {
   test('Success test', async () => {
