@@ -25,7 +25,7 @@ export const cardDelete: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler
           throw new HttpStatusError(401);
         } else {
           await this.parent.Cards.findByIdAndDelete(id);
-          res.status(204).send();
+          res.sendStatus(204);
         }
       });
     } finally {
