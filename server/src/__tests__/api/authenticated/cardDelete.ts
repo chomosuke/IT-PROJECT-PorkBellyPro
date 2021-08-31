@@ -99,7 +99,7 @@ describe('DELETE /api/card unit tests', () => {
 
   test('Failure case: malformed request', async () => {
     const request = {
-      id: 98742125005,
+      id: 12,
     };
 
     const req = mockRequest({

@@ -2,6 +2,7 @@ import {
   CardPatchResponse,
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
+import { Types } from 'mongoose';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 import { ICardField } from '../../models/card';
@@ -56,8 +57,19 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       return { key, value };
     });
 
+    try {
+      Types.ObjectId(id);
+    } catch (e) {
+      throw new HttpStatusError(400);
+    }
+
     tags?.forEach((t: string) => {
       if (typeof t !== 'string') {
+        throw new HttpStatusError(400);
+      }
+      try {
+        Types.ObjectId(t);
+      } catch (e) {
         throw new HttpStatusError(400);
       }
     });
@@ -80,10 +92,6 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           throw new HttpStatusError(400);
         }
         imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
-        // check for buffer size -- set limit to 1MB may hoist to env variable
-        if (imageBuffer.length >= 2 ** 20) {
-          throw new HttpStatusError(400);
-        }
       }
     }
     /*

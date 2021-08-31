@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 
@@ -6,9 +7,17 @@ export const cardDelete: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler
     const { user, body } = req;
     // check that the body contains an id.
     const { id } = body;
+
     if (typeof id !== 'string') {
       throw new HttpStatusError(400);
     }
+
+    try {
+      Types.ObjectId(id);
+    } catch (e) {
+      throw new HttpStatusError(400);
+    }
+
     /*
      * need to fetch card and check that card matches id.
      * also need to check that card belongs to user
