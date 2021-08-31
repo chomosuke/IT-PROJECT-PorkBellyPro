@@ -45,7 +45,7 @@ describe('/api/image unit tests', () => {
       .resolves.toBeUndefined();
 
     expect(router.parent.Cards.findById).toBeCalledTimes(1);
-    expect(router.parent.Cards.findById).toBeCalledWith(cardId.toString());
+    expect(router.parent.Cards.findById).toBeCalledWith(cardId);
 
     expect(res.contentType).toBeCalledTimes(1);
     expect(res.contentType).toBeCalledWith('image/jpeg');
@@ -146,5 +146,39 @@ describe('/api/image unit tests', () => {
 
     await expect(image.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(401));
+  });
+
+  test('Fail test: bad cardId', async () => {
+    const cardId = '42';
+
+    const req = mockRequest({
+      params: {
+        cardId: cardId.toString(),
+      },
+      user: {
+        id: Types.ObjectId().toString(),
+      } as User,
+    });
+
+    const res = mockResponse();
+
+    const imageData = 'someBuffer';
+
+    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
+      parent: {
+        Cards: {
+          findById: mock().mockResolvedValue({
+            image: imageData,
+            user: Types.ObjectId(),
+          }),
+        },
+      },
+    };
+    const router = routerPartial as IAuthenticatedRouter;
+
+    const next = mock<NextFunction>();
+
+    await expect(image.implementation.call(router, req, res, next))
+      .rejects.toStrictEqual(new HttpStatusError(404));
   });
 });

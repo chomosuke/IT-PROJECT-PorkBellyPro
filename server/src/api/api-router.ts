@@ -1,10 +1,12 @@
 import { RequestHandler, Router, json } from 'express';
 import { Connection, Model } from 'mongoose';
-import { login } from './login';
 import { AuthenticatedRouter, IAuthenticatedRouter } from './authenticated/router';
+import { login } from './login';
+import { logout } from './logout';
 import { IUser, userSchema } from '../models/user';
 import { ICard, cardSchema } from '../models/card';
 import { ITag, tagSchema } from '../models/tag';
+import { register } from './register';
 
 export interface IApiRouter {
   get secretKey(): Readonly<Buffer>;
@@ -38,7 +40,10 @@ export class ApiRouter implements IApiRouter {
     this.dbPrivate = db;
 
     const jsonMiddleware = json();
+    this.routerPrivate.post('/logout', logout);
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
+    // handle register request
+    this.routerPrivate.post('/register', jsonMiddleware, this.bind(register));
     this.routerPrivate.use(this.authRouter.router);
 
     this.usersPrivate = db.model<IUser>('User', userSchema);

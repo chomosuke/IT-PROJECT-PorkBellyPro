@@ -64,26 +64,29 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     });
 
     // image validation
-    let imageBuffer: Buffer | undefined;
+    let imageBuffer: Buffer | undefined | null;
     if (image !== undefined) {
-      // sanatize image
-      if (typeof image !== 'string'
-        || image.substr(0, dataURIPrefix.length) !== dataURIPrefix) {
+      if (image === null) {
+        // null image means remove the image from card
+        imageBuffer = null;
+      } else if (typeof image !== 'string'
+        || image.substr(0, dataURIPrefix.length) !== dataURIPrefix
+        || image === '') {
         throw new HttpStatusError(400);
-      }
-      let jimpImage;
-      try {
-        jimpImage = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
-      } catch (e) {
-        throw new HttpStatusError(400);
-      }
-      imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
-      // check for buffer size -- set limit to 1MB may hoist to env variable
-      if (imageBuffer.length >= 2 ** 20) {
-        throw new HttpStatusError(400);
+      } else {
+        let jimpImage;
+        try {
+          jimpImage = await Jimp.read(Buffer.from(image.substr(dataURIPrefix.length), 'base64'));
+        } catch (e) {
+          throw new HttpStatusError(400);
+        }
+        imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
+        // check for buffer size -- set limit to 1MB may hoist to env variable
+        if (imageBuffer.length >= 2 ** 20) {
+          throw new HttpStatusError(400);
+        }
       }
     }
-
     /*
      * removed undefined fields :: undefined fields are fields that
      * do not require an update.
