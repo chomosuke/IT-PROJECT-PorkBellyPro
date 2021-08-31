@@ -11,72 +11,96 @@ import { User } from './auth';
 import { mockRequest } from './helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 import { imageUri } from './imageUri.helpers';
+import { IApiRouter } from '../../../api/api-router';
+
+const user = {
+  id: Types.ObjectId().toString(),
+} as User;
+
+const tags = [
+  {
+    id: Types.ObjectId().toString(),
+    user: Types.ObjectId(user.id),
+    label: 'haha1',
+    color: 'fff',
+  },
+  {
+    id: Types.ObjectId().toString(),
+    user: Types.ObjectId(user.id),
+    label: 'haha2',
+    color: 'fff',
+  },
+  {
+    id: Types.ObjectId().toString(),
+    user: Types.ObjectId(user.id),
+    label: 'haha3',
+    color: 'fff',
+  },
+];
+
+const cardId = Types.ObjectId().toString();
+
+const tagsFindById = mock((id) => tags.find((t) => t.id === id.toString()));
+const cardsCreate = mock(async (obj) => {
+  const {
+    name,
+    phone,
+    email,
+    jobTitle,
+    company,
+    fields,
+    image,
+  } = obj;
+  return {
+    id: cardId,
+    favorite: false,
+    user: obj.user,
+    name,
+    phone,
+    email,
+    jobTitle,
+    company,
+    fields,
+    image,
+    tags: obj.tags.map((id: string) => Types.ObjectId(id)),
+  };
+});
+
+const routerPartial: DeepPartial<IAuthenticatedRouter> = {
+  parent: {
+    db: {
+      startSession: mockStartSession,
+    },
+    Tags: {
+      findById: tagsFindById,
+    },
+    Cards: {
+      create: cardsCreate,
+    },
+  },
+};
+const router = routerPartial as IAuthenticatedRouter;
+
+const resStatus = mock().mockReturnThis();
+const resJson = mock().mockReturnThis();
+
+const res = mockResponse({
+  status: resStatus,
+  json: resJson,
+});
+
+const next = mock<NextFunction>();
 
 describe('PUT /api/card unit tests', () => {
+  beforeEach(async () => {
+    tagsFindById.mockClear();
+    cardsCreate.mockClear();
+    resStatus.mockClear();
+    resJson.mockClear();
+    next.mockClear();
+  });
+
   test('Success test: without image', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
-
-    const cardId = Types.ObjectId().toString();
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: CardPutRequest = {
       name: 'john',
       phone: '021',
@@ -93,21 +117,14 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next)).resolves.toBeUndefined();
 
-    expect(router.parent.Tags.findById).toBeCalledTimes(3);
+    expect(tagsFindById).toBeCalledTimes(3);
     tags.forEach((tag, i) => {
-      expect(router.parent.Tags.findById).toHaveBeenNthCalledWith(i + 1, tag.id);
+      expect(tagsFindById).toHaveBeenNthCalledWith(i + 1, Types.ObjectId(tag.id));
     });
-    expect(router.parent.Cards.create).toBeCalledTimes(1);
-    expect(router.parent.Cards.create).toBeCalledWith({
+    expect(cardsCreate).toBeCalledTimes(1);
+    expect(cardsCreate).toBeCalledWith({
       user: user.id,
       name: request.name,
       phone: request.phone,
@@ -115,11 +132,12 @@ describe('PUT /api/card unit tests', () => {
       jobTitle: request.jobTitle,
       company: request.company,
       fields: request.fields,
-      tags: request.tags,
+      tags: request.tags.map((id) => Types.ObjectId(id)),
+      image: undefined,
     });
-    expect(res.status).toBeCalledTimes(1);
-    expect(res.status).toBeCalledWith(201);
-    expect(res.json).toBeCalledTimes(1);
+    expect(resStatus).toBeCalledTimes(1);
+    expect(resStatus).toBeCalledWith(201);
+    expect(resJson).toBeCalledTimes(1);
 
     const {
       name,
@@ -141,75 +159,12 @@ describe('PUT /api/card unit tests', () => {
       fields,
       tags: tags.map((t) => t.id),
     };
-    expect(res.json).toBeCalledWith(response);
+    expect(resJson).toBeCalledWith(response);
+
+    expect(next).not.toBeCalled();
   });
 
   test('Success test: with image', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
-
-    const cardId = Types.ObjectId().toString();
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-        Cards: {
-          create: mock(async (obj) => {
-            const {
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              fields,
-              image,
-            } = obj;
-            return {
-              id: cardId,
-              favorite: false,
-              user: obj.user,
-              name,
-              phone,
-              email,
-              jobTitle,
-              company,
-              image,
-              fields,
-              tags: obj.tags.map((id: string) => Types.ObjectId(id)),
-            };
-          }),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: CardPutRequest = {
       name: 'john',
       phone: '021',
@@ -227,23 +182,16 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse({
-      status: mock().mockReturnThis(),
-      json: mock().mockReturnThis(),
-    });
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next)).resolves.toBeUndefined();
 
-    expect(router.parent.Tags.findById).toBeCalledTimes(3);
+    expect(tagsFindById).toBeCalledTimes(3);
     tags.forEach((tag, i) => {
-      expect(router.parent.Tags.findById).toHaveBeenNthCalledWith(i + 1, tag.id);
+      expect(tagsFindById).toHaveBeenNthCalledWith(i + 1, Types.ObjectId(tag.id));
     });
-    expect(router.parent.Cards.create).toBeCalledTimes(1);
+    expect(cardsCreate).toBeCalledTimes(1);
     const image = await (await Jimp.read(Buffer.from(imageUri.substr(dataURIPrefix.length), 'base64')))
       .getBufferAsync(Jimp.MIME_JPEG);
-    expect(router.parent.Cards.create).toBeCalledWith({
+    expect(cardsCreate).toBeCalledWith({
       user: user.id,
       name: request.name,
       phone: request.phone,
@@ -252,11 +200,11 @@ describe('PUT /api/card unit tests', () => {
       company: request.company,
       fields: request.fields,
       image,
-      tags: request.tags,
+      tags: request.tags.map((id) => Types.ObjectId(id)),
     });
-    expect(res.status).toBeCalledTimes(1);
-    expect(res.status).toBeCalledWith(201);
-    expect(res.json).toBeCalledTimes(1);
+    expect(resStatus).toBeCalledTimes(1);
+    expect(resStatus).toBeCalledWith(201);
+    expect(resJson).toBeCalledTimes(1);
 
     const {
       name,
@@ -278,17 +226,12 @@ describe('PUT /api/card unit tests', () => {
       fields,
       tags: tags.map((t) => t.id),
     };
-    expect(res.json).toBeCalledWith(response);
+    expect(resJson).toBeCalledWith(response);
+
+    expect(next).not.toBeCalled();
   });
 
   test('Fail test: corrupted image', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {};
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: CardPutRequest = {
       name: 'john',
       phone: '021',
@@ -307,22 +250,17 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse();
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(400));
+
+    expect(tagsFindById).not.toBeCalled();
+    expect(cardsCreate).not.toBeCalled();
+    expect(resStatus).not.toBeCalled();
+    expect(resJson).not.toBeCalled();
+    expect(next).not.toBeCalled();
   });
 
   test('Fail test: bad image content type', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {};
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: CardPutRequest = {
       name: 'john',
       phone: '021',
@@ -340,52 +278,17 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse();
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(400));
+
+    expect(tagsFindById).not.toBeCalled();
+    expect(cardsCreate).not.toBeCalled();
+    expect(resStatus).not.toBeCalled();
+    expect(resJson).not.toBeCalled();
+    expect(next).not.toBeCalled();
   });
 
   test('Fail test: bad tagId', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: CardPutRequest = {
       name: 'john',
       phone: '021',
@@ -402,53 +305,34 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse();
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(400));
 
-    expect(router.parent.Tags.findById).toBeCalled();
+    expect(tagsFindById).toBeCalled();
+    expect(cardsCreate).not.toBeCalled();
+    expect(resStatus).not.toBeCalled();
+    expect(resJson).not.toBeCalled();
+    expect(next).not.toBeCalled();
   });
 
   test('Fail test: tagId wrong user', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
+    const tagsWrongUser = tags.map((t) => ({ ...t }));
+    tagsWrongUser[2].user = Types.ObjectId();
 
-    const tags = [
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha1',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(user.id),
-        label: 'haha2',
-        color: 'fff',
-      },
-      {
-        id: Types.ObjectId().toString(),
-        user: Types.ObjectId(),
-        label: 'haha3',
-        color: 'fff',
-      },
-    ];
+    const tagsFindByIdWU = mock((id) => tagsWrongUser.find((t) => t.id === id.toString()));
 
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        db: {
-          startSession: mockStartSession,
-        },
-        Tags: {
-          findById: mock((id) => tags.find((t) => t.id === id)),
-        },
-      },
+    const { parent } = router;
+    const TagsWU = {
+      findById: tagsFindByIdWU,
     };
-    const router = routerPartial as IAuthenticatedRouter;
+
+    const routerWUPartial: DeepPartial<IAuthenticatedRouter> = {
+      parent: {
+        ...parent,
+        Tags: TagsWU,
+      } as DeepPartial<IApiRouter>,
+    };
+    const routerWU = routerWUPartial as IAuthenticatedRouter;
 
     const request: CardPutRequest = {
       name: 'john',
@@ -459,31 +343,24 @@ describe('PUT /api/card unit tests', () => {
       fields: [
         { key: 'height', value: '10cm' }, { key: 'weight', value: 'fat' },
       ],
-      tags: tags.map((t) => t.id),
+      tags: tagsWrongUser.map((t) => t.id),
     };
     const req = mockRequest({
       body: request,
       user,
     });
 
-    const res = mockResponse();
-
-    const next = mock<NextFunction>();
-
-    await expect(cardPut.implementation.call(router, req, res, next))
+    await expect(cardPut.implementation.call(routerWU, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(401));
 
-    expect(router.parent.Tags.findById).toBeCalled();
+    expect(tagsFindByIdWU).toBeCalled();
+    expect(cardsCreate).not.toBeCalled();
+    expect(resStatus).not.toBeCalled();
+    expect(resJson).not.toBeCalled();
+    expect(next).not.toBeCalled();
   });
 
   test('Fail test: bad request - no email', async () => {
-    const user = {
-      id: Types.ObjectId().toString(),
-    } as User;
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {};
-    const router = routerPartial as IAuthenticatedRouter;
-
     const request: Partial<CardPutRequest> = {
       name: 'john',
       phone: '021',
@@ -499,11 +376,13 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
-    const res = mockResponse();
-
-    const next = mock<NextFunction>();
-
     await expect(cardPut.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(400));
+
+    expect(tagsFindById).not.toBeCalled();
+    expect(cardsCreate).not.toBeCalled();
+    expect(resStatus).not.toBeCalled();
+    expect(resJson).not.toBeCalled();
+    expect(next).not.toBeCalled();
   });
 });
