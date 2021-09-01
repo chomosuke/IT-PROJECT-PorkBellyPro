@@ -59,8 +59,20 @@ export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
     user: null,
     update() { },
     showCardDetail() { },
-    login() { return Promise.resolve(true); },
-    logout() { return Promise.resolve(true); },
+    login() {
+      return Promise.resolve(new ResponseStatus({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      }));
+    },
+    logout() {
+      return Promise.resolve(new ResponseStatus({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      }));
+    },
   };
 
   const { contentRoot } = getClassNames();
