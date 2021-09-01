@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ICard } from './controllers/Card';
+import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
 
@@ -27,8 +28,8 @@ export interface IAppContext extends Readonly<IAppContextProperties> {
   readonly user: IUser | null;
   update(props: Partial<IAppContextProperties>): void;
   showCardDetail(card: ICard | null): void;
-  login(username: string, password: string, register?: boolean): void;
-  logout(): void;
+  login(username: string, password: string, register?: boolean): Promise<ResponseStatus>;
+  logout(): Promise<ResponseStatus>;
 }
 
 const appContext = createContext<IAppContext | undefined>(undefined);
@@ -58,8 +59,8 @@ export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
     user: null,
     update() { },
     showCardDetail() { },
-    login() {},
-    logout() {},
+    login() { return Promise.resolve(true); },
+    logout() { return Promise.resolve(true); },
   };
 
   const { contentRoot } = getClassNames();
