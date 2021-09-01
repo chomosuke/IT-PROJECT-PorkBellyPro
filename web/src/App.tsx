@@ -1,9 +1,8 @@
 import { mergeStyleSets } from '@fluentui/react';
-import { History } from 'history';
 import PropTypes from 'prop-types';
 import React, { createContext, useContext } from 'react';
 import {
-  BrowserRouter, Route, Router, RouterProps, Switch,
+  BrowserRouter, MemoryRouter, Route, Switch,
 } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ICard } from './controllers/Card';
@@ -49,17 +48,17 @@ const getClassNames = () => mergeStyleSets({
 });
 
 export interface IAppProps {
-  history?: RouterProps['history'];
+  useMemoryRouter?: boolean;
 }
 
-export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
+export const App: React.VoidFunctionComponent<IAppProps> = ({ useMemoryRouter }) => {
   const context: IAppContext = {
     searchQuery: '',
     user: null,
     update() { },
     showCardDetail() { },
-    login() {},
-    logout() {},
+    login() { },
+    logout() { },
   };
 
   const { contentRoot } = getClassNames();
@@ -81,8 +80,8 @@ export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
     <AppProvider value={context}>
       <Header />
       <div className={contentRoot}>
-        {history != null
-          ? <Router history={history}>{content}</Router>
+        {useMemoryRouter
+          ? <MemoryRouter>{content}</MemoryRouter>
           : <BrowserRouter>{content}</BrowserRouter>}
       </div>
     </AppProvider>
@@ -90,9 +89,9 @@ export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
 };
 
 App.propTypes = {
-  history: PropTypes.object as React.Validator<History | null | undefined> | undefined,
+  useMemoryRouter: PropTypes.bool,
 };
 
 App.defaultProps = {
-  history: undefined,
+  useMemoryRouter: false,
 };
