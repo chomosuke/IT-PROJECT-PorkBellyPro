@@ -1,19 +1,23 @@
 import { ObjectId } from '@porkbellypro/crm-shared';
 import { ICardField } from './CardField';
 
-export interface ICardProperties {
+interface ICardPropertiesCommon {
   favorite: boolean;
   name: string;
   phone: string;
   email: string;
   jobTitle: string;
   company: string;
-  image: Buffer | null;
   fields: readonly ICardField[];
 }
 
-export interface ICard extends Readonly<ICardProperties> {
+export interface ICardProperties extends ICardPropertiesCommon {
+  image: Buffer | null;
+}
+
+export interface ICard extends Readonly<ICardPropertiesCommon> {
   readonly id?: ObjectId;
+  readonly image?: string;
   update(props: Partial<ICardProperties>): void;
   commit(): void;
   delete(): void;
