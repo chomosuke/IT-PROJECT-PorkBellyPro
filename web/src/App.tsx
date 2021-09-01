@@ -1,8 +1,9 @@
 import { mergeStyleSets } from '@fluentui/react';
+import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import {
-  BrowserRouter, MemoryRouter, Route, Switch,
+  BrowserRouter, MemoryRouter, Route, Switch, useHistory,
 } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ICard } from './controllers/Card';
@@ -52,52 +53,83 @@ export interface IAppProps {
   useMemoryRouter?: boolean;
 }
 
-export const App: React.VoidFunctionComponent<IAppProps> = ({ useMemoryRouter }) => {
+const AppComponent: React.VoidFunctionComponent = () => {
+  const [user, setUser] = useState<IUser | null>(null);
+  const history = useHistory();
+
   const context: IAppContext = {
     searchQuery: '',
-    user: null,
+    user,
     update() { },
     showCardDetail() { },
-    login() {
-      return Promise.resolve(new ResponseStatus({
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-      }));
+    login(username, password, register) {
+      return (async function loginAsync() {
+        const body = {
+          username,
+          password: Buffer.from(
+            await crypto.subtle.digest(
+              'SHA-256',
+              Buffer.from(password),
+            ),
+          ).toString('hex'),
+        };
+        const endpoint = register ? '/api/register' : '/api/login';
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (res.ok) {
+          if (register) history.push('/login');
+          else setUser({} as unknown as IUser);
+        }
+
+        return new ResponseStatus(res);
+      }());
     },
     logout() {
-      return Promise.resolve(new ResponseStatus({
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-      }));
+      return (async function logoutAsync() {
+        const res = await fetch('/api/logout', { method: 'POST' });
+        if (res.ok) setUser(null);
+
+        return new ResponseStatus(res);
+      }());
     },
   };
 
   const { contentRoot } = getClassNames();
 
-  const content = (
-    <Switch>
-      <Route path='/'>
-        <Home />
-      </Route>
-      <Route path='/login'>
-        <Login />
-      </Route>
-      <Route path='/register'>
-        <Login registering />
-      </Route>
-    </Switch>
-  );
   return (
     <AppProvider value={context}>
       <Header />
       <div className={contentRoot}>
-        {useMemoryRouter
-          ? <MemoryRouter>{content}</MemoryRouter>
-          : <BrowserRouter>{content}</BrowserRouter>}
+        <Switch>
+          <Route exact path='/'>
+            <Home />
+          </Route>
+          <Route exact path='/login'>
+            <Login />
+          </Route>
+          <Route exact path='/register'>
+            <Login registering />
+          </Route>
+        </Switch>
       </div>
     </AppProvider>
+  );
+};
+
+export const App: React.VoidFunctionComponent<IAppProps> = ({ useMemoryRouter }) => {
+  type RouterType = typeof MemoryRouter & typeof BrowserRouter;
+  const Router: RouterType = useMemoryRouter ? MemoryRouter : BrowserRouter;
+
+  return (
+    <Router>
+      <AppComponent />
+    </Router>
   );
 };
 
