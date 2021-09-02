@@ -1,4 +1,5 @@
 import { mergeStyleSets } from '@fluentui/react';
+import { ensureArray, ensureObject, ensureType } from '@porkbellypro/crm-shared';
 import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import React, { createContext, useContext, useState } from 'react';
@@ -6,7 +7,7 @@ import {
   BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
 import { Header } from './components/Header';
-import { ICard } from './controllers/Card';
+import { impl as Card, ICard } from './controllers/Card';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -67,9 +68,74 @@ export interface IAppProps {
   useMemoryRouter?: boolean;
 }
 
+function notAcceptable(): ResponseStatus {
+  return new ResponseStatus({
+    ok: false,
+    status: 406,
+    statusText: 'Not Acceptable',
+  });
+}
+
+type GetMeResult = {
+  status: ResponseStatus;
+  user?: IUser;
+};
+
+async function getMe(): Promise<GetMeResult> {
+  const res = await fetch('/api/me', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+
+  if (!res.ok) return { status: new ResponseStatus(res) };
+
+  try {
+    if (res.headers.get('Content-Type')?.startsWith('application/json;') !== true) {
+      throw new Error();
+    }
+
+    const body = ensureObject(await res.json());
+    const username = ensureType(body.username, 'string');
+    const settings = ensureObject(body.settings);
+    const cards = ensureArray(body.cards).map(Card.fromRaw);
+
+    return {
+      status: new ResponseStatus(res),
+      user: {
+        username,
+        settings,
+        cards,
+      },
+    };
+  } catch {
+    return { status: notAcceptable() };
+  }
+}
+
 const AppComponent: React.VoidFunctionComponent = () => {
-  const [user, setUser] = useState<IUser | null>(null);
+  const [userState, setUser] = useState<IUser | null>();
   const history = useHistory();
+
+  const updateMe: () => Promise<ResponseStatus> = async () => {
+    const { status, user } = await getMe();
+    const { ok } = status;
+
+    if (ok) {
+      if (user == null) throw new Error('Expected result.user to be non-null');
+
+      setUser(user);
+    }
+
+    return status;
+  };
+
+  if (userState === undefined) {
+    updateMe();
+  }
+
+  const user = userState === undefined ? null : userState;
 
   const context: IAppContext = {
     searchQuery: '',
@@ -98,7 +164,9 @@ const AppComponent: React.VoidFunctionComponent = () => {
         });
         if (res.ok) {
           if (register) history.push('/login');
-          else setUser({} as unknown as IUser);
+          else {
+            return updateMe();
+          }
         }
 
         return new ResponseStatus(res);
@@ -116,7 +184,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   const { header, body } = getClassNames();
 
-  const loggedIn = user != null;
+  const loggedIn = userState != null;
 
   return (
     <AppProvider value={context}>
