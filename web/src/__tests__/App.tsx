@@ -7,9 +7,14 @@ describe('App tests', () => {
   test('Simple render', () => {
     const tree = create(<App useMemoryRouter />).toJSON();
     expect(tree).toMatchInlineSnapshot(`
-<div
-  className="contentRoot-53"
-/>
+Array [
+  <div
+    className="header-53"
+  />,
+  <div
+    className="body-54"
+  />,
+]
 `);
   });
 });

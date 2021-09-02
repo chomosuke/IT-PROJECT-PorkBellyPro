@@ -43,11 +43,25 @@ export function useApp(): IAppContext {
   return context;
 }
 
-const getClassNames = () => mergeStyleSets({
-  contentRoot: {
-    height: '100%',
-  },
-});
+const getClassNames = () => {
+  const headerHeight = '60px';
+
+  return mergeStyleSets({
+    header: {
+      height: headerHeight,
+      left: '0',
+      position: 'fixed',
+      right: '0',
+    },
+    body: {
+      bottom: '0',
+      position: 'fixed',
+      left: '0',
+      right: '0',
+      top: headerHeight,
+    },
+  });
+};
 
 export interface IAppProps {
   useMemoryRouter?: boolean;
@@ -100,12 +114,14 @@ const AppComponent: React.VoidFunctionComponent = () => {
     },
   };
 
-  const { contentRoot } = getClassNames();
+  const { header, body } = getClassNames();
 
   return (
     <AppProvider value={context}>
-      <Header />
-      <div className={contentRoot}>
+      <div className={header}>
+        <Header />
+      </div>
+      <div className={body}>
         <Switch>
           <Route exact path='/'>
             <Home />
