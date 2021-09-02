@@ -129,7 +129,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
               const tag = await this.parent.Tags.findById(tagId);
               if (tag == null) {
                 throw new HttpStatusError(400);
-              } else if (!user.id.equals(tag.user)) {
+              } else if (!user._id.equals(tag.user)) {
                 throw new HttpStatusError(401);
               }
             }),
@@ -145,7 +145,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         // if card is not found
         if (!updatedCard) {
           throw new HttpStatusError(404);
-        } else if (!user.id.equals(updatedCard.user)) {
+        } else if (!user._id.equals(updatedCard.user)) {
           throw new HttpStatusError(401);
         } else {
           updatedCard.set(updateDetails);
@@ -153,7 +153,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         }
 
         const response: CardPatchResponse = {
-          id: updatedCard.id.toString(),
+          id: updatedCard.id,
           favorite: updatedCard.favorite,
           name: updatedCard.name,
           phone: updatedCard.phone,

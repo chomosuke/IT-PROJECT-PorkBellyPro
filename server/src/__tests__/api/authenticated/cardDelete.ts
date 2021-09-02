@@ -11,11 +11,11 @@ import { cardDelete } from '../../../api/authenticated/cardDelete';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
 const user = {
-  id: Types.ObjectId(),
+  _id: Types.ObjectId(),
 } as User;
 
 const user1 = {
-  id: Types.ObjectId(),
+  _id: Types.ObjectId(),
 } as User;
 
 const existingCardsConsts = [{

@@ -32,7 +32,7 @@ export const cardDelete: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler
         const cardToDelete = await this.parent.Cards.findById(cardId);
         if (!cardToDelete) {
           throw new HttpStatusError(410);
-        } else if (!user.id.equals(cardToDelete.user)) {
+        } else if (!user._id.equals(cardToDelete.user)) {
           throw new HttpStatusError(401);
         } else {
           await cardToDelete.remove();

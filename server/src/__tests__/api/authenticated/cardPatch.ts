@@ -13,29 +13,29 @@ import { imageUri } from './imageUri.helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
 const user = {
-  id: new Types.ObjectId(),
+  _id: new Types.ObjectId(),
 } as User;
 
 const user1 = {
-  id: new Types.ObjectId(),
+  _id: new Types.ObjectId(),
 } as User;
 
 const tags = [
   {
     id: new Types.ObjectId(),
-    user: Types.ObjectId(user.id),
+    user: Types.ObjectId(user._id),
     label: 'haha1',
     color: 'fff',
   },
   {
     id: new Types.ObjectId(),
-    user: Types.ObjectId(user.id),
+    user: Types.ObjectId(user._id),
     label: 'haha2',
     color: 'fff',
   },
   {
     id: new Types.ObjectId(),
-    user: Types.ObjectId(user.id),
+    user: Types.ObjectId(user._id),
     label: 'haha3',
     color: 'fff',
   },
@@ -44,8 +44,9 @@ const tags = [
 let imageBuffer: Buffer;
 
 const existingCardsConsts = [{
-  id: new Types.ObjectId(),
-  user: Types.ObjectId(user.id),
+  _id: new Types.ObjectId(),
+  id: "",
+  user: Types.ObjectId(user._id),
   favorite: true,
   name: 'Bill Nye',
   phone: '0123456789',
@@ -59,8 +60,9 @@ const existingCardsConsts = [{
   set: jest.fn(),
 },
 {
-  id: new Types.ObjectId(),
-  user: Types.ObjectId(user1.id),
+  _id: new Types.ObjectId(),
+  id: "",
+  user: Types.ObjectId(user1._id),
   favorite: false,
   name: 'Prince Charming',
   phone: '0123456789',
@@ -73,6 +75,8 @@ const existingCardsConsts = [{
   save: jest.fn().mockResolvedValue(this),
   set: jest.fn(),
 }];
+
+existingCardsConsts.forEach(c => c.id = c._id.toString())
 
 let existingCards = existingCardsConsts.map((card) => ({ ...card }));
 
