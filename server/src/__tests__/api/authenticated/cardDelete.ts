@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
-import { Types } from 'mongoose';
+import { mongo } from 'mongoose';
 import { CardDeleteRequest } from '@porkbellypro/crm-shared';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
@@ -11,16 +12,16 @@ import { cardDelete } from '../../../api/authenticated/cardDelete';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
 const user = {
-  _id: Types.ObjectId(),
+  _id: new mongo.ObjectId(),
 } as User;
 
 const user1 = {
-  _id: Types.ObjectId(),
+  _id: new mongo.ObjectId(),
 } as User;
 
 const existingCardsConsts = [{
-  id: Types.ObjectId(),
-  user: Types.ObjectId(user.id),
+  _id: new mongo.ObjectId(),
+  user: new mongo.ObjectId(user._id),
   favorite: true,
   name: 'Bill Nye',
   phone: '0123456789',
@@ -33,8 +34,8 @@ const existingCardsConsts = [{
   remove: jest.fn(),
 },
 {
-  id: Types.ObjectId(),
-  user: Types.ObjectId(user1.id),
+  _id: new mongo.ObjectId(),
+  user: new mongo.ObjectId(user1._id),
   favorite: false,
   name: 'Prince Charming',
   phone: '0123456789',
@@ -50,7 +51,7 @@ const existingCardsConsts = [{
 let existingCards: typeof existingCardsConsts;
 
 // mock the router
-const mockCardFind = mock((id) => existingCards.find((c) => id.equals(c.id)));
+const mockCardFind = mock((id) => existingCards.find((c) => id.equals(c._id)));
 const routerPartial: DeepPartial<IAuthenticatedRouter> = {
   parent: {
     db: {
@@ -75,7 +76,7 @@ describe('DELETE /api/card unit tests', () => {
 
   test('Success case: deletion of card', async () => {
     const request: CardDeleteRequest = {
-      id: existingCards[0].id.toString(),
+      id: existingCards[0]._id.toString(),
     };
 
     const req = mockRequest({
@@ -91,7 +92,7 @@ describe('DELETE /api/card unit tests', () => {
       .resolves.toBeUndefined();
 
     expect(mockCardFind).toBeCalledTimes(1);
-    expect(mockCardFind).toBeCalledWith(existingCards[0].id);
+    expect(mockCardFind).toBeCalledWith(existingCards[0]._id);
     expect(existingCards[0].remove).toBeCalledTimes(1);
     expect(res.sendStatus).toBeCalledTimes(1);
     expect(res.sendStatus).toBeCalledWith(204);
@@ -119,8 +120,8 @@ describe('DELETE /api/card unit tests', () => {
   });
 
   test('Failure case: card those not exist', async () => {
-    const request : CardDeleteRequest = {
-      id: existingCards[0].id.toString(),
+    const request: CardDeleteRequest = {
+      id: existingCards[0]._id.toString(),
     };
 
     // removes card from 'database'
@@ -139,14 +140,14 @@ describe('DELETE /api/card unit tests', () => {
       .rejects.toStrictEqual(new HttpStatusError(410));
 
     expect(mockCardFind).toBeCalledTimes(1);
-    expect(mockCardFind).toBeCalledWith(deletedCard[0].id);
+    expect(mockCardFind).toBeCalledWith(deletedCard[0]._id);
     expect(deletedCard[0].remove).toBeCalledTimes(0);
     expect(res.sendStatus).toBeCalledTimes(0);
   });
 
   test('Failure case: card is not belonging to user', async () => {
     const request = {
-      id: existingCards[1].id.toString(),
+      id: existingCards[1]._id.toString(),
     };
 
     // wrong person. card 1 belongs to user1
@@ -163,7 +164,7 @@ describe('DELETE /api/card unit tests', () => {
       .rejects.toStrictEqual(new HttpStatusError(401));
 
     expect(mockCardFind).toBeCalledTimes(1);
-    expect(mockCardFind).toBeCalledWith(existingCards[1].id);
+    expect(mockCardFind).toBeCalledWith(existingCards[1]._id);
     expect(existingCards[1].remove).toBeCalledTimes(0);
     expect(res.sendStatus).toBeCalledTimes(0);
   });

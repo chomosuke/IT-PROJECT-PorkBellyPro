@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Types } from 'mongoose';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';

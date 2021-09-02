@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { CardPatchRequest, CardPatchResponse } from '@porkbellypro/crm-shared';
@@ -45,7 +46,7 @@ let imageBuffer: Buffer;
 
 const existingCardsConsts = [{
   _id: new Types.ObjectId(),
-  id: "",
+  id: '',
   user: Types.ObjectId(user._id),
   favorite: true,
   name: 'Bill Nye',
@@ -61,7 +62,7 @@ const existingCardsConsts = [{
 },
 {
   _id: new Types.ObjectId(),
-  id: "",
+  id: '',
   user: Types.ObjectId(user1._id),
   favorite: false,
   name: 'Prince Charming',
@@ -76,7 +77,11 @@ const existingCardsConsts = [{
   set: jest.fn(),
 }];
 
-existingCardsConsts.forEach(c => c.id = c._id.toString())
+// need to override to assign mock string version of id.
+/* eslint-disable no-param-reassign */
+existingCardsConsts.forEach((card) => {
+  card.id = card._id.toString();
+});
 
 let existingCards = existingCardsConsts.map((card) => ({ ...card }));
 
