@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import React, { createContext, useContext, useState } from 'react';
 import {
-  BrowserRouter, MemoryRouter, Route, Switch, useHistory,
+  BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ICard } from './controllers/Card';
@@ -116,6 +116,8 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   const { header, body } = getClassNames();
 
+  const loggedIn = user != null;
+
   return (
     <AppProvider value={context}>
       <div className={header}>
@@ -124,13 +126,19 @@ const AppComponent: React.VoidFunctionComponent = () => {
       <div className={body}>
         <Switch>
           <Route exact path='/'>
+            {!loggedIn && <Redirect to='/login' />}
             <Home />
           </Route>
           <Route exact path='/login'>
+            {loggedIn && <Redirect to='/' />}
             <Login />
           </Route>
           <Route exact path='/register'>
+            {loggedIn && <Redirect to='/' />}
             <Login registering />
+          </Route>
+          <Route>
+            <Redirect to='/' />
           </Route>
         </Switch>
       </div>
