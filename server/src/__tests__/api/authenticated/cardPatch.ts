@@ -13,28 +13,28 @@ import { imageUri } from './imageUri.helpers';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
 const user = {
-  id: Types.ObjectId().toString(),
+  id: new Types.ObjectId(),
 } as User;
 
 const user1 = {
-  id: Types.ObjectId().toString(),
+  id: new Types.ObjectId(),
 } as User;
 
 const tags = [
   {
-    id: Types.ObjectId().toString(),
+    id: new Types.ObjectId(),
     user: Types.ObjectId(user.id),
     label: 'haha1',
     color: 'fff',
   },
   {
-    id: Types.ObjectId().toString(),
+    id: new Types.ObjectId(),
     user: Types.ObjectId(user.id),
     label: 'haha2',
     color: 'fff',
   },
   {
-    id: Types.ObjectId().toString(),
+    id: new Types.ObjectId(),
     user: Types.ObjectId(user.id),
     label: 'haha3',
     color: 'fff',
@@ -44,7 +44,7 @@ const tags = [
 let imageBuffer: Buffer;
 
 const existingCardsConsts = [{
-  id: Types.ObjectId().toString(),
+  id: new Types.ObjectId(),
   user: Types.ObjectId(user.id),
   favorite: true,
   name: 'Bill Nye',
@@ -59,7 +59,7 @@ const existingCardsConsts = [{
   set: jest.fn(),
 },
 {
-  id: Types.ObjectId().toString(),
+  id: new Types.ObjectId(),
   user: Types.ObjectId(user1.id),
   favorite: false,
   name: 'Prince Charming',
@@ -85,8 +85,8 @@ function mockSet(this: typeof existingCards[0],
 }
 
 // mock the router
-const mockTagFind = mock(mock((id) => tags.find((t) => t.id === id)));
-const mockCardFind = mock((id) => existingCards.find((c) => c.id === id));
+const mockTagFind = mock(mock((id) => tags.find((t) => id.toString() === t.id.toString())));
+const mockCardFind = mock((id) => existingCards.find((c) => id.toString() === c.id.toString()));
 const routerPartial: DeepPartial<IAuthenticatedRouter> = {
   parent: {
     db: {
@@ -129,7 +129,7 @@ describe('PATCH /api/card unit tests', () => {
   // test where call to update all test fields
   test('Success Case: update all text fields', async () => {
     const request: CardPatchRequest = {
-      id: existingCards[0].id,
+      id: existingCards[0].id.toString(),
       favorite: false,
       name: 'Bill Nyan',
       phone: '9876543210',
@@ -138,7 +138,7 @@ describe('PATCH /api/card unit tests', () => {
       company: 'PBS',
       image: imageUri,
       fields: [{ key: 'cuteness', value: 'many' }],
-      tags: [tags[0].id],
+      tags: [tags[0].id.toString()],
     };
 
     const req = mockRequest({
@@ -167,7 +167,7 @@ describe('PATCH /api/card unit tests', () => {
     expect(res.status).toBeCalledTimes(1);
     expect(res.status).toBeCalledWith(200);
     const response: CardPatchResponse = {
-      id: existingCards[0].id,
+      id: existingCards[0].id.toString(),
       favorite: false,
       name: 'Bill Nyan',
       phone: '9876543210',
@@ -176,7 +176,7 @@ describe('PATCH /api/card unit tests', () => {
       company: 'PBS',
       hasImage: true,
       fields: [{ key: 'cuteness', value: 'many' }],
-      tags: [tags[0].id],
+      tags: [tags[0].id.toString()],
     };
     expect(res.json).toBeCalledTimes(1);
     expect(res.json).toBeCalledWith(response);
@@ -208,7 +208,7 @@ describe('PATCH /api/card unit tests', () => {
       .resolves.toBeUndefined();
 
     const response: CardPatchResponse = {
-      id: existingCards[1].id,
+      id: existingCards[1].id.toString(),
       favorite: false,
       name: 'Prince Charming',
       phone: '0123456789',
@@ -260,7 +260,7 @@ describe('PATCH /api/card unit tests', () => {
   // setting request user to user1
   test('Fail case: unauthorised access to the card', async () => {
     const request: CardPatchRequest = {
-      id: existingCards[0].id,
+      id: existingCards[0].id.toString(),
       favorite: false,
     };
     const req = mockRequest({

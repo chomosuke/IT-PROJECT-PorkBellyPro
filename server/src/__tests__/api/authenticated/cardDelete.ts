@@ -11,15 +11,15 @@ import { cardDelete } from '../../../api/authenticated/cardDelete';
 import { HttpStatusError } from '../../../api/HttpStatusError';
 
 const user = {
-  id: Types.ObjectId().toString(),
+  id: Types.ObjectId(),
 } as User;
 
 const user1 = {
-  id: Types.ObjectId().toString(),
+  id: Types.ObjectId(),
 } as User;
 
 const existingCardsConsts = [{
-  id: Types.ObjectId().toString(),
+  id: Types.ObjectId(),
   user: Types.ObjectId(user.id),
   favorite: true,
   name: 'Bill Nye',
@@ -30,9 +30,10 @@ const existingCardsConsts = [{
   // image: undefined,
   fields: [{ key: 'coolness', value: 'very' }],
   tags: [],
+  remove: jest.fn(),
 },
 {
-  id: Types.ObjectId().toString(),
+  id: Types.ObjectId(),
   user: Types.ObjectId(user1.id),
   favorite: false,
   name: 'Prince Charming',
@@ -43,13 +44,13 @@ const existingCardsConsts = [{
   image: Buffer.from('bad image', 'base64'),
   fields: [],
   tags: [],
+  remove: jest.fn(),
 }];
 
 let existingCards: typeof existingCardsConsts;
 
 // mock the router
-const mockCardDelete = mock();
-const mockCardFind = mock((id) => existingCards.find((c) => c.id === id));
+const mockCardFind = mock((id) => existingCards.find((c) => id.equals(c.id)));
 const routerPartial: DeepPartial<IAuthenticatedRouter> = {
   parent: {
     db: {
@@ -57,7 +58,6 @@ const routerPartial: DeepPartial<IAuthenticatedRouter> = {
     },
     Cards: {
       findById: mockCardFind,
-      findByIdAndDelete: mockCardDelete,
     },
   },
 };
@@ -68,14 +68,14 @@ const next = mock<NextFunction>();
 
 describe('DELETE /api/card unit tests', () => {
   beforeEach(() => {
+    existingCardsConsts.forEach((c) => c.remove.mockClear());
     existingCards = existingCardsConsts.map((card) => ({ ...card }));
     mockCardFind.mockClear();
-    mockCardDelete.mockClear();
   });
 
   test('Success case: deletion of card', async () => {
     const request: CardDeleteRequest = {
-      id: existingCards[0].id,
+      id: existingCards[0].id.toString(),
     };
 
     const req = mockRequest({
@@ -92,7 +92,7 @@ describe('DELETE /api/card unit tests', () => {
 
     expect(mockCardFind).toBeCalledTimes(1);
     expect(mockCardFind).toBeCalledWith(existingCards[0].id);
-    expect(mockCardDelete).toBeCalledTimes(1);
+    expect(existingCards[0].remove).toBeCalledTimes(1);
     expect(res.sendStatus).toBeCalledTimes(1);
     expect(res.sendStatus).toBeCalledWith(204);
   });
@@ -115,17 +115,16 @@ describe('DELETE /api/card unit tests', () => {
       .rejects.toStrictEqual(new HttpStatusError(400));
 
     expect(mockCardFind).toBeCalledTimes(0);
-    expect(mockCardDelete).toBeCalledTimes(0);
     expect(res.sendStatus).toBeCalledTimes(0);
   });
 
   test('Failure case: card those not exist', async () => {
-    const request = {
-      id: existingCards[0].id,
+    const request : CardDeleteRequest = {
+      id: existingCards[0].id.toString(),
     };
 
     // removes card from 'database'
-    existingCards.splice(0);
+    const deletedCard = existingCards.splice(0);
 
     const req = mockRequest({
       body: request,
@@ -140,14 +139,14 @@ describe('DELETE /api/card unit tests', () => {
       .rejects.toStrictEqual(new HttpStatusError(410));
 
     expect(mockCardFind).toBeCalledTimes(1);
-    expect(mockCardFind).toBeCalledWith(request.id);
-    expect(mockCardDelete).toBeCalledTimes(0);
+    expect(mockCardFind).toBeCalledWith(deletedCard[0].id);
+    expect(deletedCard[0].remove).toBeCalledTimes(0);
     expect(res.sendStatus).toBeCalledTimes(0);
   });
 
   test('Failure case: card is not belonging to user', async () => {
     const request = {
-      id: existingCards[1].id,
+      id: existingCards[1].id.toString(),
     };
 
     // wrong person. card 1 belongs to user1
@@ -165,7 +164,7 @@ describe('DELETE /api/card unit tests', () => {
 
     expect(mockCardFind).toBeCalledTimes(1);
     expect(mockCardFind).toBeCalledWith(existingCards[1].id);
-    expect(mockCardDelete).toBeCalledTimes(0);
+    expect(existingCards[1].remove).toBeCalledTimes(0);
     expect(res.sendStatus).toBeCalledTimes(0);
   });
 });

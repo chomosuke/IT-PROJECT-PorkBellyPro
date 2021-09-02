@@ -57,18 +57,20 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       return { key, value };
     });
 
+    let cardId : undefined | Types.ObjectId;
+
     try {
-      Types.ObjectId(id);
+      cardId = Types.ObjectId(id);
     } catch (e) {
       throw new HttpStatusError(400);
     }
 
-    tags?.forEach((t: string) => {
+    tags?.map((t: string) => {
       if (typeof t !== 'string') {
         throw new HttpStatusError(400);
       }
       try {
-        Types.ObjectId(t);
+        return Types.ObjectId(t);
       } catch (e) {
         throw new HttpStatusError(400);
       }
@@ -123,11 +125,11 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         if (tags) {
           await Promise.all(
             // maps tags into array of promises
-            tags.map(async (tagId: string) => {
+            tags.map(async (tagId: Types.ObjectId) => {
               const tag = await this.parent.Tags.findById(tagId);
               if (tag == null) {
                 throw new HttpStatusError(400);
-              } else if (tag.user.toString() !== user.id) {
+              } else if (!user.id.equals(tag.user)) {
                 throw new HttpStatusError(401);
               }
             }),
@@ -139,11 +141,11 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
          * for undefined things, they will be interpreted as not needing to update
          * such details from cards
          */
-        const updatedCard = await this.parent.Cards.findById(id);
+        const updatedCard = await this.parent.Cards.findById(cardId);
         // if card is not found
         if (!updatedCard) {
           throw new HttpStatusError(404);
-        } else if (updatedCard.user.toString() !== user.id) {
+        } else if (!user.id.equals(updatedCard.user)) {
           throw new HttpStatusError(401);
         } else {
           updatedCard.set(updateDetails);
@@ -151,7 +153,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         }
 
         const response: CardPatchResponse = {
-          id: updatedCard.id,
+          id: updatedCard.id.toString(),
           favorite: updatedCard.favorite,
           name: updatedCard.name,
           phone: updatedCard.phone,
