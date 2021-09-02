@@ -1,4 +1,5 @@
 import { ObjectId } from '@porkbellypro/crm-shared';
+import { ResponseStatus } from '../ResponseStatus';
 import { ICardField } from './CardField';
 
 interface ICardPropertiesCommon {
@@ -19,8 +20,8 @@ export interface ICard extends Readonly<ICardPropertiesCommon> {
   readonly id?: ObjectId;
   readonly image?: string;
   update(props: Partial<ICardProperties>): void;
-  commit(): void;
-  delete(): void;
+  commit(): Promise<ResponseStatus>;
+  delete(): Promise<ResponseStatus>;
 }
 
 export function newCard(): ICard {
