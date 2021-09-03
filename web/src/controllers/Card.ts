@@ -1,6 +1,6 @@
 import { ObjectId } from '@porkbellypro/crm-shared';
 import { ResponseStatus } from '../ResponseStatus';
-import { ICardField } from './CardField';
+import { ICardField, ICardFieldProperties } from './CardField';
 import { RawCard } from './RawCard';
 
 interface ICardPropertiesCommon {
@@ -10,16 +10,17 @@ interface ICardPropertiesCommon {
   email: string;
   jobTitle: string;
   company: string;
-  fields: readonly ICardField[];
 }
 
 export interface ICardProperties extends ICardPropertiesCommon {
-  image: Buffer | null;
+  image: [Blob, string] | null;
+  fields: readonly ICardFieldProperties[];
 }
 
 export interface ICard extends Readonly<ICardPropertiesCommon> {
   readonly id?: ObjectId;
   readonly image?: string;
+  readonly fields: readonly ICardField[];
   update(props: Partial<ICardProperties>): void;
   commit(): Promise<ResponseStatus>;
   delete(): Promise<ResponseStatus>;
