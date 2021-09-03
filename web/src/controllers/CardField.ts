@@ -7,6 +7,7 @@ export interface ICardFieldProperties {
 
 export interface ICardField extends Readonly<ICardFieldProperties> {
   update(props: Partial<ICardFieldProperties>): void;
+  remove(): void;
 }
 
 export type ICardFieldData = ICardFieldProperties;
