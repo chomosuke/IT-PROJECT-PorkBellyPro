@@ -7,7 +7,7 @@ import {
   BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
 import { Header } from './components/Header';
-import { impl as Card, ICard } from './controllers/Card';
+import { ICard, fromRaw } from './controllers/Card';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -99,7 +99,7 @@ async function getMe(): Promise<GetMeResult> {
     const body = ensureObject(await res.json());
     const username = ensureType(body.username, 'string');
     const settings = ensureObject(body.settings);
-    const cards = ensureArray(body.cards).map(Card.fromRaw);
+    const cards = ensureArray(body.cards).map(fromRaw);
 
     return {
       status: new ResponseStatus(res),

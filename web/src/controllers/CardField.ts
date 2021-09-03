@@ -1,4 +1,4 @@
-import { ensureObject, ensureType } from '@porkbellypro/crm-shared';
+import { RawCardField } from './RawCardField';
 
 export interface ICardFieldProperties {
   key: string;
@@ -9,26 +9,6 @@ export interface ICardField extends Readonly<ICardFieldProperties> {
   update(props: Partial<ICardFieldProperties>): void;
 }
 
-class RawCardField implements ICardField {
-  readonly key: string;
-
-  readonly value: string;
-
-  constructor(raw: unknown) {
-    const { key, value } = ensureObject(raw);
-
-    this.key = ensureType(key, 'string');
-    this.value = ensureType(value, 'string');
-  }
-
-  /* eslint-disable-next-line class-methods-use-this */
-  update() { }
-}
-
-function fromRaw(raw: unknown): ICardField {
+export function fromRaw(raw: unknown): ICardField {
   return new RawCardField(raw);
 }
-
-export const impl = {
-  fromRaw,
-};

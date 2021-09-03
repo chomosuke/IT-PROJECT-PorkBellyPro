@@ -1,5 +1,5 @@
 import { Card } from '@porkbellypro/crm-shared';
-import { impl } from '../../controllers/Card';
+import { fromRaw } from '../../controllers/Card';
 
 type DeepReadonly<T> = T extends { [k in keyof T]: T[k] }
   ? { readonly [k in keyof T]: DeepReadonly<T[k]>; }
@@ -30,7 +30,7 @@ describe('Card tests', () => {
 
   describe('fromRaw tests', () => {
     test('Success test', () => {
-      const obj = impl.fromRaw(template);
+      const obj = fromRaw(template);
       expect(obj).toMatchInlineSnapshot(`
 RawCard {
   "company": "company",
@@ -60,7 +60,7 @@ RawCard {
         // TODO: tags not implemented yet
         .filter((k) => k !== 'tags')
         .map((k0) => test(k0, () => {
-          const fn = () => impl.fromRaw(Object.fromEntries(Object
+          const fn = () => fromRaw(Object.fromEntries(Object
             .entries(template)
             .filter(([k1]) => k1 !== k0)));
 
