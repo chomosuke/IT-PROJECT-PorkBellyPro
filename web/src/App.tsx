@@ -11,9 +11,8 @@ import {
 } from './AppContext';
 import { Header } from './components/Header';
 import {
-  CardMethods, ICardData, ICardProperties, fromRaw, implement,
+  CardFieldMethodsFactory, CardMethods, ICardData, ICardProperties, fromRaw, implement,
 } from './controllers/Card';
-import { CardFieldMethods } from './controllers/CardField';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -166,9 +165,24 @@ const AppComponent: React.VoidFunctionComponent = () => {
           commit() { return Promise.reject(); },
           delete() { return Promise.reject(); },
         };
-        const fieldMethods: CardFieldMethods = {
-          update() { },
-        };
+        const fieldMethodsFactory: CardFieldMethodsFactory = (field) => ({
+          update({ key, value }) {
+            const base = override?.overrides.fields ?? card.fields;
+            cardMethods.update({
+              fields: base.map(
+                (existing) => (field === existing
+                  ? { key: key ?? existing.key, value: value ?? existing.value }
+                  : existing),
+              ),
+            });
+          },
+          remove() {
+            const base = override?.overrides.fields ?? card.fields;
+            cardMethods.update({
+              fields: base.filter((existing) => field !== existing),
+            });
+          },
+        });
         let data = card;
         if (override != null) {
           const { overrides: { image } } = override;
@@ -180,7 +194,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
             image: imageStr,
           };
         }
-        return implement(data, cardMethods, fieldMethods);
+        return implement(data, cardMethods, fieldMethodsFactory);
       }),
     };
 

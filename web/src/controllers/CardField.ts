@@ -21,7 +21,7 @@ export function fromRaw(raw: unknown): ICardFieldData {
   };
 }
 
-export type CardFieldMethods = Pick<ICardField, 'update'>;
+export type CardFieldMethods = Omit<ICardField, keyof ICardFieldProperties>;
 
 export function implement(
   data: Readonly<ICardFieldData>,

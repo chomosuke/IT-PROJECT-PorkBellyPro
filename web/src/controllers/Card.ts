@@ -74,16 +74,20 @@ export function fromRaw(raw: unknown): ICardData {
   return result;
 }
 
-export type CardMethods = Pick<ICard, 'update' | 'commit' | 'delete'>;
+export type CardMethods = Omit<ICard, keyof ICardData>;
+
+export type CardFieldMethodsFactory = (
+  field: Readonly<ICardFieldProperties>,
+) => CardFieldMethods;
 
 export function implement(
   data: Readonly<ICardData>,
   methods: CardMethods,
-  fieldMethods: CardFieldMethods,
+  fieldMethodsFactory: CardFieldMethodsFactory,
 ): ICard {
   return {
     ...data,
-    fields: data.fields.map((field) => implementField(field, fieldMethods)),
+    fields: data.fields.map((field) => implementField(field, fieldMethodsFactory(field))),
     ...methods,
   };
 }
