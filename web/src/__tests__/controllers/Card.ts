@@ -29,24 +29,53 @@ describe('Card tests', () => {
   };
 
   describe('fromRaw tests', () => {
-    test('Success test', () => {
+    test('Success test: without image', () => {
       const obj = fromRaw(template);
       expect(obj).toMatchInlineSnapshot(`
-RawCard {
+Object {
   "company": "company",
   "email": "email",
   "favorite": false,
   "fields": Array [
-    RawCardField {
+    Object {
       "key": "Key 1",
       "value": "Value 1",
     },
-    RawCardField {
+    Object {
       "key": "Key 2",
       "value": "Value 2",
     },
   ],
   "id": "000000000000000000000000",
+  "jobTitle": "jobTitle",
+  "name": "name",
+  "phone": "phone",
+}
+`);
+    });
+
+    test('Success test: with image', () => {
+      const obj = fromRaw({
+        ...template,
+        hasImage: true,
+      });
+      expect(obj).toMatchInlineSnapshot(`
+Object {
+  "company": "company",
+  "email": "email",
+  "favorite": false,
+  "fields": Array [
+    Object {
+      "key": "Key 1",
+      "value": "Value 1",
+    },
+    Object {
+      "key": "Key 2",
+      "value": "Value 2",
+    },
+  ],
+  "id": "000000000000000000000000",
+  "image": "/image/000000000000000000000000",
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",

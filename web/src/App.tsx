@@ -7,7 +7,10 @@ import {
   BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
 import { Header } from './components/Header';
-import { ICard, fromRaw } from './controllers/Card';
+import {
+  CardMethods, ICard, ICardData, fromRaw, implement,
+} from './controllers/Card';
+import { CardFieldMethods } from './controllers/CardField';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -76,9 +79,15 @@ function notAcceptable(): ResponseStatus {
   });
 }
 
+interface IUserStatic {
+  readonly username: string;
+  readonly settings: ISettings;
+  readonly cards: readonly ICardData[];
+}
+
 type GetMeResult = {
   status: ResponseStatus;
-  user?: IUser;
+  user?: IUserStatic;
 };
 
 async function getMe(): Promise<GetMeResult> {
@@ -115,7 +124,7 @@ async function getMe(): Promise<GetMeResult> {
 }
 
 const AppComponent: React.VoidFunctionComponent = () => {
-  const [userState, setUser] = useState<IUser | null>();
+  const [userState, setUser] = useState<IUserStatic | null>();
   const history = useHistory();
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
@@ -135,7 +144,22 @@ const AppComponent: React.VoidFunctionComponent = () => {
     updateMe();
   }
 
-  const user = userState === undefined ? null : userState;
+  const user = userState == null
+    ? null
+    : {
+      ...userState,
+      cards: userState?.cards.map((card) => {
+        const cardMethods: CardMethods = {
+          update() { },
+          commit() { return Promise.reject(); },
+          delete() { return Promise.reject(); },
+        };
+        const fieldMethods: CardFieldMethods = {
+          update() { },
+        };
+        return implement(card, cardMethods, fieldMethods);
+      }),
+    };
 
   const context: IAppContext = {
     searchQuery: '',
