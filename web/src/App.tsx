@@ -2,10 +2,13 @@ import { mergeStyleSets } from '@fluentui/react';
 import { ensureArray, ensureObject, ensureType } from '@porkbellypro/crm-shared';
 import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
-import React, { createContext, useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
+import {
+  AppProvider, IAppContext, ISettings, IUser,
+} from './AppContext';
 import { Header } from './components/Header';
 import {
   CardMethods, ICard, ICardData, fromRaw, implement,
@@ -14,38 +17,6 @@ import { CardFieldMethods } from './controllers/CardField';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
-
-/* eslint-disable-next-line @typescript-eslint/no-empty-interface */
-export interface ISettings { }
-
-export interface IUser {
-  readonly username: string;
-  readonly settings: ISettings;
-  readonly cards: readonly ICard[];
-}
-
-export interface IAppContextProperties {
-  searchQuery: string;
-}
-
-export interface IAppContext extends Readonly<IAppContextProperties> {
-  readonly user: IUser | null;
-  update(props: Partial<IAppContextProperties>): void;
-  showCardDetail(card: ICard | null): void;
-  login(username: string, password: string, register?: boolean): Promise<ResponseStatus>;
-  logout(): Promise<ResponseStatus>;
-}
-
-const appContext = createContext<IAppContext | undefined>(undefined);
-
-export const AppProvider = appContext.Provider;
-
-export function useApp(): IAppContext {
-  const context = useContext(appContext);
-  if (context == null) throw new Error('context is null');
-
-  return context;
-}
 
 const getClassNames = () => {
   const headerHeight = '60px';
