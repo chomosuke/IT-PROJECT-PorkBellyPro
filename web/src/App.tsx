@@ -11,7 +11,7 @@ import {
 } from './AppContext';
 import { Header } from './components/Header';
 import {
-  CardMethods, ICard, ICardData, fromRaw, implement,
+  CardMethods, ICardData, ICardProperties, fromRaw, implement,
 } from './controllers/Card';
 import { CardFieldMethods } from './controllers/CardField';
 import { ResponseStatus } from './ResponseStatus';
@@ -50,10 +50,16 @@ function notAcceptable(): ResponseStatus {
   });
 }
 
+interface ICardOverrideData {
+  readonly base?: ICardData;
+  readonly overrides: Partial<ICardProperties>;
+}
+
 interface IUserStatic {
   readonly username: string;
   readonly settings: ISettings;
   readonly cards: readonly ICardData[];
+  readonly overrides: readonly ICardOverrideData[];
 }
 
 type GetMeResult = {
@@ -87,6 +93,7 @@ async function getMe(): Promise<GetMeResult> {
         username,
         settings,
         cards,
+        overrides: [],
       },
     };
   } catch {
@@ -115,20 +122,65 @@ const AppComponent: React.VoidFunctionComponent = () => {
     updateMe();
   }
 
-  const user = userState == null
+  const user: IUser | null = userState == null
     ? null
     : {
-      ...userState,
+      username: userState.username,
+      settings: userState.settings,
       cards: userState?.cards.map((card) => {
+        const override = userState.overrides.find(({ base }) => base === card);
         const cardMethods: CardMethods = {
-          update() { },
+          update(updates) {
+            if (override == null) {
+              setUser({
+                ...userState,
+                overrides: [...userState.overrides,
+                  {
+                    base: card,
+                    overrides: updates,
+                  }],
+              });
+            } else {
+              const { overrides: { image } } = override;
+              if (image != null && updates.image !== undefined) {
+                URL.revokeObjectURL(image[1]);
+              }
+              const overrides: Partial<ICardProperties> = {
+                ...override.overrides,
+                ...updates,
+              };
+              setUser({
+                ...userState,
+                overrides: userState.overrides.map((elem) => {
+                  if (elem.base === card) {
+                    return {
+                      base: card,
+                      overrides,
+                    };
+                  }
+                  return elem;
+                }),
+              });
+            }
+          },
           commit() { return Promise.reject(); },
           delete() { return Promise.reject(); },
         };
         const fieldMethods: CardFieldMethods = {
           update() { },
         };
-        return implement(card, cardMethods, fieldMethods);
+        let data = card;
+        if (override != null) {
+          const { overrides: { image } } = override;
+          let imageStr: string | undefined = card.image;
+          if (image !== undefined) imageStr = image == null ? undefined : image[1];
+          data = {
+            ...card,
+            ...override.overrides,
+            image: imageStr,
+          };
+        }
+        return implement(data, cardMethods, fieldMethods);
       }),
     };
 

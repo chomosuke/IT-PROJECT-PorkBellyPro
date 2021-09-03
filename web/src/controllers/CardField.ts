@@ -9,7 +9,7 @@ export interface ICardField extends Readonly<ICardFieldProperties> {
   update(props: Partial<ICardFieldProperties>): void;
 }
 
-export type ICardFieldData = Readonly<ICardFieldProperties>;
+export type ICardFieldData = ICardFieldProperties;
 
 export function fromRaw(raw: unknown): ICardFieldData {
   const { key, value } = ensureObject(raw);
@@ -23,7 +23,7 @@ export function fromRaw(raw: unknown): ICardFieldData {
 export type CardFieldMethods = Pick<ICardField, 'update'>;
 
 export function implement(
-  data: ICardFieldData,
+  data: Readonly<ICardFieldData>,
   methods: CardFieldMethods,
 ): ICardField {
   return {

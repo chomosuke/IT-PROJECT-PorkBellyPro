@@ -38,10 +38,10 @@ export function newCard(): ICard {
   throw new Error('Not implemented');
 }
 
-export interface ICardData extends Readonly<ICardPropertiesCommon> {
-  readonly id?: ObjectId;
-  readonly image?: string;
-  readonly fields: readonly ICardFieldData[];
+export interface ICardData extends ICardPropertiesCommon {
+  id?: ObjectId;
+  image?: string;
+  fields: readonly Readonly<ICardFieldData>[];
 }
 
 export function fromRaw(raw: unknown): ICardData {
@@ -77,7 +77,7 @@ export function fromRaw(raw: unknown): ICardData {
 export type CardMethods = Pick<ICard, 'update' | 'commit' | 'delete'>;
 
 export function implement(
-  data: ICardData,
+  data: Readonly<ICardData>,
   methods: CardMethods,
   fieldMethods: CardFieldMethods,
 ): ICard {
