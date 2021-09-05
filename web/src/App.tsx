@@ -268,6 +268,7 @@ function implementCardOverride(
 const AppComponent: React.VoidFunctionComponent = () => {
   const [userState, setUserState] = useState<IUserStatic | null>();
   const [detail, setDetail] = useState<ICardOverrideData | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const history = useHistory();
 
   function freeDetail() {
@@ -324,9 +325,11 @@ const AppComponent: React.VoidFunctionComponent = () => {
     };
 
   const context: IAppContext = {
-    searchQuery: '',
+    searchQuery,
     user,
-    update() { },
+    update({ searchQuery: query }) {
+      if (query != null) setSearchQuery(query);
+    },
     showCardDetail(card) {
       if (userState == null) throw new Error('userState is nullish');
       freeDetail();
