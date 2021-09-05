@@ -126,7 +126,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
     : {
       username: userState.username,
       settings: userState.settings,
-      cards: userState?.cards.map((card) => {
+      cards: userState.cards.map((card) => {
         const override = userState.overrides.find(({ base }) => base === card);
         const cardMethods: CardMethods = {
           update(updates) {
