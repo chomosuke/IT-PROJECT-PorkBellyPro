@@ -162,7 +162,53 @@ const AppComponent: React.VoidFunctionComponent = () => {
               });
             }
           },
-          commit() { return Promise.reject(); },
+          async commit() {
+            if (card.id == null) throw new Error('card.id is nullish');
+
+            if (override == null) {
+              return new ResponseStatus({
+                ok: true,
+                status: 200,
+                statusText: 'OK',
+              });
+            }
+
+            const { overrides } = override;
+            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+            const bodyObj: any = Object.fromEntries(Object
+              .entries(overrides)
+              .filter(([k, v]) => k !== 'image' && v !== undefined)
+              .concat([['id', card.id]]));
+            const { image } = overrides;
+            if (image !== undefined) {
+              if (image === null) {
+                bodyObj.image = null;
+              } else {
+                const [blob] = image;
+                bodyObj.image = Buffer.from(await blob.arrayBuffer()).toString('base64');
+              }
+            }
+            const body = JSON.stringify(bodyObj);
+            const res = await fetch('/api/card', {
+              method: 'PATCH',
+              body,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            if (res.ok) {
+              const data = await res.json();
+              const updated = fromRaw(data);
+              setUser({
+                ...userState,
+                cards: userState.cards.map((that) => {
+                  if (that === card) return updated;
+                  return that;
+                }),
+              });
+            }
+            return new ResponseStatus(res);
+          },
           async delete() {
             const res = await fetch('/api/card', {
               method: 'DELETE',
