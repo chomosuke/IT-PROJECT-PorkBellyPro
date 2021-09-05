@@ -34,15 +34,21 @@ export interface ICard extends Readonly<ICardPropertiesCommon> {
   delete(): Promise<ResponseStatus>;
 }
 
-export function newCard(): ICard {
-  throw new Error('Not implemented');
-}
-
 export interface ICardData extends ICardPropertiesCommon {
   id?: ObjectId;
   image?: string;
   fields: readonly Readonly<ICardFieldData>[];
 }
+
+export const cardDataDefaults: ICardData = Object.freeze({
+  favorite: false,
+  name: '',
+  phone: '',
+  email: '',
+  jobTitle: '',
+  company: '',
+  fields: [],
+});
 
 export function fromRaw(raw: unknown): ICardData {
   const {

@@ -11,7 +11,14 @@ import {
 } from './AppContext';
 import { Header } from './components/Header';
 import {
-  CardFieldMethodsFactory, CardMethods, ICard, ICardData, ICardProperties, fromRaw, implement,
+  CardFieldMethodsFactory,
+  CardMethods,
+  ICard,
+  ICardData,
+  ICardProperties,
+  cardDataDefaults,
+  fromRaw,
+  implement,
 } from './controllers/Card';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
@@ -58,7 +65,6 @@ interface IUserStatic {
   readonly username: string;
   readonly settings: ISettings;
   readonly cards: readonly ICardData[];
-  readonly overrides: readonly ICardOverrideData[];
 }
 
 type GetMeResult = {
@@ -92,7 +98,6 @@ async function getMe(): Promise<GetMeResult> {
         username,
         settings,
         cards,
-        overrides: [],
       },
     };
   } catch {
@@ -100,50 +105,87 @@ async function getMe(): Promise<GetMeResult> {
   }
 }
 
-function inflate(
+function notImplemented() {
+  return new Error('Not implemented');
+}
+
+function implementDelete(
+  card: ICardData,
+  userState: IUserStatic,
+  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+): ICard['delete'] {
+  return (async () => {
+    if (card.id == null) throw new Error('card.id is nullish');
+
+    const res = await fetch('/api/card', {
+      method: 'DELETE',
+      body: JSON.stringify({
+        id: card.id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.ok) {
+      setUser({
+        ...userState,
+        cards: userState.cards.filter((that) => that !== card),
+      });
+    }
+    return new ResponseStatus(res);
+  });
+}
+
+function implementCard(
   card: ICardData,
   userState: IUserStatic,
   setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
 ): ICard {
-  const override = userState.overrides.find(({ base }) => base === card);
+  const cardMethods: CardMethods = {
+    update() { throw notImplemented(); },
+    commit() { return Promise.reject(notImplemented()); },
+    delete: implementDelete(card, userState, setUser),
+  };
+  const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
+    update() { throw notImplemented(); },
+    remove() { throw notImplemented(); },
+  });
+  return implement(card, cardMethods, fieldMethodsFactory);
+}
+
+function implementCardOverride(
+  data: ICardOverrideData,
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  userState: IUserStatic,
+  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+): ICard {
+  const { base, overrides: { image, ...overrides } } = data;
+  const cardData: ICardData = {
+    ...cardDataDefaults,
+    ...base,
+    ...overrides,
+  };
+  if (image !== undefined) {
+    cardData.image = image === null ? undefined : image[1];
+  }
   const cardMethods: CardMethods = {
     update(updates) {
-      if (override == null) {
-        setUser({
-          ...userState,
-          overrides: [...userState.overrides,
-            {
-              base: card,
-              overrides: updates,
-            }],
-        });
-      } else {
-        const { overrides: { image } } = override;
-        if (image != null && updates.image !== undefined) {
-          URL.revokeObjectURL(image[1]);
-        }
-        const overrides: Partial<ICardProperties> = {
-          ...override.overrides,
-          ...updates,
-        };
-        setUser({
-          ...userState,
-          overrides: userState.overrides.map((elem) => {
-            if (elem.base === card) {
-              return {
-                base: card,
-                overrides,
-              };
-            }
-            return elem;
-          }),
-        });
+      if (image != null && updates.image !== undefined) {
+        URL.revokeObjectURL(image[1]);
       }
+      const newOverrides: Partial<ICardProperties> = {
+        ...data.overrides,
+        ...updates,
+      };
+      setDetail({
+        ...data,
+        overrides: newOverrides,
+      });
     },
     async commit() {
-      if (card.id == null) throw new Error('card.id is nullish');
+      const put = base?.id == null;
 
-      if (override == null) {
+      if (!put && !Object.entries(data.overrides).some(([, v]) => v !== undefined)) {
         return new ResponseStatus({
           ok: true,
           status: 200,
@@ -151,13 +193,19 @@ function inflate(
         });
       }
 
-      const { overrides } = override;
-      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      const bodyObj: any = Object.fromEntries(Object
-        .entries(overrides)
-        .filter(([k, v]) => k !== 'image' && v !== undefined)
-        .concat([['id', card.id]]));
-      const { image } = overrides;
+      let bodyObj;
+      if (put) {
+        bodyObj = Object.fromEntries(
+          Object
+            .entries(cardDataDefaults)
+            .concat(Object.entries(overrides), [['tags', []]]),
+        );
+      } else {
+        if (base?.id == null) throw new Error('Unreachable');
+        bodyObj = Object.fromEntries(Object
+          .entries(overrides)
+          .concat([['id', base.id]]));
+      }
       if (image !== undefined) {
         if (image === null) {
           bodyObj.image = null;
@@ -168,49 +216,40 @@ function inflate(
       }
       const body = JSON.stringify(bodyObj);
       const res = await fetch('/api/card', {
-        method: 'PATCH',
+        method: put ? 'PUT' : 'PATCH',
         body,
         headers: {
           'Content-Type': 'application/json',
         },
       });
       if (res.ok) {
-        const data = await res.json();
-        const updated = fromRaw(data);
-        setUser({
-          ...userState,
-          cards: userState.cards.map((that) => {
-            if (that === card) return updated;
-            return that;
-          }),
-        });
+        const raw = await res.json();
+        const updated = fromRaw(raw);
+        if (put) {
+          setUser({
+            ...userState,
+            cards: userState.cards.concat(updated),
+          });
+        } else {
+          setUser({
+            ...userState,
+            cards: userState.cards.map((that) => {
+              if (that === base) return updated;
+              return that;
+            }),
+          });
+        }
       }
       return new ResponseStatus(res);
     },
-    async delete() {
-      const res = await fetch('/api/card', {
-        method: 'DELETE',
-        body: JSON.stringify({
-          id: card.id,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (res.ok) {
-        setUser({
-          ...userState,
-          cards: userState.cards.filter((that) => that !== card),
-        });
-      }
-      return new ResponseStatus(res);
-    },
+    delete: base == null
+      ? () => Promise.reject(notImplemented())
+      : implementDelete(base, userState, setUser),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = (field) => ({
     update({ key, value }) {
-      const base = override?.overrides.fields ?? card.fields;
       cardMethods.update({
-        fields: base.map(
+        fields: cardData.fields.map(
           (existing) => (field === existing
             ? { key: key ?? existing.key, value: value ?? existing.value }
             : existing),
@@ -218,29 +257,46 @@ function inflate(
       });
     },
     remove() {
-      const base = override?.overrides.fields ?? card.fields;
       cardMethods.update({
-        fields: base.filter((existing) => field !== existing),
+        fields: cardData.fields.filter((existing) => field !== existing),
       });
     },
   });
-  let data = card;
-  if (override != null) {
-    const { overrides: { image } } = override;
-    let imageStr: string | undefined = card.image;
-    if (image !== undefined) imageStr = image == null ? undefined : image[1];
-    data = {
-      ...card,
-      ...override.overrides,
-      image: imageStr,
-    };
-  }
-  return implement(data, cardMethods, fieldMethodsFactory);
+  return implement(cardData, cardMethods, fieldMethodsFactory);
 }
 
 const AppComponent: React.VoidFunctionComponent = () => {
-  const [userState, setUser] = useState<IUserStatic | null>();
+  const [userState, setUserState] = useState<IUserStatic | null>();
+  const [detail, setDetail] = useState<ICardOverrideData | null>(null);
   const history = useHistory();
+
+  function freeDetail() {
+    if (detail == null) return;
+
+    const { overrides: { image } } = detail;
+    if (image != null) {
+      const [, url] = image;
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  const setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>> = (value) => {
+    let newState: IUserStatic | null | undefined;
+    if (typeof value === 'function') newState = value(userState);
+    else newState = value;
+    setUserState(newState);
+    let newBase: ICardData | undefined;
+    if (detail?.base?.id != null && newState != null) {
+      newBase = newState.cards.find((card) => card.id === detail?.base?.id);
+    }
+    freeDetail();
+    setDetail(newBase == null
+      ? null
+      : {
+        base: newBase,
+        overrides: {},
+      });
+  };
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
     const { status, user } = await getMe();
@@ -264,14 +320,32 @@ const AppComponent: React.VoidFunctionComponent = () => {
     : {
       username: userState.username,
       settings: userState.settings,
-      cards: userState.cards.map((card) => inflate(card, userState, setUser)),
+      cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
     };
 
   const context: IAppContext = {
     searchQuery: '',
     user,
     update() { },
-    showCardDetail() { },
+    showCardDetail(card) {
+      if (userState == null) throw new Error('userState is nullish');
+      freeDetail();
+      if (card == null) {
+        setDetail(null);
+      } else {
+        const base = userState.cards.find((existing) => existing.id === card.id);
+        if (base == null) throw new Error('Not found');
+        setDetail({
+          base,
+          overrides: {},
+        });
+      }
+    },
+    newCard() {
+      setDetail({
+        overrides: {},
+      });
+    },
     login(username, password, register) {
       return (async function loginAsync() {
         const body = {
@@ -312,6 +386,18 @@ const AppComponent: React.VoidFunctionComponent = () => {
     },
   };
 
+  let override: ICard | undefined;
+  if (userState != null) {
+    override = detail != null
+      ? implementCardOverride(
+        detail,
+        setDetail,
+        userState,
+        setUser,
+      )
+      : undefined;
+  }
+
   const { header, body } = getClassNames();
 
   const loggedIn = userState != null;
@@ -324,7 +410,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       <div className={body}>
         <Switch>
           <Route exact path='/'>
-            {loggedIn ? <Home /> : <Redirect to='/login' />}
+            {loggedIn ? <Home detail={override} /> : <Redirect to='/login' />}
           </Route>
           <Route exact path='/login'>
             {loggedIn ? <Redirect to='/' /> : <Login />}

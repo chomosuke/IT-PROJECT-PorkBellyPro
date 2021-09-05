@@ -19,6 +19,7 @@ export interface IAppContext extends Readonly<IAppContextProperties> {
   readonly user: IUser | null;
   update(props: Partial<IAppContextProperties>): void;
   showCardDetail(card: ICard | null): void;
+  newCard(): void;
   login(username: string, password: string, register?: boolean): Promise<ResponseStatus>;
   logout(): Promise<ResponseStatus>;
 }
