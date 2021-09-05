@@ -163,7 +163,24 @@ const AppComponent: React.VoidFunctionComponent = () => {
             }
           },
           commit() { return Promise.reject(); },
-          delete() { return Promise.reject(); },
+          async delete() {
+            const res = await fetch('/api/card', {
+              method: 'DELETE',
+              body: JSON.stringify({
+                id: card.id,
+              }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            if (res.ok) {
+              setUser({
+                ...userState,
+                cards: userState.cards.filter((that) => that !== card),
+              });
+            }
+            return new ResponseStatus(res);
+          },
         };
         const fieldMethodsFactory: CardFieldMethodsFactory = (field) => ({
           update({ key, value }) {
