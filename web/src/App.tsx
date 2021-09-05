@@ -318,16 +318,13 @@ const AppComponent: React.VoidFunctionComponent = () => {
       <div className={body}>
         <Switch>
           <Route exact path='/'>
-            {!loggedIn && <Redirect to='/login' />}
-            <Home />
+            {loggedIn ? <Home /> : <Redirect to='/login' />}
           </Route>
           <Route exact path='/login'>
-            {loggedIn && <Redirect to='/' />}
-            <Login />
+            {loggedIn ? <Redirect to='/' /> : <Login />}
           </Route>
           <Route exact path='/register'>
-            {loggedIn && <Redirect to='/' />}
-            <Login registering />
+            {loggedIn ? <Redirect to='/' /> : <Login registering />}
           </Route>
           <Route>
             <Redirect to='/' />
