@@ -49,13 +49,14 @@ export const App: React.VoidFunctionComponent<IAppProps> = ({ history }) => {
 
   const content = (
     <Switch>
-      <Route path='/'>
+      <Route exact path='/'>
         <Home />
       </Route>
-      <Route path='/login'>
+      <Route exact path='/login'>
+        <p>Login page welcome!</p>
         <Login />
       </Route>
-      <Route path='/register'>
+      <Route exact path='/register'>
         <Login registering />
       </Route>
     </Switch>
