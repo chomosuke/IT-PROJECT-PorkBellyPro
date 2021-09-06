@@ -166,13 +166,10 @@ function implementCardOverride(
     ...overrides,
   };
   if (image !== undefined) {
-    cardData.image = image === null ? undefined : image[1];
+    cardData.image = image === null ? undefined : image;
   }
   const cardMethods: CardMethods = {
     update(updates) {
-      if (image != null && updates.image !== undefined) {
-        URL.revokeObjectURL(image[1]);
-      }
       const newOverrides: Partial<ICardProperties> = {
         ...data.overrides,
         ...updates,
@@ -207,12 +204,7 @@ function implementCardOverride(
           .concat([['id', base.id]]));
       }
       if (image !== undefined) {
-        if (image === null) {
-          bodyObj.image = null;
-        } else {
-          const [blob] = image;
-          bodyObj.image = Buffer.from(await blob.arrayBuffer()).toString('base64');
-        }
+        bodyObj.image = image;
       }
       const body = JSON.stringify(bodyObj);
       const res = await fetch('/api/card', {
@@ -271,16 +263,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const history = useHistory();
 
-  function freeDetail() {
-    if (detail == null) return;
-
-    const { overrides: { image } } = detail;
-    if (image != null) {
-      const [, url] = image;
-      URL.revokeObjectURL(url);
-    }
-  }
-
   const setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>> = (value) => {
     let newState: IUserStatic | null | undefined;
     if (typeof value === 'function') newState = value(userState);
@@ -290,7 +272,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
     if (detail?.base?.id != null && newState != null) {
       newBase = newState.cards.find((card) => card.id === detail?.base?.id);
     }
-    freeDetail();
     setDetail(newBase == null
       ? null
       : {
@@ -332,7 +313,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
     },
     showCardDetail(card) {
       if (userState == null) throw new Error('userState is nullish');
-      freeDetail();
       if (card == null) {
         setDetail(null);
       } else {
