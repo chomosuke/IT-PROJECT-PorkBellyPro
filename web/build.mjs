@@ -49,6 +49,7 @@ webpack({
   },
   plugins: [
     new HtmlWebpackPlugin({
+      publicPath: '/',
       title: args.title,
       template: src('index.ejs')
     })
