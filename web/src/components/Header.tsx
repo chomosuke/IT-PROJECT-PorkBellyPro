@@ -1,20 +1,24 @@
 import React from 'react';
-import { IUser } from '../AppContext';
+import { useApp } from '../AppContext';
+import { LogoutBtn } from './LogoutBtn';
+import { SearchBox } from './SearchBox';
 
-// to display username on the top 
-export const Header = (user: IUser | null) => {
+export const Header: React.VoidFunctionComponent = () => {
+  const { user } = useApp();
   if (user !== null) {
     return (
       <div>
-        Hello {user.username}
+        Hello
+        {user.username}
+        <SearchBox />
+        <LogoutBtn />
       </div>
-    )
+    );
   }
-  else {
-    return (
-      <div>
-        PorkBelly
-      </div>
-    )
-  }
-}
+
+  return (
+    <div>
+      PorkBelly
+    </div>
+  );
+};

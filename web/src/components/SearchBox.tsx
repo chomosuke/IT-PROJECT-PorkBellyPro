@@ -1,34 +1,23 @@
-import React, { useState } from 'react';
+import { TextField } from '@fluentui/react';
+import React from 'react';
+import { useApp } from '../AppContext';
 
-export const SearchBox = () => {
+export const SearchBox: React.VoidFunctionComponent = () => {
+  const context = useApp();
 
-    const [searchStr, setSearchStr] = useState({
-        search: ""
-    })
+  const handleChange = (
+    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string | undefined,
+  ): void => {
+    context.update({
+      searchQuery: newValue,
+    });
+  };
 
-    // store the text box data
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        setSearchStr({
-            ...searchStr,
-            [event.target.name]: event.target.value
-        })
-    }
-
-    // TODO: bind search button to the function
-    // const changeSearchStr = 
-
-    return (
-        <div>
-            <input 
-                type = "text"
-                placeholder = "Search"
-                value = {searchStr.search}
-                name = "search"
-                onChange = {handleChange}
-            />
-
-        </div>
-    )
-}
-
-
+  return (
+    <TextField
+      value={context.searchQuery}
+      onChange={handleChange}
+    />
+  );
+};
