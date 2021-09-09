@@ -6,7 +6,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
   const context = useApp();
 
   const handleChange = (
-    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string | undefined,
   ): void => {
     context.update({
@@ -16,6 +16,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
 
   return (
     <TextField
+      placeholder='Search'
       value={context.searchQuery}
       onChange={handleChange}
     />

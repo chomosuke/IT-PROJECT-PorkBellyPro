@@ -2,11 +2,12 @@ import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React from 'react';
 import { useApp } from '../AppContext';
 
-export const LogoutBtn: React.VoidFunctionComponent = () => {
-  const context = useApp();
+export const UserButton: React.VoidFunctionComponent = () => {
+  const app = useApp();
+  const { user } = app;
 
   const handleLogout = async () => {
-    await context.logout();
+    await app.logout();
     /*
      * const res = await context.logout();
      * check respond
@@ -27,16 +28,16 @@ export const LogoutBtn: React.VoidFunctionComponent = () => {
         key: 'logout',
         text: 'Logout',
         onClick: logoutClick,
-        // icon go here
+        iconProps: { iconName: 'SignOut' },
       },
     ],
   };
 
-  if (context.user !== null) {
+  if (user !== null) {
     return (
       <DefaultButton
-        text='Menu'
-        split
+        text={user.username}
+        iconProps={{ iconName: 'Contact' }}
         menuProps={menuProps}
       />
     );
