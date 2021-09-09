@@ -27,16 +27,17 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
   const [password, setPassword] = useState<string>('');
 
   const app = useApp();
-  const loginEvent = () => {
-    if (username && password) {
-      app.login(username, password, registering).then((res) => {
-        if (res.ok) {
-          setUsername('');
-          setPassword('');
-        } else {
-          // error feedback for login fail
+
+  const canSubmit = username && password;
+
+  const onLoginClick = () => {
+    if (canSubmit) {
+      (async () => {
+        const res = await app.login(username, password, registering);
+        if (!res.ok) {
+          // Show error dialog
         }
-      });
+      })();
     }
   };
 
@@ -82,7 +83,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
           styles={textFieldStyles}
         />
         <PrimaryButton
-          onClick={loginEvent}
+          onClick={onLoginClick}
           text={registering ? 'Register' : 'Log in'}
         />
         <Stack.Item align='center'>
