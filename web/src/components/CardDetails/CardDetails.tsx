@@ -37,23 +37,25 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
 
   // no sort, order will be preserved on the server presumably
   const fieldViews = (
-    <Stack>
-      <Stack.Item key='image' align='stretch'>
-        <CardImageField card={card} editing={isEditing} />
-      </Stack.Item>
-      {mFields.map((field) => (
-        <Stack.Item key={field.key} align='stretch'>
-          <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
+    <Stack style={{ height: '100%' }}>
+      <Stack style={{ overflowY: 'auto' }}>
+        <Stack.Item key='image' align='stretch'>
+          <CardImageField card={card} editing={isEditing} />
         </Stack.Item>
-      ))}
-      <Stack.Item key='note' align='stretch'>
-        <CardNoteField field={note} editing={isEditing} />
-      </Stack.Item>
-      {restFields.map((field) => (
-        <Stack.Item key={field.key} align='stretch'>
-          <CardExtraField field={field} editing={isEditing} />
+        {mFields.map((field) => (
+          <Stack.Item key={field.key} align='stretch'>
+            <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
+          </Stack.Item>
+        ))}
+        <Stack.Item key='note' align='stretch'>
+          <CardNoteField field={note} editing={isEditing} />
         </Stack.Item>
-      ))}
+        {restFields.map((field) => (
+          <Stack.Item key={field.key} align='stretch'>
+            <CardExtraField field={field} editing={isEditing} />
+          </Stack.Item>
+        ))}
+      </Stack>
       <Stack.Item key='CardDetailActions'>
         <CardDetailActions
           card={card}
