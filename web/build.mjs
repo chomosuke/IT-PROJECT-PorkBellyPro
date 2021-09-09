@@ -12,9 +12,15 @@ import webpack from 'webpack';
 const parser = new ArgumentParser();
 parser.add_argument('-o', '--out');
 parser.add_argument('-t', '--title');
-parser.add_argument('-d', '--dev', { action: 'store_true' })
+parser.add_argument('-d', '--dev', { action: 'store_true' });
+parser.add_argument('-w', '--watch', { action: 'store_true' });
 
-/** @type {{out: string; title: string; dev: boolean;}} */
+/** @type {{
+ * out: string;
+ * title: string;
+ * dev: boolean;
+ * watch: boolean;
+ * }} */
 const args = parser.parse_args();
 
 /** @param rel {string} */
@@ -24,7 +30,21 @@ function src(rel) {
   return resolve(dirname(fileURLToPath(new URL(import.meta.url))), 'src', rel);
 }
 
-webpack({
+/** @type {(err: any, stats: webpack.Stats) => any} */
+const handler = (err, stats) => {
+  // https://webpack.js.org/api/node/#error-handling
+  if (err) {
+    console.error(err.stack || err);
+    if (err.details) {
+      console.error(err.details);
+    }
+    return;
+  }
+
+  console.log(stats.toString({ colors: true, errorDetails: true }));
+};
+
+const compiler = webpack({
   mode: args.dev ? 'development' : 'production',
   devtool: 'source-map',
   entry: src('main.tsx'),
@@ -54,16 +74,8 @@ webpack({
       template: src('index.ejs')
     })
   ]
-}, /** @param err {any} */(err, stats) => {
+}, args.watch ? null : handler);
 
-  // https://webpack.js.org/api/node/#error-handling
-  if (err) {
-    console.error(err.stack || err);
-    if (err.details) {
-      console.error(err.details);
-    }
-    return;
-  }
-
-  console.log(stats.toString({ colors: true, errorDetails: true }));
-});
+if (args.watch) {
+  compiler.watch({}, handler);
+}
