@@ -12,52 +12,12 @@ export interface ILoginProps {
   registering?: boolean;
 }
 
-const stackStyles = {
-  root: {
-    backgroundColor: 'white',
-    margin: '10% 0',
-    width: '40%',
-    textAlign: 'center',
-    height: 'fit-content',
-    borderRadius: '2vw',
-  },
-};
-
-const fieldStyles = {
-  fieldGroup: {
-    borderRadius: '10px',
-    border: '3px solid #5A798D',
-    boxSizing: 'border-box',
-    height: '3em',
-  },
-  field: {
-    fontSize: '1.5em',
-  },
-  root: {
-    height: '63px',
-  },
-};
-const buttonStyle = {
-  root: {
-    background: '#5A798D',
-    borderRadius: '10px',
-    height: '5em',
-  },
-  label: {
-    fontSize: '1.5em',
-  },
-};
-const stackTokens = {
-  padding: '5% 10%',
-};
-
 const getClassNames = () => mergeStyleSets({
   bodyStyle: {
-    overflow: 'auto',
     display: 'flex',
-    justifyContent: 'space-around',
-    background: '#F8F8F8',
     height: '100%',
+    justifyContent: 'space-around',
+    overflow: 'auto',
   },
 });
 
@@ -85,49 +45,62 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
 
   const { bodyStyle } = getClassNames();
 
+  const textFieldStyles = {
+    root: {
+      height: '53px',
+    },
+  };
+
+  const linkLabelStyles = {
+    root: {
+      cursor: 'pointer',
+    },
+  };
+
   return (
     <div className={bodyStyle} id='container'>
-      <Stack styles={stackStyles} tokens={stackTokens}>
-        <div>
-          <TextField
-            placeholder='Username'
-            key={registering ? 'userRegister' : 'userLogin'}
-            styles={fieldStyles}
-            value={username}
-            onGetErrorMessage={(value) => emptyField(value, 'Username')}
-            validateOnFocusOut
-            validateOnLoad={false}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-          />
-        </div>
-        <div>
-          <TextField
-            placeholder='Password'
-            type='password'
-            key={registering ? 'passRegister' : 'passLogin'}
-            styles={fieldStyles}
-            value={password}
-            onGetErrorMessage={(value) => emptyField(value, 'Password')}
-            validateOnFocusOut
-            validateOnLoad={false}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-          />
-        </div>
+      <Stack tokens={{ childrenGap: '8px' }}>
+        <TextField
+          placeholder='Username'
+          key={registering ? 'userRegister' : 'userLogin'}
+          value={username}
+          onGetErrorMessage={(value) => emptyField(value, 'Username')}
+          validateOnFocusOut
+          validateOnLoad={false}
+          onChange={(event) => setUsername(event.currentTarget.value)}
+          styles={textFieldStyles}
+        />
+        <TextField
+          placeholder='Password'
+          type='password'
+          key={registering ? 'passRegister' : 'passLogin'}
+          value={password}
+          onGetErrorMessage={(value) => emptyField(value, 'Password')}
+          validateOnFocusOut
+          validateOnLoad={false}
+          onChange={(event) => setPassword(event.currentTarget.value)}
+          styles={textFieldStyles}
+        />
         <PrimaryButton
-          styles={buttonStyle}
           onClick={loginEvent}
           text={registering ? 'Register' : 'Log in'}
         />
-        <Link to={registering ? '/login' : '/register'}>
-          <Label>
-            {
-              registering
-                ? 'Already with an account? Sign in here.'
-                : 'Register to get started'
-            }
+        <Stack.Item align='center'>
+          <Label styles={linkLabelStyles}>
+            <Link to={registering ? '/login' : '/register'}>
+              {
+                registering
+                  ? 'Already with an account? Sign in here.'
+                  : 'Register to get started'
+              }
+            </Link>
           </Label>
-        </Link>
-        <Label>Can&apos;t log in?</Label>
+        </Stack.Item>
+        <Stack.Item align='center'>
+          <Label>
+            Can&apos;t log in?
+          </Label>
+        </Stack.Item>
       </Stack>
     </div>
   );

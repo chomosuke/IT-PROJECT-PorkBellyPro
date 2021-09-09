@@ -35,55 +35,51 @@ describe('Login view render tests', () => {
   <div
     className="ms-Stack css-54"
   >
-    <div>
+    <div
+      className="ms-TextField root-56"
+    >
       <div
-        className="ms-TextField root-56"
+        className="ms-TextField-wrapper"
       >
         <div
-          className="ms-TextField-wrapper"
+          className="ms-TextField-fieldGroup fieldGroup-57"
         >
-          <div
-            className="ms-TextField-fieldGroup fieldGroup-57"
-          >
-            <input
-              aria-invalid={false}
-              className="ms-TextField-field field-58"
-              id="TextField0"
-              onBlur={[Function]}
-              onChange={[Function]}
-              onFocus={[Function]}
-              onInput={[Function]}
-              placeholder="Username"
-              type="text"
-              value=""
-            />
-          </div>
+          <input
+            aria-invalid={false}
+            className="ms-TextField-field field-58"
+            id="TextField0"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            onInput={[Function]}
+            placeholder="Username"
+            type="text"
+            value=""
+          />
         </div>
       </div>
     </div>
-    <div>
+    <div
+      className="ms-TextField root-56"
+    >
       <div
-        className="ms-TextField root-56"
+        className="ms-TextField-wrapper"
       >
         <div
-          className="ms-TextField-wrapper"
+          className="ms-TextField-fieldGroup fieldGroup-57"
         >
-          <div
-            className="ms-TextField-fieldGroup fieldGroup-57"
-          >
-            <input
-              aria-invalid={false}
-              className="ms-TextField-field field-58"
-              id="TextField3"
-              onBlur={[Function]}
-              onChange={[Function]}
-              onFocus={[Function]}
-              onInput={[Function]}
-              placeholder="Password"
-              type="password"
-              value=""
-            />
-          </div>
+          <input
+            aria-invalid={false}
+            className="ms-TextField-field field-58"
+            id="TextField3"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            onInput={[Function]}
+            placeholder="Password"
+            type="password"
+            value=""
+          />
         </div>
       </div>
     </div>
@@ -114,21 +110,29 @@ describe('Login view render tests', () => {
         </span>
       </span>
     </button>
-    <a
-      href="/register"
-      onClick={[Function]}
+    <div
+      className="ms-StackItem css-75"
     >
       <label
-        className="ms-Label root-75"
+        className="ms-Label root-76"
       >
-        Register to get started
+        <a
+          href="/register"
+          onClick={[Function]}
+        >
+          Register to get started
+        </a>
       </label>
-    </a>
-    <label
-      className="ms-Label root-75"
+    </div>
+    <div
+      className="ms-StackItem css-75"
     >
-      Can't log in?
-    </label>
+      <label
+        className="ms-Label root-77"
+      >
+        Can't log in?
+      </label>
+    </div>
   </div>
 </div>
 `);
