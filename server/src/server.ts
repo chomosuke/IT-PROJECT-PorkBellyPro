@@ -47,6 +47,8 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   }
 
   res.sendStatus(500);
+
+  console.log(err.stack);
 };
 
 async function main() {
