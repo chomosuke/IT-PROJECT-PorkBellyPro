@@ -12,6 +12,9 @@ export const CardMandatoryField: React.VoidFunctionComponent<ICardMandatoryField
   field, editing, onEdit,
 }) => {
   const { key, value } = field;
+  if (value === '' && !editing) {
+    return <></>;
+  }
   return (
     <Stack horizontal>
       <Stack.Item grow key='key'>
