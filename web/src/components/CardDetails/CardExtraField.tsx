@@ -1,4 +1,6 @@
-import { Stack, Text, TextField } from '@fluentui/react';
+import {
+  DefaultButton, Stack, Text, TextField,
+} from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import React from 'react';
 import { ICardField } from '../../controllers/CardField';
@@ -38,6 +40,17 @@ export const CardExtraField: React.VoidFunctionComponent<ICardExtraFieldProps> =
           )
           : <Text>{value}</Text>}
       </Stack.Item>
+      {editing
+        && (
+        <Stack.Item key='remove'>
+          <DefaultButton
+            text='remove'
+            onClick={() => {
+              field.remove();
+            }}
+          />
+        </Stack.Item>
+        )}
     </Stack>
   );
 };

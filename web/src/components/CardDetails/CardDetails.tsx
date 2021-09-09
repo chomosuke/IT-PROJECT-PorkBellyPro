@@ -1,4 +1,4 @@
-import { Stack } from '@fluentui/react';
+import { DefaultButton, Stack } from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
@@ -31,7 +31,15 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   ];
 
   const noteIndex = fields.findIndex((field) => field.key === 'note');
-  const note = fields[noteIndex];
+  const note = noteIndex === -1 ? undefined : fields[noteIndex];
+
+  // enfore the existence of note
+  if (note === undefined) {
+    card.update({ fields: [{ key: 'note', value: '' }, ...fields] });
+    // no need to commit as CardDetail will always make sure note exist.
+    return <></>;
+  }
+
   const [...restFields] = fields;
   restFields.splice(noteIndex, 1);
 
@@ -51,10 +59,21 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           <CardNoteField field={note} editing={isEditing} />
         </Stack.Item>
         {restFields.map((field) => (
-          <Stack.Item key={field.key} align='stretch'>
+          <Stack.Item align='stretch'>
             <CardExtraField field={field} editing={isEditing} />
           </Stack.Item>
         ))}
+        {isEditing
+          && (
+          <Stack.Item>
+            <DefaultButton
+              text='add field'
+              onClick={() => {
+                card.update({ fields: [...fields, { key: '', value: '' }] });
+              }}
+            />
+          </Stack.Item>
+          )}
       </Stack>
       <Stack.Item key='CardDetailActions'>
         <CardDetailActions
