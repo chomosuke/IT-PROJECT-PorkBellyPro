@@ -1,5 +1,5 @@
 import { ArgumentParser } from 'argparse';
-import express, { RequestHandler } from 'express';
+import express, { ErrorRequestHandler, RequestHandler } from 'express';
 import { readFile } from 'fs/promises';
 import { createConnection } from 'mongoose';
 import { resolve } from 'path';
@@ -37,6 +37,18 @@ function serveIndex(distPath: string): RequestHandler {
   return serveIndex;
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (err) {
+    if (err instanceof HttpStatusError) {
+      res.status(err.code).send(err.message);
+      return;
+    }
+  }
+
+  res.sendStatus(500);
+};
+
 async function main() {
   const parser = new ArgumentParser();
   parser.add_argument('-d', '--dist');
@@ -62,6 +74,7 @@ async function main() {
   app.use('/api', apiRouter.router);
   app.use(dist);
   app.get('*', serveIndex(distPath));
+  app.use(errorHandler);
 
   console.log(`Listening on port ${port}...`);
   app.listen(port);

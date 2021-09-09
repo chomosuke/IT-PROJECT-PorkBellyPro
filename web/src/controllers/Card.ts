@@ -21,7 +21,7 @@ interface ICardPropertiesCommon {
 }
 
 export interface ICardProperties extends ICardPropertiesCommon {
-  image: [Blob, string] | null;
+  image: string | null;
   fields: readonly ICardFieldProperties[];
 }
 
