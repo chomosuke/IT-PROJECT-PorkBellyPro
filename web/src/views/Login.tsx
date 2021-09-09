@@ -1,5 +1,7 @@
 import {
+  Label,
   PrimaryButton, Stack, TextField,
+  mergeStyleSets,
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -17,26 +19,7 @@ const stackStyles = {
     width: '40%',
     textAlign: 'center',
     height: 'fit-content',
-  },
-};
-
-const roundStyle = {
-  borderRadius: '2vw',
-};
-
-const stackTokens = {
-  padding: '5% 10%',
-  childrenGap: '10px',
-};
-
-const buttonStyle = {
-  root: {
-    background: '#5A798D',
-    borderRadius: '10px',
-    height: '5em',
-  },
-  label: {
-    fontSize: '1.5em',
+    borderRadius: '2vw',
   },
 };
 
@@ -50,15 +33,33 @@ const fieldStyles = {
   field: {
     fontSize: '1.5em',
   },
+  root: {
+    height: '63px',
+  },
+};
+const buttonStyle = {
+  root: {
+    background: '#5A798D',
+    borderRadius: '10px',
+    height: '5em',
+  },
+  label: {
+    fontSize: '1.5em',
+  },
+};
+const stackTokens = {
+  padding: '5% 10%',
 };
 
-const bodyStyle = {
-  display: 'flex',
-  justifyContent: 'space-around',
-  // background: "#F8F8F8",
-  background: 'red',
-  height: '100%',
-};
+const getClassNames = () => mergeStyleSets({
+  bodyStyle: {
+    overflow: 'auto',
+    display: 'flex',
+    justifyContent: 'space-around',
+    background: '#F8F8F8',
+    height: '100%',
+  },
+});
 
 export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering }) => {
   // get context
@@ -72,6 +73,8 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
         if (res.ok) {
           setUsername('');
           setPassword('');
+        } else {
+          // error feedback for login fail
         }
       });
     }
@@ -80,41 +83,51 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
   // rudimentary controlled input event catchers
   const emptyField = (fieldValue: string, fieldName: string) => ((fieldValue) ? '' : `${fieldName} is required`);
 
+  const { bodyStyle } = getClassNames();
+
   return (
-    <div style={bodyStyle} id='container'>
-      <Stack styles={stackStyles} tokens={stackTokens} style={roundStyle}>
-        <TextField
-          placeholder='Username'
-          styles={fieldStyles}
-          value={username}
-          onGetErrorMessage={(value) => emptyField(value, 'Username')}
-          validateOnFocusOut
-          validateOnLoad={false}
-          onChange={(event) => setUsername(event.currentTarget.value)}
-        />
-        <TextField
-          type='password'
-          placeholder='Password'
-          styles={fieldStyles}
-          value={password}
-          onGetErrorMessage={(value) => emptyField(value, 'Password')}
-          validateOnFocusOut
-          validateOnLoad={false}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-        />
+    <div className={bodyStyle} id='container'>
+      <Stack styles={stackStyles} tokens={stackTokens}>
+        <div>
+          <TextField
+            placeholder='Username'
+            key={registering ? 'userRegister' : 'userLogin'}
+            styles={fieldStyles}
+            value={username}
+            onGetErrorMessage={(value) => emptyField(value, 'Username')}
+            validateOnFocusOut
+            validateOnLoad={false}
+            onChange={(event) => setUsername(event.currentTarget.value)}
+          />
+        </div>
+        <div>
+          <TextField
+            placeholder='Password'
+            type='password'
+            key={registering ? 'passRegister' : 'passLogin'}
+            styles={fieldStyles}
+            value={password}
+            onGetErrorMessage={(value) => emptyField(value, 'Password')}
+            validateOnFocusOut
+            validateOnLoad={false}
+            onChange={(event) => setPassword(event.currentTarget.value)}
+          />
+        </div>
         <PrimaryButton
           styles={buttonStyle}
           onClick={loginEvent}
           text={registering ? 'Register' : 'Log in'}
         />
         <Link to={registering ? '/login' : '/register'}>
-          {
-          registering
-            ? 'Already with an account? Sign in here.'
-            : 'Register to get started'
-        }
+          <Label>
+            {
+              registering
+                ? 'Already with an account? Sign in here.'
+                : 'Register to get started'
+            }
+          </Label>
         </Link>
-        <span>Can&apos;t log in?</span>
+        <Label>Can&apos;t log in?</Label>
       </Stack>
     </div>
   );
