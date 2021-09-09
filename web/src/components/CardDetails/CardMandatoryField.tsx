@@ -13,7 +13,7 @@ export const CardMandatoryField: React.VoidFunctionComponent<ICardMandatoryField
 }) => {
   const { key, value } = field;
   return (
-    <Stack horizontal gap={15}>
+    <Stack horizontal>
       <Stack.Item grow key='key'>
         <Text>{key}</Text>
       </Stack.Item>
