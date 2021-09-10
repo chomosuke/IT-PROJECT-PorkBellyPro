@@ -5,7 +5,7 @@ import { useApp } from '../AppContext';
 import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
 import { ICard } from '../controllers/Card';
-import { CardDetails } from '../components/CardDetails';
+import { CardDetails } from '../components/cardDetails/CardDetails';
 
 export interface IHomeProps {
   detail?: ICard;
