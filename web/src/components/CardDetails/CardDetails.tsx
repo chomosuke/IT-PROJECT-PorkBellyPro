@@ -72,7 +72,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         ))}
         {isEditing
           && (
-          <Stack.Item>
+          <Stack.Item key='add field'>
             <DefaultButton
               text='add field'
               onClick={() => {

@@ -37,34 +37,48 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
       </>
     )
     : <div style={{ backgroundColor: 'gray', textAlign: 'center' }}>{ card.name }</div>;
+
+  const [loading, setLoading] = React.useState(false);
+
   return (
     <Stack>
       {editing
         ? (
           <>
-            {imageComp}
-            <input
-              type='file'
-              name='myImage'
-              accept='image/*'
-              onChange={async (e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const img = e.target.files[0];
-                  const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
-                  if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
-                    jimg.resize(imgWidth, Jimp.AUTO);
-                  } else {
-                    jimg.resize(Jimp.AUTO, imgHeight);
-                  }
-                  const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
-                  console.log(newImageUrl);
-                  card.update({ image: newImageUrl });
-                }
-              }}
-            />
+            <Stack.Item>{imageComp}</Stack.Item>
+            <Stack.Item>
+              <Stack horizontal>
+                <Stack.Item>
+                  <input
+                    type='file'
+                    name='myImage'
+                    accept='image/*'
+                    onChange={(e) => {
+                      setLoading(true);
+                      (async () => {
+                        if (e.target.files && e.target.files[0]) {
+                          const img = e.target.files[0];
+                          const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
+                          if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
+                            jimg.resize(imgWidth, Jimp.AUTO);
+                          } else {
+                            jimg.resize(Jimp.AUTO, imgHeight);
+                          }
+                          const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
+                          console.log(newImageUrl);
+                          card.update({ image: newImageUrl });
+                        }
+                        setLoading(false);
+                      })();
+                    }}
+                  />
+                </Stack.Item>
+                {loading && <Stack.Item>loading</Stack.Item>}
+              </Stack>
+            </Stack.Item>
           </>
         )
-        : imageComp}
+        : <Stack.Item>{imageComp}</Stack.Item>}
     </Stack>
   );
 };

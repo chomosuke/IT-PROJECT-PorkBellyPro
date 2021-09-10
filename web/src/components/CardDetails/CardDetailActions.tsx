@@ -22,16 +22,16 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
     { editing
       ? (
         <>
-          <Stack.Item>
+          <Stack.Item key='save'>
             <DefaultButton text='save' onClick={onSave} />
           </Stack.Item>
-          <Stack.Item>
+          <Stack.Item key='cancel'>
             <DefaultButton text='cancel' onClick={onCancel} />
           </Stack.Item>
         </>
       )
       : (
-        <Stack.Item>
+        <Stack.Item key='edit'>
           <DefaultButton text='edit' onClick={onBeginEdit} />
         </Stack.Item>
       )}
