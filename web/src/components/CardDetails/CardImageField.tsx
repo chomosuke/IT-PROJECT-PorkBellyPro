@@ -46,6 +46,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
             <input
               type='file'
               name='myImage'
+              accept='image/*'
               onChange={async (e) => {
                 if (e.target.files && e.target.files[0]) {
                   const img = e.target.files[0];
