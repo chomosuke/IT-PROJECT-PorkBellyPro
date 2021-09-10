@@ -62,7 +62,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     ];
 
     return searchedTokens.every((sToken) => searchedCard.some(
-      (cToken) => cToken.includes(sToken),
+      (cToken) => cToken.toLowerCase().includes(sToken.toLowerCase()),
     ));
   }
 
