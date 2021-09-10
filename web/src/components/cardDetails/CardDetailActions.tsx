@@ -25,10 +25,12 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
     return <></>;
   }
 
+  const { cardDetailExpanded, expandCardDetail } = home;
+
   return (
     <Stack horizontal horizontalAlign='end'>
       <Stack.Item key='expand'>
-        <DefaultButton text='expand' onClick={() => home.expandCardDetail(true)} />
+        <DefaultButton text={cardDetailExpanded ? 'collapse' : 'expand'} onClick={() => expandCardDetail(!cardDetailExpanded)} />
       </Stack.Item>
       { editing
         ? (

@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 
 export interface IHomeContext {
+  readonly cardDetailExpanded: boolean;
   expandCardDetail(value: boolean): void;
 }
 

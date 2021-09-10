@@ -48,10 +48,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
 
   const { cards } = user;
 
-  function expandCardDetail(value: boolean): void {
-    setExpand(value);
-  }
-
   function filterCard(card: ICard): boolean {
     const searchedTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
 
@@ -71,7 +67,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   }
 
   return (
-    <HomeProvider value={{ expandCardDetail }}>
+    <HomeProvider value={{ expandCardDetail: setExpand, cardDetailExpanded: expand }}>
       <div className={root}>
         <div className={cardSection}>
           <Stack horizontal wrap>
