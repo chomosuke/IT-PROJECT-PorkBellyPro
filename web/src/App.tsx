@@ -396,10 +396,10 @@ const AppComponent: React.VoidFunctionComponent = () => {
             {loggedIn ? <Home detail={override} /> : <Redirect to='/login' />}
           </Route>
           <Route exact path='/login'>
-            {loggedIn ? <Redirect to='/' /> : <Login />}
+            {loggedIn ? <Redirect to='/' /> : <Login key='login' />}
           </Route>
           <Route exact path='/register'>
-            {loggedIn ? <Redirect to='/' /> : <Login registering />}
+            {loggedIn ? <Redirect to='/' /> : <Login registering key='register' />}
           </Route>
           <Route>
             <Redirect to='/' />
