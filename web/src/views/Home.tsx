@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Stack } from '@fluentui/react';
+import { Stack, mergeStyleSets } from '@fluentui/react';
 import { useApp } from '../AppContext';
 import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
@@ -11,39 +11,36 @@ export interface IHomeProps {
   detail?: ICard;
 }
 
-/// ///// fluent-ui stack styling ////////
+const getClassNames = (expand: boolean, detail: boolean) => {
+  let templateColumnVar;
+  if (detail) {
+    templateColumnVar = expand ? '1fr 1fr' : '2fr 1fr';
+  } else {
+    templateColumnVar = '1fr 0fr';
+  }
 
-/*
- *const stackStyles: IStackStyles = {
- *root: {
- *  background: DefaultPalette.themePrimary,
- *},
- *};
- */
-
-/*
- * const StackItemStyles: IStackItemStyles = {
- *   root: {
- *     alignItems: 'center',
- *     display: 'flex',
- *     height: '50vh',
- *     justifyContent: 'center',
- *   },
- * };
- */
-
-/*
- * const stackTokens: IStackTokens = {
- *   childrenGap: 5,
- *   padding: 20,
- * };
- */
+  return mergeStyleSets({
+    root: {
+      background: 'limegreen',
+      display: 'grid',
+      gridTemplateAreas: '"a b"',
+      gridTemplateColumns: templateColumnVar,
+    },
+    cardSection: {
+      gridArea: 'a',
+      background: 'pink',
+    },
+    detailSection: {
+      gridArea: 'b',
+      background: 'blue',
+    },
+  });
+};
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
-  // const [ currentCard, expandCardDetail ] = useState<string | undefined>(defaultStatus);
-
   const [expand, setExpand] = useState(false);
+  const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery } = useApp();
   if (user == null) throw new Error();
 
@@ -73,25 +70,19 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
 
   return (
     <HomeProvider value={{ expandCardDetail }}>
-
-      <Stack horizontal>
-
-        <Stack.Item grow={2}>
+      <div className={root}>
+        <div className={cardSection}>
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
-        </Stack.Item>
-
+        </div>
         {detail != null
           && (
-          <Stack.Item grow={expand ? 2 : 1}>
-
+          <div className={detailSection}>
             <CardDetails card={detail} editing />
-
-          </Stack.Item>
+          </div>
           )}
-
-      </Stack>
+      </div>
     </HomeProvider>
   );
 };
