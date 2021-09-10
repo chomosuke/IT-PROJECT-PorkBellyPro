@@ -25,10 +25,12 @@ const getClassNames = (expand: boolean, detail: boolean) => {
       display: 'grid',
       gridTemplateAreas: '"a b"',
       gridTemplateColumns: templateColumnVar,
+      height: '100%',
     },
     cardSection: {
       gridArea: 'a',
       background: 'pink',
+      overflow: 'auto',
     },
     detailSection: {
       gridArea: 'b',
