@@ -75,7 +75,7 @@ Object {
     },
   ],
   "id": "000000000000000000000000",
-  "image": "/image/000000000000000000000000",
+  "image": "/api/image/000000000000000000000000",
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
