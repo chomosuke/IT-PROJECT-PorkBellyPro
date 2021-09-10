@@ -1,5 +1,5 @@
 import React from 'react';
-import Jimp from 'jimp';
+import Jimp from 'jimp/browser/lib/jimp';
 import { Stack } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import { ICard } from '../../controllers/Card';
@@ -17,32 +17,31 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   const { image } = card;
   return (
     <>
-      {image
-    && (editing
-      ? (
-        <Stack>
-          <img src={image} alt='business card' />
-          <input
-            type='file'
-            name='myImage'
-            onChange={async (e) => {
-              if (e.target.files && e.target.files[0]) {
-                const img = e.target.files[0];
-                const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
-                if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
-                  jimg.resize(250, Jimp.AUTO);
-                } else {
-                  jimg.resize(Jimp.AUTO, 500);
+      {editing
+        ? (
+          <Stack>
+            {image && <img src={image} alt='business card' />}
+            <input
+              type='file'
+              name='myImage'
+              onChange={async (e) => {
+                if (e.target.files && e.target.files[0]) {
+                  const img = e.target.files[0];
+                  const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
+                  if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
+                    jimg.resize(imgWidth, Jimp.AUTO);
+                  } else {
+                    jimg.resize(Jimp.AUTO, imgHeight);
+                  }
+                  const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
+                  console.log(newImageUrl);
+                  card.update({ image: newImageUrl });
                 }
-                const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
-                card.update({ image: newImageUrl });
-              }
-            }}
-          />
-        </Stack>
-      )
-      : <img src={image} alt='business card' />
-    )}
+              }}
+            />
+          </Stack>
+        )
+        : (image && <img src={image} alt='business card' />)}
     </>
   );
 };

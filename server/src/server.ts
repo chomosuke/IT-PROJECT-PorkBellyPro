@@ -1,7 +1,7 @@
 import { ArgumentParser } from 'argparse';
 import express, { ErrorRequestHandler, RequestHandler } from 'express';
 import { readFile } from 'fs/promises';
-import { createConnection } from 'mongoose';
+import { Schema, createConnection } from 'mongoose';
 import { resolve } from 'path';
 import { env } from 'process';
 import { ApiRouter } from './api/api-router';
@@ -47,6 +47,8 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   }
 
   res.sendStatus(500);
+
+  console.error(err);
 };
 
 async function main() {
@@ -62,6 +64,8 @@ async function main() {
 
   const secretBuffer = Buffer.from(secret, 'base64');
   if (secretBuffer.length !== 32) throw new Error('Invalid key length');
+
+  Schema.Types.String.checkRequired((v) => v != null);
 
   const app = express();
   const dist = express.static(resolve(distPath));
