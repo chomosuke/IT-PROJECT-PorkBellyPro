@@ -1,21 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { createContext, useContext } from 'react';
-import { ICard } from '../controllers/Card';
-import { Card } from '../components/Card';
-
+import React from 'react';
 import { useApp } from '../AppContext';
-
-export interface IHomeContext {
-  expandCardDetail(value: boolean): void;
-}
-
-const homeContext = createContext<IHomeContext | undefined>(undefined);
-
-const HomeProvider = homeContext.Provider;
-
-export function useHome(): IHomeContext | undefined {
-  return useContext(homeContext);
-}
+import { HomeProvider } from '../HomeContext';
+import { Card } from '../components/Card';
+import { ICard } from '../controllers/Card';
 
 export interface IHomeProps {
   detail?: ICard;
