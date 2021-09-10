@@ -20,6 +20,11 @@ export interface IApiRouter {
 export type ApiRequestHandler
   = (this: IApiRouter, ...params: Parameters<RequestHandler>) => ReturnType<RequestHandler>;
 
+const noStore: () => RequestHandler = () => ((_req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 export class ApiRouter implements IApiRouter {
   private secret: Readonly<Buffer>;
 
@@ -40,6 +45,7 @@ export class ApiRouter implements IApiRouter {
     this.dbPrivate = db;
 
     const jsonMiddleware = json();
+    this.routerPrivate.use(noStore());
     this.routerPrivate.post('/logout', logout);
     this.routerPrivate.post('/login', jsonMiddleware, this.bind(login));
     // handle register request
