@@ -21,7 +21,6 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 
   return mergeStyleSets({
     root: {
-      background: 'limegreen',
       display: 'grid',
       gridTemplateAreas: '"a b"',
       gridTemplateColumns: templateColumnVar,
@@ -29,12 +28,12 @@ const getClassNames = (expand: boolean, detail: boolean) => {
     },
     cardSection: {
       gridArea: 'a',
-      background: 'pink',
       overflow: 'auto',
     },
     detailSection: {
       gridArea: 'b',
-      background: 'blue',
+      height: '100%',
+      overflow: 'auto',
     },
   });
 };

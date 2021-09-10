@@ -1,4 +1,4 @@
-import { DefaultButton, Stack } from '@fluentui/react';
+import { DefaultButton, Stack, mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
@@ -13,6 +13,17 @@ export interface ICardDetailsProps {
   card: ICard;
   editing: boolean;
 }
+
+const getClassNames = () => mergeStyleSets({
+  root: {
+    display: 'grid',
+    height: '100%',
+    gridTemplateRows: 'auto 1fr auto',
+  },
+  content: {
+    overflow: 'auto',
+  },
+});
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
   const app = useApp();
@@ -47,65 +58,64 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
     app.showCardDetail(null);
   };
 
+  const { root, content } = getClassNames();
+
   // no sort, order will be preserved on the server presumably
-  const fieldViews = (
-    <Stack style={{ height: '100%' }}>
-      <Stack.Item key='CardDetailActions'>
-        <DefaultButton text='close' onClick={close} />
-      </Stack.Item>
-      <Stack style={{ overflowY: 'auto' }}>
-        <Stack.Item key='image' align='stretch'>
-          <CardImageField card={card} editing={isEditing} />
-        </Stack.Item>
-        {mFields.map((field) => (
-          <Stack.Item key={field.key} align='stretch'>
-            <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
+  return (
+    <div className={root}>
+      <DefaultButton text='close' onClick={close} />
+      <div className={content}>
+        <Stack>
+          <Stack.Item key='image' align='stretch'>
+            <CardImageField card={card} editing={isEditing} />
           </Stack.Item>
-        ))}
-        <Stack.Item key='note' align='stretch'>
-          <CardNoteField field={note} editing={isEditing} />
-        </Stack.Item>
-        {restFields.map((field) => (
-          <Stack.Item align='stretch'>
-            <CardExtraField field={field} editing={isEditing} />
+          {mFields.map((field) => (
+            <Stack.Item key={field.key} align='stretch'>
+              <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
+            </Stack.Item>
+          ))}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
           </Stack.Item>
-        ))}
-        {isEditing
-          && (
-          <Stack.Item key='add field'>
-            <DefaultButton
-              text='add field'
-              onClick={() => {
-                card.update({ fields: [...fields, { key: '', value: '' }] });
-              }}
-            />
-          </Stack.Item>
-          )}
-      </Stack>
-      <Stack.Item key='CardDetailActions'>
-        <CardDetailActions
-          card={card}
-          editing={isEditing}
-          onBeginEdit={() => {
-            setIsEditing(true);
-          }}
-          onSave={() => {
-            card.commit();
+          {restFields.map((field) => (
+            <Stack.Item align='stretch'>
+              <CardExtraField field={field} editing={isEditing} />
+            </Stack.Item>
+          ))}
+          {isEditing
+            && (
+              <Stack.Item key='add field'>
+                <DefaultButton
+                  text='add field'
+                  onClick={() => {
+                    card.update({ fields: [...fields, { key: '', value: '' }] });
+                  }}
+                />
+              </Stack.Item>
+            )}
+        </Stack>
+      </div>
+      <CardDetailActions
+        card={card}
+        editing={isEditing}
+        onBeginEdit={() => {
+          setIsEditing(true);
+        }}
+        onSave={() => {
+          card.commit();
+          setIsEditing(false);
+        }}
+        onCancel={() => {
+          if (card.id === undefined) {
+            close();
+          } else {
+            app.showCardDetail(card);
             setIsEditing(false);
-          }}
-          onCancel={() => {
-            if (card.id === undefined) {
-              close();
-            } else {
-              app.showCardDetail(card);
-              setIsEditing(false);
-            }
-          }}
-        />
-      </Stack.Item>
-    </Stack>
+          }
+        }}
+      />
+    </div>
   );
-  return fieldViews;
 };
 
 CardDetails.propTypes = {
