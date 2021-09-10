@@ -1,6 +1,6 @@
 import React from 'react';
 import Jimp from 'jimp/browser/lib/jimp';
-import { Stack } from '@fluentui/react';
+import { DefaultButton, Stack } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import { ICard } from '../../controllers/Card';
 
@@ -15,12 +15,34 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   { card, editing },
 ) => {
   const { image } = card;
+  const imageComp = image
+    ? (
+      <>
+        <img
+          src={
+            image.substr(0, 4) === 'data'
+              ? image
+              : `${image}?random=${Math.random()}`
+          }
+          alt='business card'
+        />
+        {editing && (
+        <DefaultButton
+          text='delete'
+          onClick={() => {
+            card.update({ image: null });
+          }}
+        />
+        )}
+      </>
+    )
+    : <div style={{ backgroundColor: 'gray', textAlign: 'center' }}>{ card.name }</div>;
   return (
-    <>
+    <Stack>
       {editing
         ? (
-          <Stack>
-            {image && <img src={image} alt='business card' />}
+          <>
+            {imageComp}
             <input
               type='file'
               name='myImage'
@@ -39,10 +61,10 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                 }
               }}
             />
-          </Stack>
+          </>
         )
-        : (image && <img src={image} alt='business card' />)}
-    </>
+        : imageComp}
+    </Stack>
   );
 };
 
