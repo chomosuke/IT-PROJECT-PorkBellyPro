@@ -1,6 +1,6 @@
 import { DefaultButton, Stack } from '@fluentui/react';
 import {
-  bool, func,
+  Requireable, bool, func, object,
 } from 'prop-types';
 import React from 'react';
 import { ICard } from '../../controllers/Card';
@@ -15,7 +15,7 @@ export interface ICardDetailActionsProps {
 
 export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsProps> = (
   {
-    editing, onBeginEdit, onSave, onCancel,
+    card, editing, onBeginEdit, onSave, onCancel,
   },
 ) => (
   <Stack horizontal horizontalAlign='end'>
@@ -35,11 +35,14 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
           <DefaultButton text='edit' onClick={onBeginEdit} />
         </Stack.Item>
       )}
+    <Stack.Item key='delete'>
+      <DefaultButton text='delete' onClick={card.delete} />
+    </Stack.Item>
   </Stack>
 );
 
 CardDetailActions.propTypes = {
-  // card: (object as Requireable<ICard>).isRequired,
+  card: (object as Requireable<ICard>).isRequired,
   editing: bool.isRequired,
   onBeginEdit: func.isRequired,
   onSave: func.isRequired,

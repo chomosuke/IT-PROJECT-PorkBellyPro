@@ -45,10 +45,10 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
       {editing
         ? (
           <>
-            <Stack.Item>{imageComp}</Stack.Item>
-            <Stack.Item>
+            <Stack.Item key='img'>{imageComp}</Stack.Item>
+            <Stack.Item key='input'>
               <Stack horizontal>
-                <Stack.Item>
+                <Stack.Item key='input'>
                   <input
                     type='file'
                     name='myImage'
@@ -73,12 +73,12 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                     }}
                   />
                 </Stack.Item>
-                {loading && <Stack.Item>loading</Stack.Item>}
+                {loading && <Stack.Item key='load'>loading</Stack.Item>}
               </Stack>
             </Stack.Item>
           </>
         )
-        : <Stack.Item>{imageComp}</Stack.Item>}
+        : <Stack.Item key='img'>{imageComp}</Stack.Item>}
     </Stack>
   );
 };
