@@ -43,9 +43,16 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const [...restFields] = fields;
   restFields.splice(noteIndex, 1);
 
+  const close = () => {
+    app.showCardDetail(null);
+  };
+
   // no sort, order will be preserved on the server presumably
   const fieldViews = (
     <Stack style={{ height: '100%' }}>
+      <Stack.Item key='CardDetailActions'>
+        <DefaultButton text='close' onClick={close} />
+      </Stack.Item>
       <Stack style={{ overflowY: 'auto' }}>
         <Stack.Item key='image' align='stretch'>
           <CardImageField card={card} editing={isEditing} />
@@ -87,8 +94,12 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             setIsEditing(false);
           }}
           onCancel={() => {
-            app.showCardDetail(card);
-            setIsEditing(false);
+            if (card.id === undefined) {
+              close();
+            } else {
+              app.showCardDetail(card);
+              setIsEditing(false);
+            }
           }}
         />
       </Stack.Item>
