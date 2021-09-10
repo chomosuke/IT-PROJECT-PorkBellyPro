@@ -4,6 +4,7 @@ import {
 } from 'prop-types';
 import React from 'react';
 import { ICard } from '../../controllers/Card';
+import { useHome } from '../../HomeContext';
 
 export interface ICardDetailActionsProps {
   card: ICard;
@@ -17,29 +18,40 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
   {
     card, editing, onBeginEdit, onSave, onCancel,
   },
-) => (
-  <Stack horizontal horizontalAlign='end'>
-    { editing
-      ? (
-        <>
-          <Stack.Item key='save'>
-            <DefaultButton text='save' onClick={onSave} />
+) => {
+  const home = useHome();
+
+  if (home === undefined) {
+    return <></>;
+  }
+
+  return (
+    <Stack horizontal horizontalAlign='end'>
+      <Stack.Item key='expand'>
+        <DefaultButton text='expand' onClick={() => home.expandCardDetail(true)} />
+      </Stack.Item>
+      { editing
+        ? (
+          <>
+            <Stack.Item key='save'>
+              <DefaultButton text='save' onClick={onSave} />
+            </Stack.Item>
+            <Stack.Item key='cancel'>
+              <DefaultButton text='cancel' onClick={onCancel} />
+            </Stack.Item>
+          </>
+        )
+        : (
+          <Stack.Item key='edit'>
+            <DefaultButton text='edit' onClick={onBeginEdit} />
           </Stack.Item>
-          <Stack.Item key='cancel'>
-            <DefaultButton text='cancel' onClick={onCancel} />
-          </Stack.Item>
-        </>
-      )
-      : (
-        <Stack.Item key='edit'>
-          <DefaultButton text='edit' onClick={onBeginEdit} />
-        </Stack.Item>
-      )}
-    <Stack.Item key='delete'>
-      <DefaultButton text='delete' onClick={card.delete} />
-    </Stack.Item>
-  </Stack>
-);
+        )}
+      <Stack.Item key='delete'>
+        <DefaultButton text='delete' onClick={card.delete} />
+      </Stack.Item>
+    </Stack>
+  );
+};
 
 CardDetailActions.propTypes = {
   card: (object as Requireable<ICard>).isRequired,
