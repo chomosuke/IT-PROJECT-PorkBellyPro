@@ -8,6 +8,9 @@ const homeContext = createContext<IHomeContext | undefined>(undefined);
 
 export const HomeProvider = homeContext.Provider;
 
-export function useHome(): IHomeContext | undefined {
-  return useContext(homeContext);
+export function useHome(): IHomeContext {
+  const context = useContext(homeContext);
+  if (context == null) throw new Error('context is nullish');
+
+  return context;
 }
