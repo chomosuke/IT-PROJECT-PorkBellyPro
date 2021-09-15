@@ -37,11 +37,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
           ? (
             <>
               <Image
-                src={
-                  image.substr(0, 4) === 'data'
-                    ? image
-                    : `${image}?random=${Math.random()}`
-                }
+                src={image}
                 alt='business card'
                 imageFit={ImageFit.contain}
               />
