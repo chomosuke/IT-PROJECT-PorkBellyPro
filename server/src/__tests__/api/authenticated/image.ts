@@ -23,6 +23,7 @@ describe('/api/image unit tests', () => {
     const res = mockResponse({
       contentType: mock(),
       end: mock(),
+      removeHeader: mock(),
     });
 
     const imageData = 'someBuffer';

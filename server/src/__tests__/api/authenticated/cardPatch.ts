@@ -3,6 +3,7 @@ import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { CardPatchRequest, CardPatchResponse } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
+import md5 from 'md5';
 import { cardPatch, dataURIPrefix } from '../../../api/authenticated/cardPatch';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
@@ -71,6 +72,7 @@ const existingCardsConsts = [{
   jobTitle: 'Clean Shaven',
   company: 'FaceClear',
   image: Buffer.from('bad image', 'base64'),
+  imageHash: md5(Buffer.from('bad image', 'base64')),
   fields: [],
   tags: [],
   save: jest.fn().mockResolvedValue(this),
@@ -183,7 +185,8 @@ describe('PATCH /api/card unit tests', () => {
       email: 'thesciencecat@pbs.org',
       jobTitle: 'Science Cat',
       company: 'PBS',
-      hasImage: true,
+      imageHash: md5(imageBuffer),
+      // what a cute line of code
       fields: [{ key: 'cuteness', value: 'many' }],
       tags: [tags[0].id.toString()],
     };
@@ -193,10 +196,11 @@ describe('PATCH /api/card unit tests', () => {
 
   /*
    * setting image to a null buffer
-   * should clear the image field and return hasimage === false
+   * should clear the image field and return imageHash == undefined
    */
   test('Success Case: removal of image', async () => {
     existingCards[1].image = imageBuffer;
+    existingCards[1].imageHash = md5(imageBuffer);
 
     const request: CardPatchRequest = {
       id: existingCards[1].id.toString(),
@@ -224,7 +228,6 @@ describe('PATCH /api/card unit tests', () => {
       email: 'noFace@face.clear',
       jobTitle: 'Clean Shaven',
       company: 'FaceClear',
-      hasImage: false,
       fields: [],
       tags: [],
     };

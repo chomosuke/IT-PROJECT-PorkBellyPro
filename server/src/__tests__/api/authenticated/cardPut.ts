@@ -2,6 +2,7 @@ import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { CardPutRequest, CardPutResponse } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
+import md5 from 'md5';
 import { cardPut, dataURIPrefix } from '../../../api/authenticated/cardPut';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
@@ -155,7 +156,6 @@ describe('PUT /api/card unit tests', () => {
       email,
       jobTitle,
       company,
-      hasImage: false,
       fields,
       tags: tags.map((t) => t.id),
     };
@@ -182,6 +182,10 @@ describe('PUT /api/card unit tests', () => {
       user,
     });
 
+    const imageBuffer = await (
+      await Jimp.read(Buffer.from(imageUri.substr(dataURIPrefix.length), 'base64'))
+    ).getBufferAsync(Jimp.MIME_JPEG);
+
     await expect(cardPut.implementation.call(router, req, res, next)).resolves.toBeUndefined();
 
     expect(tagsFindById).toBeCalledTimes(3);
@@ -200,6 +204,7 @@ describe('PUT /api/card unit tests', () => {
       company: request.company,
       fields: request.fields,
       image,
+      imageHash: md5(imageBuffer),
       tags: request.tags.map((id) => Types.ObjectId(id)),
     });
     expect(resStatus).toBeCalledTimes(1);
@@ -222,7 +227,7 @@ describe('PUT /api/card unit tests', () => {
       email,
       jobTitle,
       company,
-      hasImage: true,
+      imageHash: md5(imageBuffer),
       fields,
       tags: tags.map((t) => t.id),
     };
