@@ -53,6 +53,9 @@ describe('/api/image unit tests', () => {
 
     expect(res.end).toBeCalledTimes(1);
     expect(res.end).toBeCalledWith(imageData);
+
+    expect(res.removeHeader).toBeCalledTimes(1);
+    expect(res.removeHeader).toBeCalledWith('Cache-Control');
   });
 
   test('Fail test: no card', async () => {

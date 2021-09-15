@@ -83,9 +83,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     let imageHash: string | undefined | null;
     if (image !== undefined) {
       if (image === null) {
-        /*
-         * null image means remove the image from card
-         */
+        // null image means remove the image from card
         imageBuffer = null;
         imageHash = null;
       } else if (typeof image !== 'string'
