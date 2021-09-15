@@ -27,6 +27,7 @@ export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     }
 
     res.contentType('image/jpeg');
+    res.removeHeader('Cache-Control');
     res.end(imageData);
   },
 );
