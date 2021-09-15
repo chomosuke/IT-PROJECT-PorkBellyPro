@@ -7,7 +7,7 @@ Request body:
 import type { Card } from './Card';
 import type { Image } from './Image';
 
-interface CardPutRequest extends Omit<Card, 'id' | 'favorite' | 'hasImage'> {
+interface CardPutRequest extends Omit<Card, 'id' | 'favorite' | 'imageHash'> {
   image?: Image;
 }
 ```
@@ -43,7 +43,7 @@ Request body:
 import type { Card } from './Card';
 import type { Image } from './Image';
 
-interface CardPatchRequest extends Pick<Card, 'id'>, Partial<Omit<Card, 'id' | 'hasImage'>> {
+interface CardPatchRequest extends Pick<Card, 'id'>, Partial<Omit<Card, 'id' | 'imageHash'>> {
   image?: Image | null;
 }
 ```
