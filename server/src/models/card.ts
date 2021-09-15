@@ -14,6 +14,7 @@ export interface ICard {
   jobTitle: string;
   company: string;
   image?: Buffer;
+  imageHash?: string;
   fields: ICardField[];
   tags: Types.ObjectId[];
 }
@@ -32,6 +33,7 @@ export const cardSchema = new Schema<ICard>({
   jobTitle: { type: String, required: true },
   company: { type: String, required: true },
   image: Buffer,
+  imageHash: String,
   fields: {
     type: [cardFieldSchema],
     required: true,
