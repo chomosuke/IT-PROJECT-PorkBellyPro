@@ -8,7 +8,7 @@ import { mockRequest } from './helpers';
 
 describe('PUT /api/tag unit tests', () => {
   test('Success test', async () => {
-    expect.assertions(7);
+    expect.assertions(8);
 
     const save = mock();
     const router = {
