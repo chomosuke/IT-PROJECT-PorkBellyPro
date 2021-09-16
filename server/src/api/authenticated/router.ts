@@ -8,6 +8,7 @@ import { cardPatch } from './cardPatch';
 import { cardPut } from './cardPut';
 import { image } from './image';
 import { me } from './me';
+import { tagDelete } from './tagDelete';
 import { tagPatch } from './tagPatch';
 import { tagPut } from './tagPut';
 
@@ -54,6 +55,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
     this.routerPrivate.put('/tag', json(), this.auth, this.bind(tagPut));
     this.routerPrivate.patch('/tag', json(), this.auth, this.bind(tagPatch));
+    this.routerPrivate.delete('/tag', json(), this.auth, this.bind(tagDelete));
     this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
   }
 
