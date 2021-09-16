@@ -17,6 +17,7 @@ describe('Header component unit tests', () => {
       update() { throw notImplemented(); },
       showCardDetail() { throw notImplemented(); },
       newCard() { throw notImplemented(); },
+      newTag() { throw notImplemented(); },
       login() { return Promise.reject(notImplemented()); },
       logout() { return Promise.reject(notImplemented()); },
     };
@@ -49,10 +50,12 @@ describe('Header component unit tests', () => {
         username: 'username',
         settings: {},
         cards: [],
+        tags: [],
       },
       update() { throw notImplemented(); },
       showCardDetail() { throw notImplemented(); },
       newCard() { throw notImplemented(); },
+      newTag() { throw notImplemented(); },
       login() { return Promise.reject(notImplemented()); },
       logout() { return Promise.reject(notImplemented()); },
     };
@@ -200,10 +203,12 @@ describe('Header component unit tests', () => {
         username: 'username',
         settings: {},
         cards: [],
+        tags: [],
       },
       update() { throw notImplemented(); },
       showCardDetail() { throw notImplemented(); },
       newCard() { throw notImplemented(); },
+      newTag() { throw notImplemented(); },
       login() { return Promise.reject(notImplemented()); },
       logout() { return Promise.reject(notImplemented()); },
     };

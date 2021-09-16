@@ -7,6 +7,7 @@ import { AppProvider, IAppContext } from '../../AppContext';
 const mockApp: IAppContext = {
   searchQuery: '',
   newCard() { throw new Error('Not Implemented'); },
+  newTag() { throw new Error('Not Implemented'); },
   update() { throw new Error('Not Implemented'); },
   showCardDetail() { throw new Error('Not Implemented'); },
   user: null,
