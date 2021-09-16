@@ -74,7 +74,7 @@ Object {
     },
   ],
   "id": "000000000000000000000000",
-  "image": "/api/image/000000000000000000000000?random=${'aHash'}",
+  "image": "/api/image/aHash",
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
