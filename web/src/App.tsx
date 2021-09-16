@@ -303,6 +303,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       username: userState.username,
       settings: userState.settings,
       cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
+      tags: [],
     };
 
   const context: IAppContext = {
@@ -329,6 +330,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
         overrides: {},
       });
     },
+    newTag() { throw notImplemented(); },
     login(username, password, register) {
       return (async function loginAsync() {
         const body = {
