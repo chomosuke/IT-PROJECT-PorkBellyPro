@@ -8,7 +8,6 @@ export interface ITagProperties {
 
 export interface ITag extends Readonly<ITagProperties> {
   readonly id: ObjectId;
-  update(props: Partial<ITagProperties>): void;
-  commit(): Promise<ResponseStatus>;
+  commit(props: Partial<ITagProperties>): Promise<ResponseStatus>;
   delete(): Promise<ResponseStatus>;
 }
