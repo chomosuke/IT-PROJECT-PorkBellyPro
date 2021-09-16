@@ -1,4 +1,4 @@
-# /api/image/:cardId
+# /api/image/:imageHash
 ## GET
 - Authenticated
 - 404 not found if image does not exist.
