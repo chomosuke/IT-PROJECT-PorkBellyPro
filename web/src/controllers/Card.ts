@@ -75,6 +75,8 @@ export function fromRaw(raw: unknown): ICardData {
     fields: ensureArray(fieldsRaw).map(fieldFromRaw),
   };
 
+  console.log(imageHash);
+
   if (result.image === undefined) delete result.image;
 
   return result;

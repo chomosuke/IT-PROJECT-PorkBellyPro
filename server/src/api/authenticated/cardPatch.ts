@@ -168,7 +168,8 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: updatedCard.email,
           jobTitle: updatedCard.jobTitle,
           company: updatedCard.company,
-          imageHash: imageHash || undefined,
+          // in test imageHash would be null
+          imageHash: updatedCard.imageHash ?? undefined,
           fields: updatedCard.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: updatedCard.tags.map((t) => t.toString()),
         };
