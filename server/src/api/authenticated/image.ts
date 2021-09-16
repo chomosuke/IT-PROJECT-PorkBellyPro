@@ -7,8 +7,7 @@ export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     const { user, params } = req;
     const { imageHash } = params;
 
-    const cardDocs = await this.parent.Cards.find({ user: user._id, imageHash });
-    const cardDoc = cardDocs.length > 0 ? cardDocs[0] : null;
+    const cardDoc = await this.parent.Cards.findOne({ user: user._id, imageHash });
     if (cardDoc === null) {
       throw new HttpStatusError(404);
     }

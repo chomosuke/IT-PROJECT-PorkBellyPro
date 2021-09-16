@@ -31,10 +31,10 @@ describe('/api/image unit tests', () => {
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         Cards: {
-          find: mock().mockResolvedValue([{
+          findOne: mock().mockResolvedValue({
             image: imageData,
             user: req.user._id,
-          }]),
+          }),
         },
       },
     };
@@ -45,8 +45,8 @@ describe('/api/image unit tests', () => {
     await expect(image.implementation.call(router, req, res, next))
       .resolves.toBeUndefined();
 
-    expect(router.parent.Cards.find).toBeCalledTimes(1);
-    expect(router.parent.Cards.find).toBeCalledWith({ user: req.user._id, imageHash });
+    expect(router.parent.Cards.findOne).toBeCalledTimes(1);
+    expect(router.parent.Cards.findOne).toBeCalledWith({ user: req.user._id, imageHash });
 
     expect(res.contentType).toBeCalledTimes(1);
     expect(res.contentType).toBeCalledWith('image/jpeg');
@@ -73,7 +73,7 @@ describe('/api/image unit tests', () => {
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         Cards: {
-          find: mock().mockResolvedValue([]),
+          findOne: mock().mockResolvedValue(null),
         },
       },
     };
@@ -83,5 +83,8 @@ describe('/api/image unit tests', () => {
 
     await expect(image.implementation.call(router, req, res, next))
       .rejects.toStrictEqual(new HttpStatusError(404));
+
+    expect(router.parent.Cards.findOne).toBeCalledTimes(1);
+    expect(router.parent.Cards.findOne).toBeCalledWith({ user: req.user._id, imageHash: 'someHash' });
   });
 });
