@@ -71,7 +71,7 @@ export function fromRaw(raw: unknown): ICardData {
     email: ensureType(email, 'string'),
     jobTitle: ensureType(jobTitle, 'string'),
     company: ensureType(company, 'string'),
-    image: imageHash ? `/api/image/${id}?random=${ensureType(imageHash, 'string')}` : undefined,
+    image: imageHash ? `/api/image/${ensureType(imageHash, 'string')}` : undefined,
     fields: ensureArray(fieldsRaw).map(fieldFromRaw),
   };
 
