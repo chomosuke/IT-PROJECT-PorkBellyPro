@@ -16,3 +16,4 @@ All requests will have a size limit of 1 MB.
 [register.md](register.md)|Register endpoint.|
 [me.md](me.md)|User information read-only endpoint.|
 [card.md](card.md)|Card CRUD actions.|
+[tag.md](tag.md)|Tag CRUD actions.|
