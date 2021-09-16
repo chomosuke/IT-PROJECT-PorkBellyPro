@@ -1,10 +1,6 @@
-import { get } from 'color-string';
-import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
+import { isValidColor } from '../../isValidColor';
 import { HttpStatusError } from '../HttpStatusError';
-
-function isValidColor(color: string): boolean {
-  return get(color) != null;
-}
+import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 
 export const tagPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
   async function tagPut(req, res) {
