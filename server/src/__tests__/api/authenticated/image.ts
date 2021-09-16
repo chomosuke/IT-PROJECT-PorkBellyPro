@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { image } from '../../../api/authenticated/image';
@@ -9,14 +10,15 @@ import { mockRequest } from './helpers';
 
 describe('/api/image unit tests', () => {
   test('Success test', async () => {
-    const cardId = Types.ObjectId();
+    const imageData = 'someBuffer';
+    const imageHash = 'someHash';
 
     const req = mockRequest({
       params: {
-        cardId: cardId.toString(),
+        imageHash,
       },
       user: {
-        id: Types.ObjectId().toString(),
+        _id: Types.ObjectId(),
       } as User,
     });
 
@@ -26,15 +28,13 @@ describe('/api/image unit tests', () => {
       removeHeader: mock(),
     });
 
-    const imageData = 'someBuffer';
-
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         Cards: {
-          findById: mock().mockResolvedValue({
+          find: mock().mockResolvedValue([{
             image: imageData,
-            user: Types.ObjectId(req.user.id),
-          }),
+            user: req.user._id,
+          }]),
         },
       },
     };
@@ -45,8 +45,8 @@ describe('/api/image unit tests', () => {
     await expect(image.implementation.call(router, req, res, next))
       .resolves.toBeUndefined();
 
-    expect(router.parent.Cards.findById).toBeCalledTimes(1);
-    expect(router.parent.Cards.findById).toBeCalledWith(cardId);
+    expect(router.parent.Cards.find).toBeCalledTimes(1);
+    expect(router.parent.Cards.find).toBeCalledWith({ user: req.user._id, imageHash });
 
     expect(res.contentType).toBeCalledTimes(1);
     expect(res.contentType).toBeCalledWith('image/jpeg');
@@ -59,11 +59,9 @@ describe('/api/image unit tests', () => {
   });
 
   test('Fail test: no card', async () => {
-    const cardId = Types.ObjectId();
-
     const req = mockRequest({
       params: {
-        cardId: cardId.toString(),
+        imageHash: 'someHash',
       },
       user: {
         id: Types.ObjectId().toString(),
@@ -75,106 +73,7 @@ describe('/api/image unit tests', () => {
     const routerPartial: DeepPartial<IAuthenticatedRouter> = {
       parent: {
         Cards: {
-          findById: mock().mockResolvedValue(null),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
-    const next = mock<NextFunction>();
-
-    await expect(image.implementation.call(router, req, res, next))
-      .rejects.toStrictEqual(new HttpStatusError(404));
-  });
-
-  test('Fail test: no image', async () => {
-    const cardId = Types.ObjectId();
-
-    const req = mockRequest({
-      params: {
-        cardId: cardId.toString(),
-      },
-      user: {
-        id: Types.ObjectId().toString(),
-      } as User,
-    });
-
-    const res = mockResponse();
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        Cards: {
-          findById: mock().mockResolvedValue({
-            user: Types.ObjectId(req.user.id),
-          }),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
-    const next = mock<NextFunction>();
-
-    await expect(image.implementation.call(router, req, res, next))
-      .rejects.toStrictEqual(new HttpStatusError(404));
-  });
-
-  test('Fail test: wrong user', async () => {
-    const cardId = Types.ObjectId();
-
-    const req = mockRequest({
-      params: {
-        cardId: cardId.toString(),
-      },
-      user: {
-        id: Types.ObjectId().toString(),
-      } as User,
-    });
-
-    const res = mockResponse();
-
-    const imageData = 'someBuffer';
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        Cards: {
-          findById: mock().mockResolvedValue({
-            image: imageData,
-            user: Types.ObjectId(),
-          }),
-        },
-      },
-    };
-    const router = routerPartial as IAuthenticatedRouter;
-
-    const next = mock<NextFunction>();
-
-    await expect(image.implementation.call(router, req, res, next))
-      .rejects.toStrictEqual(new HttpStatusError(401));
-  });
-
-  test('Fail test: bad cardId', async () => {
-    const cardId = '42';
-
-    const req = mockRequest({
-      params: {
-        cardId: cardId.toString(),
-      },
-      user: {
-        id: Types.ObjectId().toString(),
-      } as User,
-    });
-
-    const res = mockResponse();
-
-    const imageData = 'someBuffer';
-
-    const routerPartial: DeepPartial<IAuthenticatedRouter> = {
-      parent: {
-        Cards: {
-          findById: mock().mockResolvedValue({
-            image: imageData,
-            user: Types.ObjectId(),
-          }),
+          find: mock().mockResolvedValue([]),
         },
       },
     };
