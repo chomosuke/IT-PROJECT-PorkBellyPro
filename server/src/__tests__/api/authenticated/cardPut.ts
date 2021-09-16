@@ -2,7 +2,7 @@ import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { CardPutRequest, CardPutResponse } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
-import md5 from 'md5';
+import { createHash } from 'crypto';
 import { cardPut, dataURIPrefix } from '../../../api/authenticated/cardPut';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
@@ -204,7 +204,7 @@ describe('PUT /api/card unit tests', () => {
       company: request.company,
       fields: request.fields,
       image,
-      imageHash: md5(imageBuffer),
+      imageHash: createHash('sha256').update(imageBuffer).digest('hex'),
       tags: request.tags.map((id) => Types.ObjectId(id)),
     });
     expect(resStatus).toBeCalledTimes(1);
@@ -227,7 +227,7 @@ describe('PUT /api/card unit tests', () => {
       email,
       jobTitle,
       company,
-      imageHash: md5(imageBuffer),
+      imageHash: createHash('sha256').update(imageBuffer).digest('hex'),
       fields,
       tags: tags.map((t) => t.id),
     };

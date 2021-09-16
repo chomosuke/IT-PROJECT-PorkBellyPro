@@ -1,5 +1,4 @@
 import { NextFunction, Response } from 'express';
-import md5 from 'md5';
 import { Types } from 'mongoose';
 import { me } from '../../../api/authenticated/me';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
@@ -18,7 +17,7 @@ describe('/api/me unit tests', () => {
       jobTitle: 'jobTitle',
       company: 'company',
       image: Buffer.alloc(0),
-      imageHash: md5(Buffer.alloc(0)),
+      imageHash: 'someHash',
       fields: [{
         key: 'Field 1',
         value: 'Value 1',
@@ -99,7 +98,7 @@ describe('/api/me unit tests', () => {
         email: 'email',
         jobTitle: 'jobTitle',
         company: 'company',
-        imageHash: md5(Buffer.alloc(0)),
+        imageHash: 'someHash',
         fields: [{
           key: 'Field 1',
           value: 'Value 1',

@@ -4,7 +4,7 @@ import {
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
 import { Types } from 'mongoose';
-import md5 from 'md5';
+import { createHash } from 'crypto';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 import { ICardField } from '../../models/card';
@@ -100,7 +100,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
 
         // now hash
-        imageHash = md5(imageBuffer);
+        imageHash = createHash('sha256').update(imageBuffer).digest('hex');
       }
     }
     /*

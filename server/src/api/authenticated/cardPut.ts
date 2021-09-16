@@ -3,7 +3,7 @@ import {
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
 import { Types } from 'mongoose';
-import md5 from 'md5';
+import { createHash } from 'crypto';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 
@@ -71,7 +71,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
       imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
 
       // now hash the image and store it
-      imageHash = md5(imageBuffer);
+      imageHash = createHash('sha256').update(imageBuffer).digest('hex');
     }
 
     // now do the actual thing.

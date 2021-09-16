@@ -3,7 +3,7 @@ import { NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { CardPatchRequest, CardPatchResponse } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
-import md5 from 'md5';
+import { createHash } from 'crypto';
 import { cardPatch, dataURIPrefix } from '../../../api/authenticated/cardPatch';
 import { IAuthenticatedRouter } from '../../../api/authenticated/router';
 import {
@@ -72,7 +72,7 @@ const existingCardsConsts = [{
   jobTitle: 'Clean Shaven',
   company: 'FaceClear',
   image: Buffer.from('bad image', 'base64'),
-  imageHash: md5(Buffer.from('bad image', 'base64')),
+  imageHash: createHash('sha256').update(Buffer.from('bad image', 'base64')).digest('hex'),
   fields: [],
   tags: [],
   save: jest.fn().mockResolvedValue(this),
@@ -185,7 +185,7 @@ describe('PATCH /api/card unit tests', () => {
       email: 'thesciencecat@pbs.org',
       jobTitle: 'Science Cat',
       company: 'PBS',
-      imageHash: md5(imageBuffer),
+      imageHash: createHash('sha256').update(imageBuffer).digest('hex'),
       // what a cute line of code
       fields: [{ key: 'cuteness', value: 'many' }],
       tags: [tags[0].id.toString()],
@@ -200,7 +200,7 @@ describe('PATCH /api/card unit tests', () => {
    */
   test('Success Case: removal of image', async () => {
     existingCards[1].image = imageBuffer;
-    existingCards[1].imageHash = md5(imageBuffer);
+    existingCards[1].imageHash = createHash('sha256').update(imageBuffer).digest('hex');
 
     const request: CardPatchRequest = {
       id: existingCards[1].id.toString(),
