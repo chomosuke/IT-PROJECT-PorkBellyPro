@@ -13,6 +13,7 @@ describe('Header component unit tests', () => {
   test('Not logged in', () => {
     const app: IAppContext = {
       searchQuery: '',
+      tagQuery: [],
       user: null,
       update() { throw notImplemented(); },
       showCardDetail() { throw notImplemented(); },
@@ -46,6 +47,7 @@ describe('Header component unit tests', () => {
   test('Logged in', () => {
     const app: IAppContext = {
       searchQuery: '',
+      tagQuery: [],
       user: {
         username: 'username',
         settings: {},
@@ -199,6 +201,7 @@ describe('Header component unit tests', () => {
   test('Logged in with query', () => {
     const app: IAppContext = {
       searchQuery: 'query',
+      tagQuery: [],
       user: {
         username: 'username',
         settings: {},

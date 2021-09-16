@@ -15,6 +15,7 @@ export interface IUser {
 
 export interface IAppContextProperties {
   searchQuery: string;
+  tagQuery: readonly Pick<ITag, 'id'>[];
 }
 
 export interface IAppContext extends Readonly<IAppContextProperties> {
