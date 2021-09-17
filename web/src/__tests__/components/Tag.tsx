@@ -94,7 +94,7 @@ describe('Tag component unit tests', () => {
     };
 
     const json = create(
-      <Tag tag={tag} onClick={() => notImplemented()} onRemove={undefined} />,
+      <Tag tag={tag} onClick={() => notImplemented()} />,
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <button
