@@ -43,8 +43,7 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
       border: 'none',
     },
   };
-
-  if ({ onRemove } !== undefined) {
+  if (onRemove !== undefined) {
     // show x button if on remove is pass in
     return (
       <Stack horizontal>
