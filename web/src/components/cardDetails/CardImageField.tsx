@@ -79,7 +79,6 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                         jimg.resize(Jimp.AUTO, imgHeight);
                       }
                       const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
-                      console.log(newImageUrl);
                       card.update({ image: newImageUrl });
                     }
                     setLoading(false);
