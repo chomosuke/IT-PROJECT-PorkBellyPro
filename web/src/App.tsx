@@ -308,6 +308,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   const context: IAppContext = {
     searchQuery,
+    tagQuery: [],
     user,
     update({ searchQuery: query }) {
       if (query != null) setSearchQuery(query);

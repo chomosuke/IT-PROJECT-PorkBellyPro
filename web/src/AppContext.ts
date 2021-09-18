@@ -13,12 +13,16 @@ export interface IUser {
   readonly tags: readonly ITag[];
 }
 
-export interface IAppContextProperties {
+export interface IAppContextPropertiesCommon {
   searchQuery: string;
+}
+
+export interface IAppContextProperties extends IAppContextPropertiesCommon {
   tagQuery: readonly Pick<ITag, 'id'>[];
 }
 
-export interface IAppContext extends Readonly<IAppContextProperties> {
+export interface IAppContext extends Readonly<IAppContextPropertiesCommon> {
+  readonly tagQuery: readonly ITag[];
   readonly user: IUser | null;
   update(props: Partial<IAppContextProperties>): void;
   showCardDetail(card: ICard | null): void;
