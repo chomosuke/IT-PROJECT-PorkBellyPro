@@ -1,5 +1,5 @@
 import {
-  DefaultButton, IButtonProps, IIconProps, IconButton, Stack,
+  DefaultButton, IButtonProps, IIconProps, IconButton, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
@@ -13,61 +13,54 @@ export interface ITagProps {
   onRemove?: OnClickHandler;
 }
 
+const getClassNames = () => mergeStyleSets({
+  tagContainer: {
+    height: '100%',
+    outerWidth: '60px',
+  },
+});
+
 const removeIcon: IIconProps = { iconName: 'CalculatorMultiply' };
 
 export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRemove }) => {
-  const tagWithXStyles = {
-    root: {
-      height: '20px',
-      outerWidth: '50px',
-      backgroundColor: tag.color,
-      border: 'none',
-    },
-  };
-
-  const removeBtnStyles = {
-    root: {
-      height: '20px',
-      outerWidth: '10px',
-      fontSize: '5px',
-      backgroundColor: tag.color,
-      border: 'none',
-    },
-  };
-
   const tagStyles = {
     root: {
-      height: '20px',
-      outerWidth: '60px',
       backgroundColor: tag.color,
       border: 'none',
     },
   };
+
+  const { tagContainer } = getClassNames();
+
   if (onRemove !== undefined) {
     // show x button if on remove is pass in
     return (
-      <Stack horizontal>
-        <DefaultButton
-          text={tag.label}
-          onClick={onClick}
-          styles={tagWithXStyles}
-        />
-        <IconButton
-          iconProps={removeIcon}
-          onClick={onRemove}
-          styles={removeBtnStyles}
-        />
-      </Stack>
+      <div className={tagContainer}>
+        <Stack horizontal>
+          <DefaultButton
+            text={tag.label}
+            onClick={onClick}
+            styles={tagStyles}
+          />
+          <IconButton
+            iconProps={removeIcon}
+            onClick={onRemove}
+            styles={tagStyles}
+          />
+        </Stack>
+      </div>
     );
   }
 
   // otherwise only show the tag itself
   return (
-    <DefaultButton
-      text={tag.label}
-      onClick={onClick}
-      styles={tagStyles}
-    />
+    <div className={tagContainer}>
+      <DefaultButton
+        text={tag.label}
+        onClick={onClick}
+        styles={tagStyles}
+      />
+    </div>
   );
 };
 

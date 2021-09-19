@@ -24,62 +24,66 @@ describe('Tag component unit tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
+  className="tagContainer-53"
 >
-  <button
-    className="ms-Button ms-Button--default root-54"
-    data-is-focusable={true}
-    onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
-    type="button"
+  <div
+    className="ms-Stack css-54"
   >
-    <span
-      className="ms-Button-flexContainer flexContainer-55"
-      data-automationid="splitbuttonprimary"
+    <button
+      className="ms-Button ms-Button--default root-55"
+      data-is-focusable={true}
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      onKeyPress={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseUp={[Function]}
+      type="button"
     >
       <span
-        className="ms-Button-textContainer textContainer-56"
+        className="ms-Button-flexContainer flexContainer-56"
+        data-automationid="splitbuttonprimary"
       >
         <span
-          className="ms-Button-label label-58"
-          id="id__0"
+          className="ms-Button-textContainer textContainer-57"
         >
-          Tag name
+          <span
+            className="ms-Button-label label-59"
+            id="id__0"
+          >
+            Tag name
+          </span>
         </span>
       </span>
-    </span>
-  </button>
-  <button
-    className="ms-Button ms-Button--icon root-62"
-    data-is-focusable={true}
-    onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
-    type="button"
-  >
-    <span
-      className="ms-Button-flexContainer flexContainer-55"
-      data-automationid="splitbuttonprimary"
+    </button>
+    <button
+      className="ms-Button ms-Button--icon root-63"
+      data-is-focusable={true}
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      onKeyPress={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseUp={[Function]}
+      type="button"
     >
-      <i
-        aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-icon icon-57"
-        data-icon-name="CalculatorMultiply"
-        style={
-          Object {
-            "fontFamily": undefined,
+      <span
+        className="ms-Button-flexContainer flexContainer-56"
+        data-automationid="splitbuttonprimary"
+      >
+        <i
+          aria-hidden={true}
+          className="ms-Icon root-37 ms-Button-icon icon-58"
+          data-icon-name="CalculatorMultiply"
+          style={
+            Object {
+              "fontFamily": undefined,
+            }
           }
-        }
-      />
-    </span>
-  </button>
+        />
+      </span>
+    </button>
+  </div>
 </div>
 `);
   });
@@ -97,33 +101,37 @@ describe('Tag component unit tests', () => {
       <Tag tag={tag} onClick={() => notImplemented()} />,
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
-<button
-  className="ms-Button ms-Button--default root-64"
-  data-is-focusable={true}
-  onClick={[Function]}
-  onKeyDown={[Function]}
-  onKeyPress={[Function]}
-  onKeyUp={[Function]}
-  onMouseDown={[Function]}
-  onMouseUp={[Function]}
-  type="button"
+<div
+  className="tagContainer-53"
 >
-  <span
-    className="ms-Button-flexContainer flexContainer-55"
-    data-automationid="splitbuttonprimary"
+  <button
+    className="ms-Button ms-Button--default root-55"
+    data-is-focusable={true}
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    onKeyPress={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseUp={[Function]}
+    type="button"
   >
     <span
-      className="ms-Button-textContainer textContainer-56"
+      className="ms-Button-flexContainer flexContainer-56"
+      data-automationid="splitbuttonprimary"
     >
       <span
-        className="ms-Button-label label-58"
-        id="id__6"
+        className="ms-Button-textContainer textContainer-57"
       >
-        Tag name
+        <span
+          className="ms-Button-label label-59"
+          id="id__6"
+        >
+          Tag name
+        </span>
       </span>
     </span>
-  </span>
-</button>
+  </button>
+</div>
 `);
   });
 });

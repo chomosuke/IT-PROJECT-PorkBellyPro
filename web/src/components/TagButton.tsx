@@ -1,4 +1,4 @@
-import { DefaultButton, IButtonProps } from '@fluentui/react';
+import { DefaultButton, IButtonProps, mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
 import { ITag } from '../controllers/Tag';
@@ -10,22 +10,31 @@ export interface ITagButtonProps {
   onClick?: OnClickHandler;
 }
 
+const getClassNames = () => mergeStyleSets({
+  tagContainer: {
+    height: '100%',
+    outerWidth: '60px',
+  },
+});
+
 export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, onClick }) => {
   const tagStyles = {
     root: {
-      height: '40px',
-      outerWidth: '60px',
       backgroundColor: tag.color,
       border: 'none',
     },
   };
 
+  const { tagContainer } = getClassNames();
+
   return (
-    <DefaultButton
-      text={tag.label}
-      onClick={onClick}
-      styles={tagStyles}
-    />
+    <div className={tagContainer}>
+      <DefaultButton
+        text={tag.label}
+        onClick={onClick}
+        styles={tagStyles}
+      />
+    </div>
   );
 };
 
