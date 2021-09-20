@@ -17,9 +17,10 @@ import {
   ICardData,
   ICardProperties,
   cardDataDefaults,
-  fromRaw,
+  fromRaw as cardsFromRaw,
   implement,
 } from './controllers/Card';
+import { ITagData, fromRaw as tagFromRaw } from './controllers/Tag';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -65,6 +66,7 @@ interface IUserStatic {
   readonly username: string;
   readonly settings: ISettings;
   readonly cards: readonly ICardData[];
+  readonly tags: readonly ITagData[];
 }
 
 type GetMeResult = {
@@ -90,7 +92,8 @@ async function getMe(): Promise<GetMeResult> {
     const body = ensureObject(await res.json());
     const username = ensureType(body.username, 'string');
     const settings = ensureObject(body.settings);
-    const cards = ensureArray(body.cards).map(fromRaw);
+    const cards = ensureArray(body.cards).map(cardsFromRaw);
+    const tags = ensureArray(body.tags).map(tagFromRaw);
 
     return {
       status: new ResponseStatus(res),
@@ -98,6 +101,7 @@ async function getMe(): Promise<GetMeResult> {
         username,
         settings,
         cards,
+        tags,
       },
     };
   } catch {
@@ -216,7 +220,7 @@ function implementCardOverride(
       });
       if (res.ok) {
         const raw = await res.json();
-        const updated = fromRaw(raw);
+        const updated = cardsFromRaw(raw);
         if (put) {
           setUser({
             ...userState,
