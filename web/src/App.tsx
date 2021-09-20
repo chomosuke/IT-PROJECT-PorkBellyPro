@@ -282,7 +282,7 @@ function implementTag(
       });
 
       if (res.ok) {
-        const newTag = tagFromRaw(res.json());
+        const newTag = tagFromRaw(await res.json());
 
         setUser({
           ...user,
@@ -413,7 +413,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       });
 
       if (res.ok) {
-        const newTag = tagFromRaw(res.json());
+        const newTag = tagFromRaw(await res.json());
 
         setUser({
           ...userState,
