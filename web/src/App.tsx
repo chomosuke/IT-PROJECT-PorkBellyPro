@@ -335,7 +335,26 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
           return new ResponseStatus(res);
         },
-        delete() { throw notImplemented(); },
+        async delete() {
+          const res = await fetch('/api/tag', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: tag.id,
+            }),
+          });
+
+          if (res.ok) {
+            setUserState({
+              ...userState,
+              tags: userState.tags.filter((existing) => (existing.id !== tag.id)),
+            });
+          }
+
+          return new ResponseStatus(res);
+        },
       })),
     };
 
