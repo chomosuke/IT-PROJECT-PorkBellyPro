@@ -363,7 +363,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       username: userState.username,
       settings: userState.settings,
       cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-      tags: userState.tags.map((tag) => implementTag(tag, userState, setUserState)),
+      tags: userState.tags.map((tag) => implementTag(tag, userState, setUser)),
     };
 
   const context: IAppContext = {
