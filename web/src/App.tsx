@@ -391,7 +391,38 @@ const AppComponent: React.VoidFunctionComponent = () => {
         overrides: {},
       });
     },
-    newTag() { throw notImplemented(); },
+    async newTag(tagProps) {
+      if (userState == null) {
+        throw new Error('userState is nullish');
+      }
+
+      let label = tagProps?.label;
+      let color = tagProps?.color;
+      if (label == null) label = '';
+      if (color == null) color = 'white';
+
+      const res = await fetch('/api/tag', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(res.json());
+
+        setUser({
+          ...userState,
+          tags: [...userState.tags, newTag],
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
     login(username, password, register) {
       return (async function loginAsync() {
         const body = {
