@@ -20,7 +20,7 @@ import {
   fromRaw as cardsFromRaw,
   implement,
 } from './controllers/Card';
-import { ITagData, fromRaw as tagFromRaw } from './controllers/Tag';
+import { ITag, ITagData, fromRaw as tagFromRaw } from './controllers/Tag';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -261,6 +261,62 @@ function implementCardOverride(
   return implement(cardData, cardMethods, fieldMethodsFactory);
 }
 
+function implementTag(
+  tag: ITagData,
+  user: IUserStatic,
+  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+): ITag {
+  return {
+    ...tag,
+    async commit({ label, color }) {
+      const res = await fetch('/api/tag', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(res.json());
+
+        setUser({
+          ...user,
+          tags: user.tags.map((existing) => (existing.id === newTag.id
+            ? newTag
+            : existing)),
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
+    async delete() {
+      const res = await fetch('/api/tag', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+        }),
+      });
+
+      if (res.ok) {
+        setUser({
+          ...user,
+          tags: user.tags.filter((existing) => (existing.id !== tag.id)),
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
+  };
+}
+
 const AppComponent: React.VoidFunctionComponent = () => {
   const [userState, setUserState] = useState<IUserStatic | null>();
   const [detail, setDetail] = useState<ICardOverrideData | null>(null);
@@ -307,55 +363,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       username: userState.username,
       settings: userState.settings,
       cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-      tags: userState.tags.map((tag) => ({
-        ...tag,
-        async commit({ label, color }) {
-          const res = await fetch('/api/tag', {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: tag.id,
-              label,
-              color,
-            }),
-          });
-
-          if (res.ok) {
-            const newTag = tagFromRaw(res.json());
-
-            setUserState({
-              ...userState,
-              tags: userState.tags.map((existing) => (existing.id === newTag.id
-                ? newTag
-                : existing)),
-            });
-          }
-
-          return new ResponseStatus(res);
-        },
-        async delete() {
-          const res = await fetch('/api/tag', {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: tag.id,
-            }),
-          });
-
-          if (res.ok) {
-            setUserState({
-              ...userState,
-              tags: userState.tags.filter((existing) => (existing.id !== tag.id)),
-            });
-          }
-
-          return new ResponseStatus(res);
-        },
-      })),
+      tags: userState.tags.map((tag) => implementTag(tag, userState, setUserState)),
     };
 
   const context: IAppContext = {
