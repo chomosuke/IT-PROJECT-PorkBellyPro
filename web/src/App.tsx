@@ -307,7 +307,36 @@ const AppComponent: React.VoidFunctionComponent = () => {
       username: userState.username,
       settings: userState.settings,
       cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-      tags: [],
+      tags: userState.tags.map((tag) => ({
+        ...tag,
+        async commit({ label, color }) {
+          const res = await fetch('/api/tag', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: tag.id,
+              label,
+              color,
+            }),
+          });
+
+          if (res.ok) {
+            const newTag = tagFromRaw(res.json());
+
+            setUserState({
+              ...userState,
+              tags: userState.tags.map((existing) => (existing.id === newTag.id
+                ? newTag
+                : existing)),
+            });
+          }
+
+          return new ResponseStatus(res);
+        },
+        delete() { throw notImplemented(); },
+      })),
     };
 
   const context: IAppContext = {
