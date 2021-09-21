@@ -50,6 +50,7 @@ Object {
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
+  "tags": Array [],
 }
 `);
     });
@@ -79,6 +80,7 @@ Object {
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
+  "tags": Array [],
 }
 `);
     });
