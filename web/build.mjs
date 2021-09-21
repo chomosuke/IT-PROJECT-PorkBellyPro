@@ -42,6 +42,8 @@ const handler = (err, stats) => {
   }
 
   console.log(stats.toString({ colors: true, errorDetails: true }));
+  if (stats.hasErrors())
+    process.exitCode = 1;
 };
 
 const compiler = webpack({

@@ -1,32 +1,19 @@
-import { Types } from 'mongoose';
+/* eslint-disable no-underscore-dangle */
 import { HttpStatusError } from '../HttpStatusError';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 
 export const image: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
   async function image(req, res) {
     const { user, params } = req;
-    const { cardId } = params;
+    const { imageHash } = params;
 
-    let cardObjId;
-    try {
-      cardObjId = Types.ObjectId(cardId);
-    } catch (e) {
-      throw new HttpStatusError(404);
-    }
-
-    const cardDoc = await this.parent.Cards.findById(cardObjId);
+    const cardDoc = await this.parent.Cards.findOne({ user: user._id, imageHash });
     if (cardDoc === null) {
       throw new HttpStatusError(404);
     }
-    const imageData = cardDoc.image;
-    if (imageData == null) {
-      throw new HttpStatusError(404);
-    }
-    if (cardDoc.user.toString() !== user.id) {
-      throw new HttpStatusError(401);
-    }
 
     res.contentType('image/jpeg');
-    res.end(imageData);
+    res.removeHeader('Cache-Control');
+    res.end(cardDoc.image);
   },
 );

@@ -17,9 +17,10 @@ import {
   ICardData,
   ICardProperties,
   cardDataDefaults,
-  fromRaw,
+  fromRaw as cardsFromRaw,
   implement,
 } from './controllers/Card';
+import { ITag, ITagData, fromRaw as tagFromRaw } from './controllers/Tag';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
@@ -65,6 +66,7 @@ interface IUserStatic {
   readonly username: string;
   readonly settings: ISettings;
   readonly cards: readonly ICardData[];
+  readonly tags: readonly ITagData[];
 }
 
 type GetMeResult = {
@@ -90,7 +92,8 @@ async function getMe(): Promise<GetMeResult> {
     const body = ensureObject(await res.json());
     const username = ensureType(body.username, 'string');
     const settings = ensureObject(body.settings);
-    const cards = ensureArray(body.cards).map(fromRaw);
+    const cards = ensureArray(body.cards).map(cardsFromRaw);
+    const tags = ensureArray(body.tags).map(tagFromRaw);
 
     return {
       status: new ResponseStatus(res),
@@ -98,6 +101,7 @@ async function getMe(): Promise<GetMeResult> {
         username,
         settings,
         cards,
+        tags,
       },
     };
   } catch {
@@ -216,7 +220,7 @@ function implementCardOverride(
       });
       if (res.ok) {
         const raw = await res.json();
-        const updated = fromRaw(raw);
+        const updated = cardsFromRaw(raw);
         if (put) {
           setUser({
             ...userState,
@@ -255,6 +259,62 @@ function implementCardOverride(
     },
   });
   return implement(cardData, cardMethods, fieldMethodsFactory);
+}
+
+function implementTag(
+  tag: ITagData,
+  user: IUserStatic,
+  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+): ITag {
+  return {
+    ...tag,
+    async commit({ label, color }) {
+      const res = await fetch('/api/tag', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(await res.json());
+
+        setUser({
+          ...user,
+          tags: user.tags.map((existing) => (existing.id === newTag.id
+            ? newTag
+            : existing)),
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
+    async delete() {
+      const res = await fetch('/api/tag', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+        }),
+      });
+
+      if (res.ok) {
+        setUser({
+          ...user,
+          tags: user.tags.filter((existing) => (existing.id !== tag.id)),
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
+  };
 }
 
 const AppComponent: React.VoidFunctionComponent = () => {
@@ -303,11 +363,12 @@ const AppComponent: React.VoidFunctionComponent = () => {
       username: userState.username,
       settings: userState.settings,
       cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-      tags: [],
+      tags: userState.tags.map((tag) => implementTag(tag, userState, setUser)),
     };
 
   const context: IAppContext = {
     searchQuery,
+    tagQuery: [],
     user,
     update({ searchQuery: query }) {
       if (query != null) setSearchQuery(query);
@@ -330,7 +391,38 @@ const AppComponent: React.VoidFunctionComponent = () => {
         overrides: {},
       });
     },
-    newTag() { throw notImplemented(); },
+    async newTag(tagProps) {
+      if (userState == null) {
+        throw new Error('userState is nullish');
+      }
+
+      let label = tagProps?.label;
+      let color = tagProps?.color;
+      if (label == null) label = '';
+      if (color == null) color = 'white';
+
+      const res = await fetch('/api/tag', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(await res.json());
+
+        setUser({
+          ...userState,
+          tags: [...userState.tags, newTag],
+        });
+      }
+
+      return new ResponseStatus(res);
+    },
     login(username, password, register) {
       return (async function loginAsync() {
         const body = {

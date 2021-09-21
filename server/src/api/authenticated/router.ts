@@ -56,7 +56,7 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.routerPrivate.put('/tag', json(), this.auth, this.bind(tagPut));
     this.routerPrivate.patch('/tag', json(), this.auth, this.bind(tagPatch));
     this.routerPrivate.delete('/tag', json(), this.auth, this.bind(tagDelete));
-    this.routerPrivate.get('/image/:cardId', this.auth, this.bind(image));
+    this.routerPrivate.get('/image/:imageHash', this.auth, this.bind(image));
   }
 
   get router(): Router {

@@ -12,7 +12,7 @@ export const me = asyncRouteHandler(async function me(req, res) {
     await dbs.withTransaction(async () => {
       const cardDocs = await this.parent.Cards.find({ user: id });
       const tagDocs = await this.parent.Tags.find({ user: id });
-      cards = cardDocs.map((v) => ({
+      cards = cardDocs.map((v): Card => ({
         id: v.id,
         favorite: v.favorite,
         name: v.name,
@@ -20,7 +20,7 @@ export const me = asyncRouteHandler(async function me(req, res) {
         email: v.email,
         jobTitle: v.jobTitle,
         company: v.company,
-        hasImage: Boolean(v.image),
+        imageHash: v.imageHash,
         fields: v.fields,
         tags: v.tags.map((i) => i.toString()),
       }));
