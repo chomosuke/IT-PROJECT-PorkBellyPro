@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  DefaultButton, Image, ImageFit, Stack, mergeStyleSets,
+  DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import { ICard } from '../../controllers/Card';
@@ -85,7 +85,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                 }}
               />
             </Stack.Item>
-            {loading && <Stack.Item key='load'>loading</Stack.Item>}
+            {loading && <Spinner size={SpinnerSize.small} />}
           </Stack>
         </Stack.Item>
         )}
