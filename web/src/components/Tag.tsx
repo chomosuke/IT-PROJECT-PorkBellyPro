@@ -32,7 +32,7 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
 
   const { tagContainer } = getClassNames();
 
-  if (onRemove !== undefined) {
+  if (onRemove != null) {
     // show x button if on remove is pass in
     return (
       <div className={tagContainer}>
