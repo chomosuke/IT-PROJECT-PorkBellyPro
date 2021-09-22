@@ -1,5 +1,4 @@
 import React from 'react';
-import Jimp from 'jimp/browser/lib/jimp';
 import {
   DefaultButton, Image, ImageFit, Stack, mergeStyleSets,
 } from '@fluentui/react';
@@ -68,21 +67,20 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                 name='myImage'
                 accept='image/*'
                 onChange={(e) => {
-                  setLoading(true);
-                  (async () => {
-                    if (e.target.files && e.target.files[0]) {
-                      const img = e.target.files[0];
-                      const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
-                      if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
-                        jimg.resize(imgWidth, Jimp.AUTO);
-                      } else {
-                        jimg.resize(Jimp.AUTO, imgHeight);
-                      }
-                      const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
-                      card.update({ image: newImageUrl });
-                    }
-                    setLoading(false);
-                  })();
+                  if (e.target.files && e.target.files[0]) {
+                    const img = e.target.files[0];
+                    setLoading(true);
+                    const worker = new Worker(new URL('./processImage.ts', import.meta.url));
+                    worker.postMessage({
+                      img,
+                      imgWidth,
+                      imgHeight,
+                    });
+                    worker.onmessage = ({ data: { url } }) => {
+                      card.update({ image: url });
+                      setLoading(false);
+                    };
+                  }
                 }}
               />
             </Stack.Item>
