@@ -19,6 +19,8 @@ const getClassNames = () => mergeStyleSets({
   },
 });
 
+const imgWorker = new Worker(new URL('./processImage.ts', import.meta.url));
+
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
   { card, editing },
 ) => {
@@ -70,17 +72,18 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                   if (e.target.files && e.target.files[0]) {
                     const img = e.target.files[0];
                     setLoading(true);
-                    const worker = new Worker(new URL('./processImage.ts', import.meta.url));
-                    worker.postMessage({
+                    imgWorker.onmessage = ({ data: { url } }) => {
+                      card.update({ image: url });
+                      setLoading(false);
+                    };
+                    imgWorker.onerror = (err) => {
+                      console.error(err);
+                    };
+                    imgWorker.postMessage({
                       img,
                       imgWidth,
                       imgHeight,
                     });
-                    worker.onmessage = ({ data: { url } }) => {
-                      card.update({ image: url });
-                      setLoading(false);
-                      worker.terminate();
-                    };
                   }
                 }}
               />
