@@ -79,6 +79,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                     worker.onmessage = ({ data: { url } }) => {
                       card.update({ image: url });
                       setLoading(false);
+                      worker.terminate();
                     };
                   }
                 }}
