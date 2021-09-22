@@ -10,6 +10,7 @@ import {
   fromRaw as fieldFromRaw,
   implement as implementField,
 } from './CardField';
+import { ITag } from './Tag';
 
 interface ICardPropertiesCommon {
   favorite: boolean;
@@ -23,12 +24,14 @@ interface ICardPropertiesCommon {
 export interface ICardProperties extends ICardPropertiesCommon {
   image: string | null;
   fields: readonly ICardFieldProperties[];
+  tags: readonly Pick<ITag, 'id'>[];
 }
 
 export interface ICard extends Readonly<ICardPropertiesCommon> {
   readonly id?: ObjectId;
   readonly image?: string;
   readonly fields: readonly ICardField[];
+  readonly tags: readonly ITag[];
   update(props: Partial<ICardProperties>): void;
   commit(): Promise<ResponseStatus>;
   delete(): Promise<ResponseStatus>;
@@ -38,6 +41,7 @@ export interface ICardData extends ICardPropertiesCommon {
   id?: ObjectId;
   image?: string;
   fields: readonly Readonly<ICardFieldData>[];
+  tags: readonly ObjectId[];
 }
 
 export const cardDataDefaults: ICardData = Object.freeze({
@@ -48,6 +52,7 @@ export const cardDataDefaults: ICardData = Object.freeze({
   jobTitle: '',
   company: '',
   fields: [],
+  tags: [],
 });
 
 export function fromRaw(raw: unknown): ICardData {
@@ -61,6 +66,7 @@ export function fromRaw(raw: unknown): ICardData {
     company,
     imageHash,
     fields: fieldsRaw,
+    tags: tagsRaw,
   } = ensureObject(raw);
 
   const result = {
@@ -73,6 +79,7 @@ export function fromRaw(raw: unknown): ICardData {
     company: ensureType(company, 'string'),
     image: imageHash ? `/api/image/${ensureType(imageHash, 'string')}` : undefined,
     fields: ensureArray(fieldsRaw).map(fieldFromRaw),
+    tags: ensureArray(tagsRaw).map((tag) => ensureType(tag, 'string')),
   };
 
   if (result.image === undefined) delete result.image;
@@ -89,11 +96,17 @@ export type CardFieldMethodsFactory = (
 export function implement(
   data: Readonly<ICardData>,
   methods: CardMethods,
+  tags: readonly ITag[],
   fieldMethodsFactory: CardFieldMethodsFactory,
 ): ICard {
   return {
     ...data,
     fields: data.fields.map((field) => implementField(field, fieldMethodsFactory(field))),
+    tags: data.tags.map((tagId) => {
+      const found = tags.find((tag) => tag.id === tagId);
+      if (found == null) throw new Error('No such tag');
+      return found;
+    }),
     ...methods,
   };
 }

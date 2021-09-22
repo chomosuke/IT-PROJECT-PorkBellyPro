@@ -8,6 +8,9 @@ import { cardPatch } from './cardPatch';
 import { cardPut } from './cardPut';
 import { image } from './image';
 import { me } from './me';
+import { tagDelete } from './tagDelete';
+import { tagPatch } from './tagPatch';
+import { tagPut } from './tagPut';
 
 type QueryResult<Q> =
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -50,6 +53,9 @@ export class AuthenticatedRouter implements IAuthenticatedRouter {
     this.routerPrivate.delete('/card', json(), this.auth, this.bind(cardDelete));
     this.routerPrivate.patch('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPatch));
     this.routerPrivate.put('/card', json({ limit: '1mb' }), this.auth, this.bind(cardPut));
+    this.routerPrivate.put('/tag', json(), this.auth, this.bind(tagPut));
+    this.routerPrivate.patch('/tag', json(), this.auth, this.bind(tagPatch));
+    this.routerPrivate.delete('/tag', json(), this.auth, this.bind(tagDelete));
     this.routerPrivate.get('/image/:imageHash', this.auth, this.bind(image));
   }
 

@@ -142,6 +142,7 @@ function implementDelete(
 
 function implementCard(
   card: ICardData,
+  tags: readonly ITag[],
   userState: IUserStatic,
   setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
 ): ICard {
@@ -154,16 +155,17 @@ function implementCard(
     update() { throw notImplemented(); },
     remove() { throw notImplemented(); },
   });
-  return implement(card, cardMethods, fieldMethodsFactory);
+  return implement(card, cardMethods, tags, fieldMethodsFactory);
 }
 
 function implementCardOverride(
   data: ICardOverrideData,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  tags: readonly ITag[],
   userState: IUserStatic,
   setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
 ): ICard {
-  const { base, overrides: { image, ...overrides } } = data;
+  const { base, overrides: { image, tags: tagsOverride, ...overrides } } = data;
   const cardData: ICardData = {
     ...cardDataDefaults,
     ...base,
@@ -172,12 +174,18 @@ function implementCardOverride(
   if (image !== undefined) {
     cardData.image = image === null ? undefined : image;
   }
+  if (tagsOverride != null) {
+    cardData.tags = tagsOverride.map((tag) => tag.id);
+  }
   const cardMethods: CardMethods = {
-    update(updates) {
+    update({ tags: updateTags, ...rest }) {
       const newOverrides: Partial<ICardProperties> = {
         ...data.overrides,
-        ...updates,
+        ...rest,
       };
+      if (updateTags != null) {
+        newOverrides.tags = updateTags.map((tag) => ({ id: tag.id }));
+      }
       setDetail({
         ...data,
         overrides: newOverrides,
@@ -199,13 +207,21 @@ function implementCardOverride(
         bodyObj = Object.fromEntries(
           Object
             .entries(cardDataDefaults)
-            .concat(Object.entries(overrides), [['tags', []]]),
+            .concat(
+              Object.entries(overrides).filter(([k]) => k !== 'tags'),
+              [['tags', cardData.tags]],
+            ),
         );
       } else {
         if (base?.id == null) throw new Error('Unreachable');
-        bodyObj = Object.fromEntries(Object
+        let entries = Object
           .entries(overrides)
-          .concat([['id', base.id]]));
+          .filter(([k]) => k !== 'tags')
+          .concat([['id', base.id]]);
+        if (tagsOverride != null) {
+          entries = entries.concat([['tags', cardData.tags]]);
+        }
+        bodyObj = Object.fromEntries(entries);
       }
       if (image !== undefined) {
         bodyObj.image = image;
@@ -258,7 +274,7 @@ function implementCardOverride(
       });
     },
   });
-  return implement(cardData, cardMethods, fieldMethodsFactory);
+  return implement(cardData, cardMethods, tags, fieldMethodsFactory);
 }
 
 function implementTag(
@@ -317,6 +333,28 @@ function implementTag(
   };
 }
 
+function implementUser(
+  userState: IUserStatic | null | undefined,
+  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+): [user: IUser, tags: readonly ITag[]] | null {
+  if (userState == null) return null;
+
+  const {
+    username, settings, cards, tags,
+  } = userState;
+
+  const tagsImpl = tags.map((tag) => implementTag(tag, userState, setUser));
+
+  const user: IUser = {
+    username,
+    settings,
+    cards: cards.map((card) => implementCard(card, tagsImpl, userState, setUser)),
+    tags: tagsImpl,
+  };
+
+  return [user, tagsImpl];
+}
+
 const AppComponent: React.VoidFunctionComponent = () => {
   const [userState, setUserState] = useState<IUserStatic | null>();
   const [detail, setDetail] = useState<ICardOverrideData | null>(null);
@@ -357,14 +395,9 @@ const AppComponent: React.VoidFunctionComponent = () => {
     updateMe();
   }
 
-  const user: IUser | null = userState == null
-    ? null
-    : {
-      username: userState.username,
-      settings: userState.settings,
-      cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-      tags: userState.tags.map((tag) => implementTag(tag, userState, setUser)),
-    };
+  const userImpl = implementUser(userState, setUser);
+
+  const user = userImpl == null ? null : userImpl[0];
 
   const context: IAppContext = {
     searchQuery,
@@ -465,10 +498,12 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   let override: ICard | undefined;
   if (userState != null) {
+    if (userImpl == null) throw new Error('Unexpected null');
     override = detail != null
       ? implementCardOverride(
         detail,
         setDetail,
+        userImpl[1],
         userState,
         setUser,
       )
