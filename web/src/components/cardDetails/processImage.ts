@@ -7,7 +7,6 @@ self.onmessage = async ({ data: { img, imgWidth, imgHeight } }) => {
   } else {
     jimg.resize(Jimp.AUTO, imgHeight);
   }
-  // @ts-expect-error need help
   // eslint-disable-next-line no-restricted-globals
   self.postMessage({ url: await jimg.getBase64Async(Jimp.MIME_JPEG) });
 };
