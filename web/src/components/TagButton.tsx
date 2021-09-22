@@ -22,6 +22,9 @@ export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, o
     root: {
       backgroundColor: tag.color,
       border: 'none',
+      padding: '0 48px',
+      margin: '0 12px',
+      outerHeight: '48px',
     },
   };
 

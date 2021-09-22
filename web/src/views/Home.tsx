@@ -6,6 +6,7 @@ import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
 import { ICard } from '../controllers/Card';
 import { CardDetails } from '../components/cardDetails/CardDetails';
+import { TagButton } from '../components/TagButton';
 
 export interface IHomeProps {
   detail?: ICard;
@@ -35,17 +36,28 @@ const getClassNames = (expand: boolean, detail: boolean) => {
       height: '100%',
       overflow: 'auto',
     },
+    tagList: {
+      // flex: '1',
+      display: 'flex',
+      flexDirection: 'row',
+      overflowX: 'auto',
+
+      scrollBehavior: 'smooth',
+      margin: '24px 0',
+    },
   });
 };
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   const [expand, setExpand] = useState(false);
-  const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
-  const { user, searchQuery } = useApp();
+  const {
+    root, cardSection, detailSection, tagList,
+  } = getClassNames(expand, Boolean(detail));
+  const { user, searchQuery, tagQuery } = useApp();
   if (user == null) throw new Error();
 
-  const { cards } = user;
+  const { cards, tags } = user;
 
   function filterCard(card: ICard): boolean {
     const searchedTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
@@ -69,15 +81,26 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     <HomeProvider value={{ expandCardDetail: setExpand, cardDetailExpanded: expand }}>
       <div className={root}>
         <div className={cardSection}>
+          <div className={tagList}>
+            {tags.map((tag) => <TagButton key={tag.id} tag={tag} />)}
+          </div>
+          <p>
+            {searchQuery}
+            {' '}
+            and
+            {' '}
+            {tagQuery}
+          </p>
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
+          <p>{searchQuery}</p>
         </div>
         {detail != null
           && (
-          <div className={detailSection}>
-            <CardDetails key={detail.id} card={detail} editing={detail.id === undefined} />
-          </div>
+            <div className={detailSection}>
+              <CardDetails key={detail.id} card={detail} editing={detail.id === undefined} />
+            </div>
           )}
       </div>
     </HomeProvider>
