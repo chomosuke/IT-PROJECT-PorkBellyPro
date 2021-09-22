@@ -8,6 +8,7 @@ import { CardExtraField } from './CardExtraField';
 import { CardImageField } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
+import { TagPicker } from '../TagPicker';
 
 export interface ICardDetailsProps {
   card: ICard;
@@ -68,6 +69,9 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         <Stack>
           <Stack.Item key='image' align='stretch'>
             <CardImageField card={card} editing={isEditing} />
+          </Stack.Item>
+          <Stack.Item key='tags' align='stretch'>
+            <TagPicker targetCard={card} />
           </Stack.Item>
           {mFields.map((field) => (
             <Stack.Item key={field.key} align='stretch'>
