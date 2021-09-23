@@ -1,9 +1,12 @@
+import { PromiseWorker } from '@porkbellypro/crm-shared';
 import React from 'react';
 import {
   DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import { ICard } from '../../controllers/Card';
+
+import type { Message, Result } from './processImage';
 
 export interface ICardImageFieldProps {
   card: ICard;
@@ -19,7 +22,9 @@ const getClassNames = () => mergeStyleSets({
   },
 });
 
-const imgWorker = new Worker(new URL('./processImage.ts', import.meta.url));
+const imgWorker = new PromiseWorker<Message, Result>(
+  new Worker(new URL('./processImage.ts', import.meta.url)),
+);
 
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
   { card, editing },
@@ -68,22 +73,17 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                 type='file'
                 name='myImage'
                 accept='image/*'
-                onChange={(e) => {
+                onChange={async (e) => {
                   if (e.target.files && e.target.files[0]) {
                     const img = e.target.files[0];
                     setLoading(true);
-                    imgWorker.onmessage = ({ data: { url } }) => {
-                      card.update({ image: url });
-                      setLoading(false);
-                    };
-                    imgWorker.onerror = (err) => {
-                      console.error(err);
-                    };
-                    imgWorker.postMessage({
+                    const { url } = await imgWorker.post({
                       img,
-                      imgWidth,
                       imgHeight,
+                      imgWidth,
                     });
+                    card.update({ image: url });
+                    setLoading(false);
                   }
                 }}
               />
