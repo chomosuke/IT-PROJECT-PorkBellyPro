@@ -1,8 +1,8 @@
 import { DefaultButton, Stack, mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
-import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
+import { useHome } from '../../HomeContext';
 import { CardDetailActions } from './CardDetailActions';
 import { CardExtraField } from './CardExtraField';
 import { CardImageField } from './CardImageField';
@@ -26,7 +26,7 @@ const getClassNames = () => mergeStyleSets({
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
-  const app = useApp();
+  const { showCardDetail } = useHome();
 
   const [isEditing, setIsEditing] = React.useState(editing);
 
@@ -55,7 +55,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   restFields.splice(noteIndex, 1);
 
   const close = () => {
-    app.showCardDetail(null);
+    showCardDetail(null);
   };
 
   const { root, content } = getClassNames();
@@ -109,7 +109,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           if (card.id === undefined) {
             close();
           } else {
-            app.showCardDetail(card);
+            showCardDetail(card);
             setIsEditing(false);
           }
         }}

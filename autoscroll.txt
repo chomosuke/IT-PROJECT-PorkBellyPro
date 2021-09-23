@@ -28,11 +28,11 @@ A custom wrap is no different than letting the stack wrap and caculate how did t
 
 what does it need to do:
 
-1. be notified when it's resized. It'll be resized in 2 ways, one is through window resizing, another one is through showcard detail changing,
+1. be rerendered when it's resized. It'll be resized in 2 ways, one is through window resizing, another one is through showcard detail changing,
 
 For show card detail, CardDetail will have to report on this through context.
 
-For window resizing, looks like I'll have to make a viewport.
+For window resizing, looks like I'll have to make a viewport. [done]
 
 2. To be notified onscroll, luckily there's a html callback for this.
 
@@ -63,3 +63,8 @@ Need to investiage, does calling scroll trigger onscroll?
 
 If it does, we need to tell the differences between onscroll so that home doesn't get notified when i call onscroll.
 
+Homecontext need: override appcontext's showCardDetail, and lockCard
+
+Home need: currentLockedCardId (nullable), currentLockedCardYPos (nullable), scrollPercentage.
+
+It'll use scrollHeight, scrolltop, clientHeight to calculate scrollPercentage.

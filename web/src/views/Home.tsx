@@ -9,6 +9,7 @@ import { CardDetails } from '../components/cardDetails/CardDetails';
 
 export interface IHomeProps {
   detail?: ICard;
+  showCardDetail(card: ICard | null): void;
 }
 
 const getClassNames = (expand: boolean, detail: boolean) => {
@@ -39,7 +40,7 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 };
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
+export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
   const [expand, setExpand] = useState(false);
   const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery } = useApp();
@@ -65,8 +66,17 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     ));
   }
 
+  const onShowCardDetail = (card: ICard | null) => {
+    showCardDetail(card);
+  };
+
   return (
-    <HomeProvider value={{ expandCardDetail: setExpand, cardDetailExpanded: expand }}>
+    <HomeProvider value={{
+      expandCardDetail: setExpand,
+      cardDetailExpanded: expand,
+      showCardDetail: onShowCardDetail,
+    }}
+    >
       <div className={root}>
         <div className={cardSection}>
           <Stack horizontal wrap>
@@ -86,6 +96,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
 
 Home.propTypes = {
   detail: PropTypes.object as React.Validator<ICard | null | undefined> | undefined,
+  showCardDetail: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {

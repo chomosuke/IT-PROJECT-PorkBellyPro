@@ -6,7 +6,7 @@ import {
   IImageProps, Image, ImageFit, Label, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
-import { useApp } from '../AppContext';
+import { useHome } from '../HomeContext';
 
 export interface ICardProps {
   card: ICard;
@@ -50,7 +50,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
     jobTitle,
     image,
   } = card;
-  const { showCardDetail } = useApp();
+  const { showCardDetail } = useHome();
 
   const { root, target, imageContainer } = getClassNames();
 

@@ -406,19 +406,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
     update({ searchQuery: query }) {
       if (query != null) setSearchQuery(query);
     },
-    showCardDetail(card) {
-      if (userState == null) throw new Error('userState is nullish');
-      if (card == null) {
-        setDetail(null);
-      } else {
-        const base = userState.cards.find((existing) => existing.id === card.id);
-        if (base == null) throw new Error('Not found');
-        setDetail({
-          base,
-          overrides: {},
-        });
-      }
-    },
     newCard() {
       setDetail({
         overrides: {},
@@ -496,6 +483,20 @@ const AppComponent: React.VoidFunctionComponent = () => {
     },
   };
 
+  const showCardDetail = (card: ICard | null) => {
+    if (userState == null) throw new Error('userState is nullish');
+    if (card == null) {
+      setDetail(null);
+    } else {
+      const base = userState.cards.find((existing) => existing.id === card.id);
+      if (base == null) throw new Error('Not found');
+      setDetail({
+        base,
+        overrides: {},
+      });
+    }
+  };
+
   let override: ICard | undefined;
   if (userState != null) {
     if (userImpl == null) throw new Error('Unexpected null');
@@ -522,7 +523,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       <div className={body}>
         <Switch>
           <Route exact path='/'>
-            {loggedIn ? <Home detail={override} /> : <Redirect to='/login' />}
+            {loggedIn ? <Home detail={override} showCardDetail={showCardDetail} /> : <Redirect to='/login' />}
           </Route>
           <Route exact path='/login'>
             {loggedIn ? <Redirect to='/' /> : <Login key='login' />}

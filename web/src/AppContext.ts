@@ -25,7 +25,6 @@ export interface IAppContext extends Readonly<IAppContextPropertiesCommon> {
   readonly tagQuery: readonly ITag[];
   readonly user: IUser | null;
   update(props: Partial<IAppContextProperties>): void;
-  showCardDetail(card: ICard | null): void;
   newCard(): void;
   newTag(props?: Partial<ITagProperties>): Promise<ResponseStatus>;
   login(username: string, password: string, register?: boolean): Promise<ResponseStatus>;
