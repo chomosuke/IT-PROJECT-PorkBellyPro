@@ -40,7 +40,7 @@ const getClassNames = (expand: boolean, detail: boolean) => {
       // flex: '1',
       display: 'flex',
       flexDirection: 'row',
-      overflowX: 'auto',
+      overflowX: 'scroll',
 
       scrollBehavior: 'smooth',
       margin: '24px 0',
@@ -77,24 +77,36 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     ));
   }
 
+  const tagScrollRef = React.createRef<HTMLDivElement>();
+  const scroll = (offset: number) => {
+    const element = tagScrollRef.current;
+    if (element) {
+      element.scrollLeft += offset;
+    }
+  };
+
   return (
     <HomeProvider value={{ expandCardDetail: setExpand, cardDetailExpanded: expand }}>
       <div className={root}>
         <div className={cardSection}>
-          <div className={tagList}>
+          <div className={tagList} ref={tagScrollRef}>
             {tags.map((tag) => <TagButton key={tag.id} tag={tag} />)}
           </div>
+          <button type='button' onClick={() => scroll(-200)}> scroll left </button>
+          <button type='button' onClick={() => scroll(200)}> scroll right </button>
+          <p> testing for query: </p>
           <p>
+            search query:
             {searchQuery}
-            {' '}
-            and
-            {' '}
+          </p>
+          <p>
+            tag query:
             {tagQuery}
           </p>
+          <button type='button' onClick={() => console.log({ tagQuery })}> console log tagQuery</button>
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
-          <p>{searchQuery}</p>
         </div>
         {detail != null
           && (
