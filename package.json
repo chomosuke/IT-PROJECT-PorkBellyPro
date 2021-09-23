@@ -23,8 +23,5 @@
     "server",
     "shared",
     "web"
-  ],
-  "dependencies": {
-    "@fluentui/react-hooks": "^8.3.2"
-  }
+  ]
 }
