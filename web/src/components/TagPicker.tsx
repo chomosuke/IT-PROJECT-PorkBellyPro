@@ -1,5 +1,5 @@
 import React, {
-  Requireable, useRef, useState,
+  Requireable, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -9,27 +9,28 @@ import { useId } from '@fluentui/react-hooks';
 import { ICard } from '../controllers/Card';
 import { useApp } from '../AppContext';
 import { Tag } from './Tag';
-import { ITagEditorProps, TagEditor } from './TagEditor';
 import { ITagProperties } from '../controllers/Tag';
+import { TagWrapper } from './TagWrapper';
 
 export interface ITagPickerProps {
   targetCard: ICard;
+  editing: boolean;
 }
 
-export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({ targetCard }) => {
+export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
+  targetCard, editing,
+}) => {
   const user = useApp();
   const [pickerActive, setPickerActive] = useState<boolean>(false);
   const [tagSearchString, setTagSearchString] = useState<string>('');
-  const [focusedTag, setFocusedTag] = useState<ITagEditorProps>();
   const pickerTargetId = useId('picker-target');
-  // map stores tag id keys and element values
-  const tagTargetRefs = useRef(new Map());
 
   function getNewTag(): void {
     const tagProps: Partial<ITagProperties> = {
       label: tagSearchString || 'New Tag',
     };
     user.newTag(tagProps);
+    setTagSearchString('');
   }
 
   // user variable is used to access the tags available to the user
@@ -41,16 +42,27 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({ target
       <Stack.Item grow key='tags' id={pickerTargetId}>
         {/* could style to fit measurements */}
         <Stack horizontal>
-          {targetCard?.tags.map((t) => <Tag tag={t} onRemove={() => { }} />)}
+          {targetCard?.tags.map((t) => (
+            <Tag
+              key={t.id}
+              tag={t}
+              onRemove={() => {
+                targetCard.update({ tags: targetCard.tags.filter((tag) => tag.id !== t.id) });
+              }}
+            />
+          ))}
         </Stack>
 
       </Stack.Item>
-      <DefaultButton text='AttachCard' onClick={() => setPickerActive((old) => !old)} />
+      {editing
+        && <DefaultButton text='Attach Tags' onClick={() => setPickerActive((old) => !old)} />}
       {pickerActive
         ? (
           <Callout
             target={`#${pickerTargetId}`}
-            onDismiss={() => setPickerActive(false)}
+            onDismiss={() => {
+              setPickerActive(false);
+            }}
           >
             <Stack>
               <Stack.Item key='tagFinder'>
@@ -59,35 +71,18 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({ target
                   value={tagSearchString}
                   onChange={(event) => setTagSearchString(event.currentTarget.value)}
                 />
-                <DefaultButton text='CreateTag' onClick={getNewTag} />
+                <DefaultButton text='Create Tag' onClick={getNewTag} />
               </Stack.Item>
               {/* Tags available to use are listed here */}
               {user.user?.tags
                 .filter((t) => t.label.toUpperCase().startsWith(tagSearchString.toUpperCase()))
                 .filter((t) => !targetCard?.tags.includes(t))
                 .map((t) => (
-                  <div ref={(el) => tagTargetRefs.current.set(t.id, el)}>
-                    <Stack.Item key={t.id}>
-                      <Tag tag={t} />
-                      <DefaultButton
-                        text='EditTag'
-                        onClick={() => setFocusedTag({
-                          tag: t,
-                          anchor: tagTargetRefs.current.get(t.id),
-                        })}
-                      />
-                    </Stack.Item>
-                  </div>
+                  <Stack.Item key={t.id}>
+                    <TagWrapper key={t.id} tag={t} card={targetCard} />
+                  </Stack.Item>
                 ))}
             </Stack>
-            {focusedTag
-              && (
-                <TagEditor
-                  tag={focusedTag.tag}
-                  anchor={focusedTag.anchor}
-                  closingFunction={() => setFocusedTag(undefined)}
-                />
-              )}
           </Callout>
         )
         : null}
@@ -97,4 +92,5 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({ target
 
 TagPicker.propTypes = {
   targetCard: (PropTypes.object as Requireable<ICard>).isRequired,
+  editing: PropTypes.bool.isRequired,
 };

@@ -71,7 +71,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             <CardImageField card={card} editing={isEditing} />
           </Stack.Item>
           <Stack.Item key='tags' align='stretch'>
-            <TagPicker targetCard={card} />
+            <TagPicker targetCard={card} editing={isEditing} />
           </Stack.Item>
           {mFields.map((field) => (
             <Stack.Item key={field.key} align='stretch'>
