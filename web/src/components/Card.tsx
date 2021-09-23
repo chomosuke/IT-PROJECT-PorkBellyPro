@@ -83,9 +83,5 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
 };
 
 Card.propTypes = {
-  card: PropTypes.object as React.Validator<ICard> | undefined,
-};
-
-Card.defaultProps = {
-  card: undefined,
+  card: (PropTypes.object as React.Requireable<ICard>).isRequired,
 };
