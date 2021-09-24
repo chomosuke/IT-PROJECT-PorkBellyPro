@@ -58,6 +58,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   if (user == null) throw new Error();
 
   const { cards, tags } = user;
+  const context = useApp();
 
   function filterCard(card: ICard): boolean {
     const searchedTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
@@ -90,20 +91,20 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
       <div className={root}>
         <div className={cardSection}>
           <div className={tagList} ref={tagScrollRef}>
-            {tags.map((tag) => <TagButton key={tag.id} tag={tag} />)}
+            {tags.map((tag) => (
+              <TagButton
+                key={tag.id}
+                tag={tag}
+                onClick={() => {
+                  if (!tagQuery.includes(tag)) {
+                    context.update({ tagQuery: tagQuery.concat(tag) });
+                  }
+                }}
+              />
+            ))}
           </div>
           <button type='button' onClick={() => scroll(-200)}> scroll left </button>
           <button type='button' onClick={() => scroll(200)}> scroll right </button>
-          <p> testing for query: </p>
-          <p>
-            search query:
-            {searchQuery}
-          </p>
-          <p>
-            tag query:
-            {tagQuery}
-          </p>
-          <button type='button' onClick={() => console.log({ tagQuery })}> console log tagQuery</button>
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
