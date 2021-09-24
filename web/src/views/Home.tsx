@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, {
+  RefObject, createRef, useEffect, useState,
+} from 'react';
 import { Stack, mergeStyleSets } from '@fluentui/react';
+import { ObjectId } from '@porkbellypro/crm-shared';
 import { useApp } from '../AppContext';
 import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
 import { ICard } from '../controllers/Card';
 import { CardDetails } from '../components/cardDetails/CardDetails';
+import { useViewportSize } from '../ViewportSize';
 
 export interface IHomeProps {
   detail?: ICard;
@@ -42,6 +46,46 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
   const [expand, setExpand] = useState(false);
+
+  const [lockedCard, setLockedCard] = useState< { id: ObjectId; yPos: number } | null>(null);
+  const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
+
+  const cardRefs: { id?: ObjectId; ref: RefObject<HTMLDivElement> }[] = [];
+
+  const cardSectionRef = createRef<HTMLDivElement>();
+
+  console.log('rerendered');
+
+  const findCardDiv = (cardId: ObjectId) => {
+    const cardDiv = cardRefs.find((cardRef) => cardId === cardRef.id)?.ref?.current;
+    if (cardDiv == null) {
+      throw new Error('card ref not found');
+    }
+    return cardDiv;
+  };
+  const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
+
+  // trigger rerender when viewport changes
+  useViewportSize();
+
+  // I want it to run on every render
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    // if card is locked, lock its scroll
+    if (lockedCard != null) {
+      const cardDiv = findCardDiv(lockedCard.id);
+      const cardSectionDiv = cardSectionRef.current;
+      if (getDivTop(cardDiv) !== lockedCard.yPos && cardSectionDiv != null) {
+        cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
+      }
+
+      if (unlockOnNextEffect) {
+        setLockedCard(null);
+        setUnlockOnNextEffect(false);
+      }
+    }
+  });
+
   const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery } = useApp();
   if (user == null) throw new Error();
@@ -68,6 +112,23 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
 
   const onShowCardDetail = (card: ICard | null) => {
     showCardDetail(card);
+
+    if (card?.id == null) {
+      setUnlockOnNextEffect(true);
+    } else {
+      // find card ref
+      const cardDiv = findCardDiv(card.id);
+
+      /*
+       * calculate the YPos now because locked card can only happen after render.
+       * you don't want to wait for it to rerender because the card y position
+       * might already have been changed then
+       */
+      setLockedCard({
+        id: card.id,
+        yPos: getDivTop(cardDiv),
+      });
+    }
   };
 
   return (
@@ -78,9 +139,13 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     }}
     >
       <div className={root}>
-        <div className={cardSection}>
+        <div className={cardSection} ref={cardSectionRef}>
           <Stack horizontal wrap>
-            {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
+            {cards.filter(filterCard).map((card) => {
+              const ref = createRef<HTMLDivElement>();
+              cardRefs.push({ id: card.id, ref });
+              return <Card key={card.id} card={card} ref={ref} />;
+            })}
           </Stack>
         </div>
         {detail != null

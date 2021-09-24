@@ -43,7 +43,9 @@ const imageStyles: IImageProps['styles'] = {
   },
 };
 
-export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
+export const Card: React.ForwardRefExoticComponent<
+ICardProps & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, ICardProps>(({ card }, ref) => {
   const {
     name,
     phone,
@@ -59,7 +61,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
   };
 
   return (
-    <div className={root}>
+    <div className={root} ref={ref}>
       <Stack>
         <div className={imageContainer}>
           {image != null && (
@@ -80,7 +82,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
       />
     </div>
   );
-};
+});
 
 Card.propTypes = {
   card: (PropTypes.object as React.Requireable<ICard>).isRequired,
