@@ -355,10 +355,16 @@ function implementUser(
   return [user, tagsImpl];
 }
 
+function ensureNotNull<T>(value: T | null | undefined): T {
+  if (value == null) throw new Error('value is nullish');
+  return value;
+}
+
 const AppComponent: React.VoidFunctionComponent = () => {
   const [userState, setUserState] = useState<IUserStatic | null>();
   const [detail, setDetail] = useState<ICardOverrideData | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [tagQuery, setTagQuery] = useState<Pick<ITag, 'id'>[]>([]);
   const history = useHistory();
 
   const setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>> = (value) => {
@@ -401,10 +407,15 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   const context: IAppContext = {
     searchQuery,
-    tagQuery: [],
+    tagQuery: user == null
+      ? []
+      : tagQuery.map(
+        (tag) => ensureNotNull(user.tags.find((userTag) => userTag.id === tag.id)),
+      ),
     user,
-    update({ searchQuery: query }) {
-      if (query != null) setSearchQuery(query);
+    update({ searchQuery: searchQueryUpdate, tagQuery: tagQueryUpdate }) {
+      if (searchQueryUpdate != null) setSearchQuery(searchQueryUpdate);
+      if (tagQueryUpdate != null) setTagQuery(tagQueryUpdate.map((tag) => ({ id: tag.id })));
     },
     showCardDetail(card) {
       if (userState == null) throw new Error('userState is nullish');
