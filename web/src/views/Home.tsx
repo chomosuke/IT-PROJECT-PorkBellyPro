@@ -51,6 +51,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   // states
   const [lockedCard, setLockedCard] = useState< { id: ObjectId; yPos: number } | null>(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
+  // start at the top. 0 is top, 1 is bottom
+  const [scrollPortion, setScrollPortion] = useState(0);
 
   // refs
   const cardRefs: { id?: ObjectId; ref: RefObject<HTMLDivElement> }[] = [];
@@ -72,11 +74,18 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   // autoScroll & unlock after close
   useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
     // if card is locked, lock its scroll
-    if (lockedCard != null) {
-      const cardDiv = findCardDiv(lockedCard.id);
-      const cardSectionDiv = cardSectionRef.current;
-      if (getDivTop(cardDiv) !== lockedCard.yPos && cardSectionDiv != null) {
-        cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
+    const cardSectionDiv = cardSectionRef.current;
+    if (cardSectionDiv != null) {
+      if (lockedCard != null) {
+        const cardDiv = findCardDiv(lockedCard.id);
+        if (getDivTop(cardDiv) !== lockedCard.yPos) {
+          cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
+        }
+      } else {
+      // maintain scrollPortion
+        cardSectionDiv.scrollTop = scrollPortion * (
+          cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
+        );
       }
     }
 
@@ -134,7 +143,17 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     if (numOnScroll < 3) {
       return;
     }
+
+    // unlock lockedCard
     setLockedCard(null);
+
+    // record scrollPortion
+    const cardSectionDiv = cardSectionRef.current;
+    if (cardSectionDiv != null) {
+      setScrollPortion(
+        cardSectionDiv.scrollTop / (cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight),
+      );
+    }
   };
 
   /**
