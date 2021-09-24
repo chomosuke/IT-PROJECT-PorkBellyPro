@@ -61,9 +61,9 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   const context = useApp();
 
   function filterCard(card: ICard): boolean {
-    const searchedTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
+    const searchTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
 
-    const searchedCard = [
+    const cardTokens = [
       ...card.name.split(/\W/).filter((x) => x.length > 0),
       ...card.phone.split(/\W/).filter((x) => x.length > 0),
       ...card.email.split(/\W/).filter((x) => x.length > 0),
@@ -73,9 +73,9 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
         .reduce((a, b) => a.concat(b), []),
     ];
 
-    return searchedTokens.every((sToken) => searchedCard.some(
-      (cToken) => cToken.toLowerCase().includes(sToken.toLowerCase()),
-    ));
+    return searchTokens.every((searchToken) => cardTokens.some(
+      (cardToken) => cardToken.toLowerCase().includes(searchToken.toLowerCase()),
+    )) && tagQuery.every((qTag) => card.tags.includes(qTag));
   }
 
   const tagScrollRef = React.createRef<HTMLDivElement>();
@@ -103,6 +103,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
               />
             ))}
           </div>
+          <button type='button' onClick={() => console.log(tagQuery.map((tag) => tag.id))}>check tag</button>
           <button type='button' onClick={() => scroll(-200)}> scroll left </button>
           <button type='button' onClick={() => scroll(200)}> scroll right </button>
           <Stack horizontal wrap>
