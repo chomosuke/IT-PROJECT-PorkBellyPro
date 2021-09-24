@@ -44,15 +44,22 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 };
 
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
-  const [expand, setExpand] = useState(false);
+  /**
+   * autoScroll start
+   */
 
+  // states
   const [lockedCard, setLockedCard] = useState< { id: ObjectId; yPos: number } | null>(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
 
+  // refs
   const cardRefs: { id?: ObjectId; ref: RefObject<HTMLDivElement> }[] = [];
-
   const cardSectionRef = createRef<HTMLDivElement>();
 
+  // trigger rerender when viewport changes
+  useViewportSize();
+
+  // helpers
   const findCardDiv = (cardId: ObjectId) => {
     const cardDiv = cardRefs.find((cardRef) => cardId === cardRef.id)?.ref?.current;
     if (cardDiv == null) {
@@ -62,7 +69,48 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
+  // autoScroll & unlock after close
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    // if card is locked, lock its scroll
+    if (lockedCard != null) {
+      const cardDiv = findCardDiv(lockedCard.id);
+      const cardSectionDiv = cardSectionRef.current;
+      if (getDivTop(cardDiv) !== lockedCard.yPos && cardSectionDiv != null) {
+        cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
+      }
+    }
+
+    if (unlockOnNextEffect) {
+      setLockedCard(null);
+      setUnlockOnNextEffect(false);
+    }
+  });
+
+  // card locking and unlocking
+  const onShowCardDetail = (card: ICard | null) => {
+    showCardDetail(card);
+
+    if (card?.id == null) {
+      setUnlockOnNextEffect(true);
+    } else {
+      // find card ref
+      const cardDiv = findCardDiv(card.id);
+
+      /*
+       * calculate the YPos now because locked card can only happen after some renders.
+       * you don't want to wait for it to rerender because the card y position might already have
+       * been changed then
+       */
+      setLockedCard({
+        id: card.id,
+        yPos: getDivTop(cardDiv),
+      });
+    }
+  };
+
   /**
+   * onScroll:
+   *
    * The problem is that onScroll sometimes gets triggered upon resize
    * There's no good way to avoid this.
    * The solution is to recongize that when the user scroll, there'll be rapid onScroll without
@@ -89,26 +137,11 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     setLockedCard(null);
   };
 
-  // trigger rerender when viewport changes
-  useViewportSize();
+  /**
+   * autoScroll end
+   */
 
-  // I want it to run on every render
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    // if card is locked, lock its scroll
-    if (lockedCard != null) {
-      const cardDiv = findCardDiv(lockedCard.id);
-      const cardSectionDiv = cardSectionRef.current;
-      if (getDivTop(cardDiv) !== lockedCard.yPos && cardSectionDiv != null) {
-        cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
-      }
-    }
-
-    if (unlockOnNextEffect) {
-      setLockedCard(null);
-      setUnlockOnNextEffect(false);
-    }
-  });
+  const [expand, setExpand] = useState(false);
 
   const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery } = useApp();
@@ -133,27 +166,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
       (cToken) => cToken.toLowerCase().includes(sToken.toLowerCase()),
     ));
   }
-
-  const onShowCardDetail = (card: ICard | null) => {
-    showCardDetail(card);
-
-    if (card?.id == null) {
-      setUnlockOnNextEffect(true);
-    } else {
-      // find card ref
-      const cardDiv = findCardDiv(card.id);
-
-      /*
-       * calculate the YPos now because locked card can only happen after render.
-       * you don't want to wait for it to rerender because the card y position
-       * might already have been changed then
-       */
-      setLockedCard({
-        id: card.id,
-        yPos: getDivTop(cardDiv),
-      });
-    }
-  };
 
   return (
     <HomeProvider value={{
