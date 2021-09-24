@@ -1,22 +1,21 @@
 import { DefaultButton } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
-import React, { Requireable, useState } from 'react';
+import React, { Requireable } from 'react';
 import PropType from 'prop-types';
 import { ICard } from '../controllers/Card';
 import { ITag } from '../controllers/Tag';
 import { Tag } from './Tag';
-import { TagEditor } from './TagEditor';
 
 export interface ITagWrapperProps {
   tag: ITag;
   card?: ICard;
+  setTagEdit?: (id: string) => void;
 }
 
 export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
-  tag, card,
+  tag, card, setTagEdit,
 }) => {
   const targetElemId = useId();
-  const [editorOpen, setEditorOpen] = useState(false);
 
   const attachTag = () => {
     if (card && !card.tags.includes(tag)) {
@@ -27,18 +26,13 @@ export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
   return (
     <div id={targetElemId}>
       <Tag tag={tag} onClick={attachTag} />
-      <DefaultButton
-        text='Edit Tag'
-        onClick={() => setEditorOpen(true)}
-      />
-      {editorOpen
-      && (
-      <TagEditor
-        anchor={`#${targetElemId}`}
-        tag={tag}
-        closingFunction={() => setEditorOpen(false)}
-      />
-      )}
+      {setTagEdit
+        && (
+        <DefaultButton
+          text='Edit Tag'
+          onClick={() => setTagEdit(targetElemId)}
+        />
+        )}
     </div>
 
   );
@@ -47,8 +41,10 @@ export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
 TagWrapper.propTypes = {
   tag: (PropType.object as Requireable<ITag>).isRequired,
   card: (PropType.object as Requireable<ICard>),
+  setTagEdit: PropType.func,
 };
 
 TagWrapper.defaultProps = {
   card: undefined,
+  setTagEdit: undefined,
 };
