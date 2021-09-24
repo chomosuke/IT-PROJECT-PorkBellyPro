@@ -2,10 +2,13 @@
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
     "lib": [
-      "dom"
+      "dom",
+      "webworker"
     ],
-    "rootDir": "./src",
-    "jsx": "react-jsx"
+    "module": "es2020",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "rootDir": "./src"
   },
   "include": [
     "./src/**/*"

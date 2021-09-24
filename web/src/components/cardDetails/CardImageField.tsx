@@ -1,10 +1,12 @@
+import { PromiseWorker } from '@porkbellypro/crm-shared';
 import React from 'react';
-import Jimp from 'jimp/browser/lib/jimp';
 import {
-  DefaultButton, Image, ImageFit, Stack, mergeStyleSets,
+  DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import { ICard } from '../../controllers/Card';
+
+import type { Message, Result } from './processImage';
 
 export interface ICardImageFieldProps {
   card: ICard;
@@ -19,6 +21,10 @@ const getClassNames = () => mergeStyleSets({
     textAlign: 'center',
   },
 });
+
+const imgWorker = new PromiseWorker<Message, Result>(
+  new Worker(new URL('./processImage.ts', import.meta.url)),
+);
 
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
   { card, editing },
@@ -67,26 +73,22 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                 type='file'
                 name='myImage'
                 accept='image/*'
-                onChange={(e) => {
-                  setLoading(true);
-                  (async () => {
-                    if (e.target.files && e.target.files[0]) {
-                      const img = e.target.files[0];
-                      const jimg = await Jimp.read(Buffer.from(await img.arrayBuffer()));
-                      if (jimg.getWidth() / jimg.getHeight() > imgWidth / imgHeight) {
-                        jimg.resize(imgWidth, Jimp.AUTO);
-                      } else {
-                        jimg.resize(Jimp.AUTO, imgHeight);
-                      }
-                      const newImageUrl = await jimg.getBase64Async(Jimp.MIME_JPEG);
-                      card.update({ image: newImageUrl });
-                    }
+                onChange={async (e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const img = e.target.files[0];
+                    setLoading(true);
+                    const { url } = await imgWorker.post({
+                      img,
+                      imgHeight,
+                      imgWidth,
+                    });
+                    card.update({ image: url });
                     setLoading(false);
-                  })();
+                  }
                 }}
               />
             </Stack.Item>
-            {loading && <Stack.Item key='load'>loading</Stack.Item>}
+            {loading && <Spinner size={SpinnerSize.small} />}
           </Stack>
         </Stack.Item>
         )}
