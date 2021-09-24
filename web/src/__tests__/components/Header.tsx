@@ -83,21 +83,20 @@ describe('Header component unit tests', () => {
     className="ms-StackItem css-56"
   >
     <div
-      className="ms-Stack css-57"
+      className="ms-Stack searchBoxWrap-58"
     >
-      <div />
       <div
-        className="ms-TextField root-59"
+        className="ms-TextField ms-TextField--borderless root-60"
       >
         <div
           className="ms-TextField-wrapper"
         >
           <div
-            className="ms-TextField-fieldGroup fieldGroup-60"
+            className="ms-TextField-fieldGroup fieldGroup-61"
           >
             <input
               aria-invalid={false}
-              className="ms-TextField-field field-61"
+              className="ms-TextField-field field-62"
               id="TextField0"
               onBlur={[Function]}
               onChange={[Function]}
@@ -113,7 +112,7 @@ describe('Header component unit tests', () => {
     </div>
   </div>
   <button
-    className="ms-Button ms-Button--default root-70"
+    className="ms-Button ms-Button--default root-71"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -124,12 +123,12 @@ describe('Header component unit tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-71"
+      className="ms-Button-flexContainer flexContainer-72"
       data-automationid="splitbuttonprimary"
     >
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-icon icon-73"
+        className="ms-Icon root-37 ms-Button-icon icon-74"
         data-icon-name="Add"
         style={
           Object {
@@ -138,10 +137,10 @@ describe('Header component unit tests', () => {
         }
       />
       <span
-        className="ms-Button-textContainer textContainer-72"
+        className="ms-Button-textContainer textContainer-73"
       >
         <span
-          className="ms-Button-label label-74"
+          className="ms-Button-label label-75"
           id="id__3"
         >
           New card
@@ -153,7 +152,7 @@ describe('Header component unit tests', () => {
     aria-controls={null}
     aria-expanded={false}
     aria-haspopup={true}
-    className="ms-Button ms-Button--default ms-Button--hasMenu root-70"
+    className="ms-Button ms-Button--default ms-Button--hasMenu root-71"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -164,12 +163,12 @@ describe('Header component unit tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-71"
+      className="ms-Button-flexContainer flexContainer-72"
       data-automationid="splitbuttonprimary"
     >
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-icon icon-73"
+        className="ms-Icon root-37 ms-Button-icon icon-74"
         data-icon-name="Contact"
         style={
           Object {
@@ -178,10 +177,10 @@ describe('Header component unit tests', () => {
         }
       />
       <span
-        className="ms-Button-textContainer textContainer-72"
+        className="ms-Button-textContainer textContainer-73"
       >
         <span
-          className="ms-Button-label label-74"
+          className="ms-Button-label label-75"
           id="id__6"
         >
           username
@@ -189,7 +188,7 @@ describe('Header component unit tests', () => {
       </span>
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-menuIcon menuIcon-75"
+        className="ms-Icon root-37 ms-Button-menuIcon menuIcon-76"
         data-icon-name="ChevronDown"
         style={
           Object {
@@ -242,21 +241,20 @@ describe('Header component unit tests', () => {
     className="ms-StackItem css-56"
   >
     <div
-      className="ms-Stack css-57"
+      className="ms-Stack searchBoxWrap-58"
     >
-      <div />
       <div
-        className="ms-TextField root-59"
+        className="ms-TextField ms-TextField--borderless root-60"
       >
         <div
           className="ms-TextField-wrapper"
         >
           <div
-            className="ms-TextField-fieldGroup fieldGroup-60"
+            className="ms-TextField-fieldGroup fieldGroup-61"
           >
             <input
               aria-invalid={false}
-              className="ms-TextField-field field-61"
+              className="ms-TextField-field field-62"
               id="TextField9"
               onBlur={[Function]}
               onChange={[Function]}
@@ -272,7 +270,7 @@ describe('Header component unit tests', () => {
     </div>
   </div>
   <button
-    className="ms-Button ms-Button--default root-70"
+    className="ms-Button ms-Button--default root-71"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -283,12 +281,12 @@ describe('Header component unit tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-71"
+      className="ms-Button-flexContainer flexContainer-72"
       data-automationid="splitbuttonprimary"
     >
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-icon icon-73"
+        className="ms-Icon root-37 ms-Button-icon icon-74"
         data-icon-name="Add"
         style={
           Object {
@@ -297,10 +295,10 @@ describe('Header component unit tests', () => {
         }
       />
       <span
-        className="ms-Button-textContainer textContainer-72"
+        className="ms-Button-textContainer textContainer-73"
       >
         <span
-          className="ms-Button-label label-74"
+          className="ms-Button-label label-75"
           id="id__12"
         >
           New card
@@ -312,7 +310,7 @@ describe('Header component unit tests', () => {
     aria-controls={null}
     aria-expanded={false}
     aria-haspopup={true}
-    className="ms-Button ms-Button--default ms-Button--hasMenu root-70"
+    className="ms-Button ms-Button--default ms-Button--hasMenu root-71"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -323,12 +321,12 @@ describe('Header component unit tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-71"
+      className="ms-Button-flexContainer flexContainer-72"
       data-automationid="splitbuttonprimary"
     >
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-icon icon-73"
+        className="ms-Icon root-37 ms-Button-icon icon-74"
         data-icon-name="Contact"
         style={
           Object {
@@ -337,10 +335,10 @@ describe('Header component unit tests', () => {
         }
       />
       <span
-        className="ms-Button-textContainer textContainer-72"
+        className="ms-Button-textContainer textContainer-73"
       >
         <span
-          className="ms-Button-label label-74"
+          className="ms-Button-label label-75"
           id="id__15"
         >
           username
@@ -348,7 +346,7 @@ describe('Header component unit tests', () => {
       </span>
       <i
         aria-hidden={true}
-        className="ms-Icon root-37 ms-Button-menuIcon menuIcon-75"
+        className="ms-Icon root-37 ms-Button-menuIcon menuIcon-76"
         data-icon-name="ChevronDown"
         style={
           Object {
