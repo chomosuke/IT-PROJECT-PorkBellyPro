@@ -1,8 +1,8 @@
 What is the expected behavior of auto scroll?
 
-1. Once a card is clicked, it's locked, meaning it's y-position will not change. [done]
+1. Once a card is clicked, it's locked, meaning it's y-position will not change.
 
-2. Any form of scrolling on the leftside will unlock any locked card.
+2. User scrolling on the leftside will unlock any locked card.
 
 3. deselecting the card also unlock the card (though deselecting shouldn't change a locked card position).
 

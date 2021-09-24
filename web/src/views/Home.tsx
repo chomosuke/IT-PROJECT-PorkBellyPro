@@ -43,7 +43,6 @@ const getClassNames = (expand: boolean, detail: boolean) => {
   });
 };
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
   const [expand, setExpand] = useState(false);
 
@@ -54,8 +53,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
 
   const cardSectionRef = createRef<HTMLDivElement>();
 
-  console.log('rerendered');
-
   const findCardDiv = (cardId: ObjectId) => {
     const cardDiv = cardRefs.find((cardRef) => cardId === cardRef.id)?.ref?.current;
     if (cardDiv == null) {
@@ -64,6 +61,33 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     return cardDiv;
   };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
+
+  /**
+   * The problem is that onScroll sometimes gets triggered upon resize
+   * There's no good way to avoid this.
+   * The solution is to recongize that when the user scroll, there'll be rapid onScroll without
+   * any rerender.
+   * Another thing to recognize is that when the viewport resize, Home will be rerender upon
+   * every resize.
+   * Hence if we suppress the first onScroll we should beable to suppress, not only all the random
+   * onScroll on resize, but also all the scrollBy, while still capturing user's scroll.
+   *
+   * Now, that should've been enough, but there's this senario where:
+   * User select the last card.
+   * The user makes the window wider and the number of rows descreases.
+   * An onScroll is trigger by the browser as the scroll now exceed the max value (I'm guessing).
+   * A second onScroll is called by my effect to scroll the lockedCard into the correct place.
+   *
+   * Hence I ignore the first 2 onScroll after render
+   */
+  let numOnScroll = 0;
+  const onCardScroll = () => {
+    numOnScroll += 1;
+    if (numOnScroll < 3) {
+      return;
+    }
+    setLockedCard(null);
+  };
 
   // trigger rerender when viewport changes
   useViewportSize();
@@ -78,11 +102,11 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
       if (getDivTop(cardDiv) !== lockedCard.yPos && cardSectionDiv != null) {
         cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
       }
+    }
 
-      if (unlockOnNextEffect) {
-        setLockedCard(null);
-        setUnlockOnNextEffect(false);
-      }
+    if (unlockOnNextEffect) {
+      setLockedCard(null);
+      setUnlockOnNextEffect(false);
     }
   });
 
@@ -139,7 +163,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     }}
     >
       <div className={root}>
-        <div className={cardSection} ref={cardSectionRef}>
+        <div className={cardSection} ref={cardSectionRef} onScroll={onCardScroll}>
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => {
               const ref = createRef<HTMLDivElement>();
