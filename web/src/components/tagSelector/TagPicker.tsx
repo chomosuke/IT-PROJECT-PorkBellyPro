@@ -6,10 +6,10 @@ import {
   Callout, DefaultButton, Stack, TextField,
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
-import { ICard } from '../controllers/Card';
-import { useApp } from '../AppContext';
-import { Tag } from './Tag';
-import { ITag, ITagProperties } from '../controllers/Tag';
+import { ICard } from '../../controllers/Card';
+import { useApp } from '../../AppContext';
+import { Tag } from '../Tag';
+import { ITag, ITagProperties } from '../../controllers/Tag';
 import { TagWrapper } from './TagWrapper';
 import { ITagEditorProps, TagEditor } from './TagEditor';
 

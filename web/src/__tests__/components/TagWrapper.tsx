@@ -1,6 +1,6 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { TagWrapper } from '../../components/TagWrapper';
+import { TagWrapper } from '../../components/tagSelector/TagWrapper';
 import { ICard } from '../../controllers/Card';
 import { ITag } from '../../controllers/Tag';
 

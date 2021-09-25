@@ -1,7 +1,7 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
 import { AppProvider, IAppContext } from '../../AppContext';
-import { TagPicker } from '../../components/TagPicker';
+import { TagPicker } from '../../components/tagSelector/TagPicker';
 import { ICard } from '../../controllers/Card';
 import { ITag } from '../../controllers/Tag';
 

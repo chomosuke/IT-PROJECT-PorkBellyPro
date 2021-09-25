@@ -8,7 +8,7 @@ import { CardExtraField } from './CardExtraField';
 import { CardImageField } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
-import { TagPicker } from '../TagPicker';
+import { TagPicker } from '../tagSelector/TagPicker';
 
 export interface ICardDetailsProps {
   card: ICard;

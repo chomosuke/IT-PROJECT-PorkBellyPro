@@ -3,7 +3,7 @@ import {
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
-import { ITag, ITagProperties } from '../controllers/Tag';
+import { ITag, ITagProperties } from '../../controllers/Tag';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
