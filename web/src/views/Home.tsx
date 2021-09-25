@@ -36,6 +36,9 @@ const getClassNames = (expand: boolean, detail: boolean) => {
       height: '100%',
       overflow: 'auto',
     },
+    tagSection: {
+      display: 'flex',
+    },
     tagList: {
       // flex: '1',
       display: 'flex',
@@ -52,7 +55,7 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   const [expand, setExpand] = useState(false);
   const {
-    root, cardSection, detailSection, tagList,
+    root, cardSection, detailSection, tagList, tagSection,
   } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery, tagQuery } = useApp();
   if (user == null) throw new Error();
@@ -90,22 +93,24 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     <HomeProvider value={{ expandCardDetail: setExpand, cardDetailExpanded: expand }}>
       <div className={root}>
         <div className={cardSection}>
-          <div className={tagList} ref={tagScrollRef}>
-            {tags.map((tag) => (
-              <TagButton
-                key={tag.id}
-                tag={tag}
-                onClick={() => {
-                  if (!tagQuery.includes(tag)) {
-                    context.update({ tagQuery: tagQuery.concat(tag) });
-                  }
-                }}
-              />
-            ))}
+          <div className={tagSection}>
+            <button type='button' onClick={() => scroll(-200)}> scroll left </button>
+            <div className={tagList} ref={tagScrollRef}>
+              {tags.map((tag) => (
+                <TagButton
+                  key={tag.id}
+                  tag={tag}
+                  onClick={() => {
+                    if (!tagQuery.includes(tag)) {
+                      context.update({ tagQuery: tagQuery.concat(tag) });
+                    }
+                  }}
+                />
+              ))}
+            </div>
+            <button type='button' onClick={() => scroll(200)}> scroll right </button>
           </div>
-          <button type='button' onClick={() => console.log(tagQuery.map((tag) => tag.id))}>check tag</button>
-          <button type='button' onClick={() => scroll(-200)}> scroll left </button>
-          <button type='button' onClick={() => scroll(200)}> scroll right </button>
+
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
