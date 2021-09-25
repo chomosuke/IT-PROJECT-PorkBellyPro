@@ -1,4 +1,6 @@
-import { Stack, TextField, mergeStyleSets } from '@fluentui/react';
+import {
+  DefaultButton, Stack, TextField, mergeStyleSets,
+} from '@fluentui/react';
 import React from 'react';
 import { useApp } from '../AppContext';
 import { ITag } from '../controllers/Tag';
@@ -8,10 +10,33 @@ const getClassNames = () => mergeStyleSets({
   searchBoxWrap: {
     border: 'solid',
   },
+  clearButton: {
+    border: 'none',
+  },
 });
 
 export const SearchBox: React.VoidFunctionComponent = () => {
   const context = useApp();
+
+  const { searchBoxWrap, clearButton } = getClassNames();
+
+  const clearTagButton = () => {
+    if (context.tagQuery.length === 0) {
+      return (<></>);
+    }
+
+    return (
+      <DefaultButton
+        className={clearButton}
+        text='clear tags'
+        onClick={() => {
+          context.update({
+            tagQuery: [],
+          });
+        }}
+      />
+    );
+  };
 
   const handleChange = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -26,10 +51,9 @@ export const SearchBox: React.VoidFunctionComponent = () => {
     context.tagQuery.filter((elem) => elem !== tag)
   );
 
-  const { searchBoxWrap } = getClassNames();
-
   return (
     <Stack horizontal className={searchBoxWrap}>
+      {clearTagButton()}
       {context.tagQuery.map((tag) => (
         <Tag
           key={tag.id}
