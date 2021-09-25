@@ -5,7 +5,7 @@ import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
 import { CardDetailActions } from './CardDetailActions';
 import { CardExtraField } from './CardExtraField';
-import { CardImageField } from './CardImageField';
+import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
 
@@ -29,6 +29,8 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const app = useApp();
 
   const [isEditing, setIsEditing] = React.useState(editing);
+  // this state is here because cardDetailAction needs to overwrite it.
+  const [imgLoading, setImgLoading] = React.useState(false);
 
   const {
     name, phone, email, jobTitle, company, fields,
@@ -60,6 +62,11 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
 
   const { root, content } = getClassNames();
 
+  const cancelImgLoading = () => {
+    cancelLoading();
+    setImgLoading(false);
+  };
+
   // no sort, order will be preserved on the server presumably
   return (
     <div className={root}>
@@ -67,7 +74,12 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
       <div className={content}>
         <Stack>
           <Stack.Item key='image' align='stretch'>
-            <CardImageField card={card} editing={isEditing} />
+            <CardImageField
+              card={card}
+              editing={isEditing}
+              loading={imgLoading}
+              setLoading={setImgLoading}
+            />
           </Stack.Item>
           {mFields.map((field) => (
             <Stack.Item key={field.key} align='stretch'>
@@ -96,7 +108,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         </Stack>
       </div>
       <CardDetailActions
-        card={card}
         editing={isEditing}
         onBeginEdit={() => {
           setIsEditing(true);
@@ -104,6 +115,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         onSave={() => {
           card.commit();
           setIsEditing(false);
+          cancelImgLoading();
         }}
         onCancel={() => {
           if (card.id === undefined) {
@@ -112,6 +124,11 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             app.showCardDetail(card);
             setIsEditing(false);
           }
+          cancelImgLoading();
+        }}
+        onDelete={() => {
+          card.delete();
+          cancelImgLoading();
         }}
       />
     </div>

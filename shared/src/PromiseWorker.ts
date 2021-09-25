@@ -7,12 +7,16 @@ interface PromiseCallbacks<Result> {
 export class PromiseWorker<Message, Result> {
   private worker: Worker;
 
-  private callbacks: (PromiseCallbacks<Result> | undefined)[] = [];
+  private readonly workerFactory: () => Worker;
 
-  constructor(worker: Worker) {
-    this.worker = worker;
+  private callbacks: (PromiseCallbacks<Result> | undefined)[];
+
+  constructor(workerFactory: () => Worker) {
+    this.workerFactory = workerFactory;
+    this.worker = workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
     this.worker.addEventListener('error', this.onError.bind(this));
+    this.callbacks = [];
   }
 
   post(message: Message, options?: PostMessageOptions): Promise<Result> {
@@ -20,6 +24,14 @@ export class PromiseWorker<Message, Result> {
       this.callbacks = this.callbacks.concat({ resolve, reject });
       this.worker.postMessage(message, options);
     });
+  }
+
+  restart(): void {
+    this.worker.terminate();
+    this.worker = this.workerFactory();
+    this.worker.addEventListener('message', this.onMessage.bind(this));
+    this.worker.addEventListener('error', this.onError.bind(this));
+    this.callbacks = [];
   }
 
   private onMessage = (ev: MessageEvent<Result>) => {

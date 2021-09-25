@@ -3,7 +3,9 @@ import React from 'react';
 import {
   DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
-import { Requireable, bool, object } from 'prop-types';
+import {
+  Requireable, bool, func, object,
+} from 'prop-types';
 import { ICard } from '../../controllers/Card';
 
 import type { Message, Result } from './processImage';
@@ -11,6 +13,8 @@ import type { Message, Result } from './processImage';
 export interface ICardImageFieldProps {
   card: ICard;
   editing: boolean;
+  loading: boolean;
+  setLoading(value: boolean): void;
 }
 
 const [imgWidth, imgHeight] = [500, 250];
@@ -23,15 +27,19 @@ const getClassNames = () => mergeStyleSets({
 });
 
 const imgWorker = new PromiseWorker<Message, Result>(
-  new Worker(new URL('./processImage.ts', import.meta.url)),
+  () => new Worker(new URL('./processImage.ts', import.meta.url)),
 );
 
+export const cancelLoading = (): void => {
+  imgWorker.restart();
+};
+
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
-  { card, editing },
+  {
+    card, editing, loading, setLoading,
+  },
 ) => {
   const { image } = card;
-
-  const [loading, setLoading] = React.useState(false);
 
   const { name } = getClassNames();
 
@@ -99,4 +107,6 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
 CardImageField.propTypes = {
   card: (object as Requireable<ICard>).isRequired,
   editing: bool.isRequired,
+  loading: bool.isRequired,
+  setLoading: func.isRequired,
 };
