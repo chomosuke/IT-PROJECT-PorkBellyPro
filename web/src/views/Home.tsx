@@ -44,22 +44,20 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 };
 
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
-  /**
-   * autoScroll start
-   */
-
   // states
+  const [expand, setExpand] = useState(false);
   const [lockedCard, setLockedCard] = useState< { id: ObjectId; yPos: number } | null>(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
   // start at the top. 0 is top, 1 is bottom
   const [scrollPortion, setScrollPortion] = useState(0);
 
+  /**
+   * autoScroll start
+   */
+
   // refs
   const cardRefs: { id?: ObjectId; ref: RefObject<HTMLDivElement> }[] = [];
   const cardSectionRef = createRef<HTMLDivElement>();
-
-  // trigger rerender when viewport changes
-  useViewportSize();
 
   // helpers
   const cardDivExist = (cardId: ObjectId | undefined) => cardRefs.find(
@@ -74,8 +72,11 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
-  // autoScroll & unlock after close
-  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+  // trigger rerender when viewport changes
+  const viewPortSize = useViewportSize();
+
+  // autoScroll
+  useEffect(() => {
     // if card is locked, lock its scroll
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
@@ -94,12 +95,21 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
         );
       }
     }
+  },
+  // the change of below values means a change in cardGrid size
+  [ // eslint-disable-line react-hooks/exhaustive-deps
+    detail,
+    expand,
+    viewPortSize,
+  ]);
 
+  // unlock after close
+  useEffect(() => {
     if (unlockOnNextEffect) {
       setLockedCard(null);
       setUnlockOnNextEffect(false);
     }
-  });
+  }, [unlockOnNextEffect]);
 
   // card locking and unlocking
   const onShowCardDetail = (card: ICard | null) => {
@@ -165,8 +175,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   /**
    * autoScroll end
    */
-
-  const [expand, setExpand] = useState(false);
 
   const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery } = useApp();
