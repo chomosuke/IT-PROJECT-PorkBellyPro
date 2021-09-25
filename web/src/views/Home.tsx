@@ -62,7 +62,10 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   useViewportSize();
 
   // helpers
-  const findCardDiv = (cardId: ObjectId) => {
+  const cardDivExist = (cardId: ObjectId | undefined) => cardRefs.find(
+    (cardRef) => cardId === cardRef.id,
+  )?.ref?.current != null;
+  const getCardDiv = (cardId: ObjectId) => {
     const cardDiv = cardRefs.find((cardRef) => cardId === cardRef.id)?.ref?.current;
     if (cardDiv == null) {
       throw new Error('card ref not found');
@@ -76,13 +79,16 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     // if card is locked, lock its scroll
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
-      if (lockedCard != null) {
-        const cardDiv = findCardDiv(lockedCard.id);
+      if (lockedCard != null && cardDivExist(lockedCard.id)) {
+        const cardDiv = getCardDiv(lockedCard.id);
         if (getDivTop(cardDiv) !== lockedCard.yPos) {
           cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
         }
       } else {
-      // maintain scrollPortion
+        /*
+         * no locked card or locked card already deleted
+         * maintain scrollPortion
+         */
         cardSectionDiv.scrollTop = scrollPortion * (
           cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
         );
@@ -103,7 +109,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
       setUnlockOnNextEffect(true);
     } else {
       // find card ref
-      const cardDiv = findCardDiv(card.id);
+      const cardDiv = getCardDiv(card.id);
 
       /*
        * calculate the YPos now because locked card can only happen after some renders.
