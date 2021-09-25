@@ -89,7 +89,6 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               {/* Tags available to use are listed here */}
               {user.user?.tags
                 .filter((t) => t.label.toUpperCase().startsWith(tagSearchString.toUpperCase()))
-                .filter((t) => !targetCard?.tags.includes(t))
                 .map((t) => (
                   <Stack.Item key={t.id}>
                     <TagWrapper
