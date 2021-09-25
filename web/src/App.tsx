@@ -324,6 +324,10 @@ function implementTag(
       if (res.ok) {
         setUser({
           ...user,
+          cards: user.cards.map((existing) => ({
+            ...existing,
+            tags: existing.tags.filter((existingTag) => existingTag !== tag.id),
+          })),
           tags: user.tags.filter((existing) => (existing.id !== tag.id)),
         });
       }
