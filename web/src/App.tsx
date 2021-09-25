@@ -284,6 +284,7 @@ function implementCardOverride(
 
 function implementTag(
   tag: ITagData,
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   user: IUserStatic,
   setUser: SetUserCallback,
 ): ITag {
@@ -327,6 +328,16 @@ function implementTag(
       });
 
       if (res.ok) {
+        setDetail((detail) => (detail == null
+          ? null
+          : {
+            ...detail,
+            overrides: {
+              ...detail.overrides,
+              tags: detail.overrides.tags
+                ?.filter((overrideTag) => overrideTag.id !== tag.id),
+            },
+          }));
         setUser({
           ...user,
           cards: user.cards.map((existing) => ({
@@ -344,6 +355,7 @@ function implementTag(
 }
 
 function implementUser(
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   userState: IUserStatic | null | undefined,
   setUser: SetUserCallback,
 ): [user: IUser, tags: readonly ITag[]] | null {
@@ -353,7 +365,7 @@ function implementUser(
     username, settings, cards, tags,
   } = userState;
 
-  const tagsImpl = tags.map((tag) => implementTag(tag, userState, setUser));
+  const tagsImpl = tags.map((tag) => implementTag(tag, setDetail, userState, setUser));
 
   const user: IUser = {
     username,
@@ -428,7 +440,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
     updateMe();
   }
 
-  const userImpl = implementUser(userState, setUser);
+  const userImpl = implementUser(setDetail, userState, setUser);
 
   const user = userImpl == null ? null : userImpl[0];
 
