@@ -113,10 +113,15 @@ function notImplemented() {
   return new Error('Not implemented');
 }
 
+type SetUserCallback = (
+  value: SetStateAction<IUserStatic | null | undefined>,
+  clearOverrides?: boolean,
+) => void;
+
 function implementDelete(
   card: ICardData,
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard['delete'] {
   return (async () => {
     if (card.id == null) throw new Error('card.id is nullish');
@@ -144,7 +149,7 @@ function implementCard(
   card: ICardData,
   tags: readonly ITag[],
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard {
   const cardMethods: CardMethods = {
     update() { throw notImplemented(); },
@@ -163,7 +168,7 @@ function implementCardOverride(
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   tags: readonly ITag[],
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard {
   const { base, overrides: { image, tags: tagsOverride, ...overrides } } = data;
   const cardData: ICardData = {
@@ -280,7 +285,7 @@ function implementCardOverride(
 function implementTag(
   tag: ITagData,
   user: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ITag {
   return {
     ...tag,
@@ -329,7 +334,8 @@ function implementTag(
             tags: existing.tags.filter((existingTag) => existingTag !== tag.id),
           })),
           tags: user.tags.filter((existing) => (existing.id !== tag.id)),
-        });
+        },
+        false);
       }
 
       return new ResponseStatus(res);
@@ -339,7 +345,7 @@ function implementTag(
 
 function implementUser(
   userState: IUserStatic | null | undefined,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): [user: IUser, tags: readonly ITag[]] | null {
   if (userState == null) return null;
 
@@ -371,21 +377,38 @@ const AppComponent: React.VoidFunctionComponent = () => {
   const [tagQuery, setTagQuery] = useState<Pick<ITag, 'id'>[]>([]);
   const history = useHistory();
 
-  const setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>> = (value) => {
+  const setUser: SetUserCallback = (value, clearOverrides) => {
     let newState: IUserStatic | null | undefined;
     if (typeof value === 'function') newState = value(userState);
     else newState = value;
+
     setUserState(newState);
+
     let newBase: ICardData | undefined;
     if (detail?.base?.id != null && newState != null) {
       newBase = newState.cards.find((card) => card.id === detail?.base?.id);
     }
-    setDetail(newBase == null
-      ? null
-      : {
+
+    const shouldClearOverrides = clearOverrides ?? true;
+
+    if (newBase == null) {
+      setDetail(null);
+    } else {
+      const overrides: ICardOverrideData['overrides'] = {};
+      if (!shouldClearOverrides) {
+        Object.assign(overrides, detail?.overrides);
+        if (detail?.overrides?.tags != null) {
+          overrides.tags = detail.overrides.tags.filter(
+            (tag) => newState?.tags.find((newTag) => newTag.id === tag.id) != null,
+          );
+        }
+      }
+
+      setDetail({
         base: newBase,
-        overrides: {},
+        overrides,
       });
+    }
   };
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
@@ -466,7 +489,8 @@ const AppComponent: React.VoidFunctionComponent = () => {
         setUser({
           ...userState,
           tags: [...userState.tags, newTag],
-        });
+        },
+        false);
       }
 
       return new ResponseStatus(res);
