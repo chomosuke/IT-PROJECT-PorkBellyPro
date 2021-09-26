@@ -24,8 +24,8 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
   targetCard, editing,
 }) => {
   const user = useApp();
-  const [pickerActive, setPickerActive] = useState<boolean>(false);
-  const [tagSearchString, setTagSearchString] = useState<string>('');
+  const [pickerActive, setPickerActive] = useState(false);
+  const [tagSearchString, setTagSearchString] = useState('');
   const [focusedTag, setFocusedTag] = useState<ITagAnchor>();
   const pickerTargetId = useId('picker-target');
 
@@ -51,19 +51,15 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
       <Stack.Item grow key='tags'>
         {/* could style to fit measurements */}
         <Stack horizontal>
-          {targetCard?.tags.map((t) => {
-            if (editing) {
-              return (
-                <Tag
-                  tag={t}
-                  key={t.id}
-                  onRemove={() => removeTag(t)}
-                />
-              );
-            }
-
-            return <Tag tag={t} key={t.id} />;
-          })}
+          {targetCard?.tags.map((t) => ((editing)
+            ? (
+              <Tag
+                tag={t}
+                key={t.id}
+                onRemove={() => removeTag(t)}
+              />
+            )
+            : <Tag tag={t} key={t.id} />))}
         </Stack>
 
       </Stack.Item>
@@ -105,12 +101,12 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
         : null}
       {focusedTag
         && (
-        <TagEditor
-          anchor={`#${focusedTag.anchor}`}
-          tag={focusedTag.tag}
-          key='TagEditor'
-          closingFunction={() => setFocusedTag(undefined)}
-        />
+          <TagEditor
+            anchor={`#${focusedTag.anchor}`}
+            tag={focusedTag.tag}
+            key='TagEditor'
+            closingFunction={() => setFocusedTag(undefined)}
+          />
         )}
     </Stack>
   );

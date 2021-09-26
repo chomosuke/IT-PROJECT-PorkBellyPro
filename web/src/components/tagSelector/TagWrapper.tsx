@@ -34,7 +34,6 @@ export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
         />
         )}
     </div>
-
   );
 };
 

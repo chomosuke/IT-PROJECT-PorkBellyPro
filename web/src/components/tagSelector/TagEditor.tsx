@@ -1,7 +1,7 @@
 import {
   Callout, DefaultButton, ICalloutProps, Stack, TextField, mergeStyles,
 } from '@fluentui/react';
-import PropTypes, { Requireable } from 'prop-types';
+import PropTypes, { Requireable, Validator } from 'prop-types';
 import React, { useState } from 'react';
 import { ITag, ITagProperties } from '../../controllers/Tag';
 
@@ -12,12 +12,12 @@ export interface ITagEditorProps {
   closingFunction?: () => void;
 }
 
-const getSwatchClassNames = (selectedColour: string) => {
+const getSwatchClassNames = (selectedColor: string) => {
   const height = 24;
   const borderRadius = height / 2;
   const width = 24;
   // Extracted from Figma
-  const colours = [
+  const colors = [
     '#BF7829',
     '#127976',
     '#D61317',
@@ -32,15 +32,15 @@ const getSwatchClassNames = (selectedColour: string) => {
     '#FBE900',
   ];
 
-  return colours.map((colour) => [colour,
+  return colors.map((color) => [color,
     mergeStyles([{
       height,
       width,
       borderRadius,
-      backgroundColor: colour,
+      backgroundColor: color,
     },
-    // when selectedColour matches then we have feedback on what colour is selected
-    (colour === selectedColour) && {
+    // when selectedColor matches then we have feedback on what color is selected
+    (color === selectedColor) && {
       border: '2px solid black',
       boxSizing: 'border-box',
     }])]);
@@ -93,14 +93,21 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
   );
 };
 
+function requireable<T>(validator: Validator<T>) {
+  const asRequireable = validator as unknown as Requireable<T>;
+  const isRequired = asRequireable.isRequired ?? validator;
+  return { isRequired };
+}
+function ensureNotNull<T>(value: T | null | undefined) {
+  if (value == null) throw new Error('value is nullish');
+  return value;
+}
 TagEditor.propTypes = {
   tag: (PropTypes.object as Requireable<ITag>).isRequired,
-  anchor: (PropTypes.oneOfType([
-    PropTypes.object as Requireable<ICalloutProps['target']>, PropTypes.string,
-  ])).isRequired,
+  anchor: requireable(ensureNotNull(Callout.propTypes?.target)).isRequired,
   closingFunction: PropTypes.func,
 };
 
 TagEditor.defaultProps = {
-  closingFunction: () => { },
+  closingFunction: () => {},
 };
