@@ -22,7 +22,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
 
   const clearTagButton = () => {
     if (context.tagQuery.length === 0) {
-      return (<></>);
+      return (null);
     }
 
     return (
@@ -47,7 +47,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
     });
   };
 
-  const removeTagFromQuery = (tag:ITag) => (
+  const removeTagFromQuery = (tag: ITag) => (
     context.tagQuery.filter((elem) => elem !== tag)
   );
 
