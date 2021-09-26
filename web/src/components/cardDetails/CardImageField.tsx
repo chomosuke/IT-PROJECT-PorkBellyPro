@@ -1,10 +1,10 @@
-import { PromiseWorker } from '@porkbellypro/crm-shared';
+import { PromiseWorker, WorkerTerminatedError } from '@porkbellypro/crm-shared';
 import React from 'react';
 import {
   DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
 import {
-  Requireable, bool, func, object,
+  Requireable, bool, object,
 } from 'prop-types';
 import { ICard } from '../../controllers/Card';
 
@@ -13,8 +13,6 @@ import type { Message, Result } from './processImage';
 export interface ICardImageFieldProps {
   card: ICard;
   editing: boolean;
-  loading: boolean;
-  setLoading(value: boolean): void;
 }
 
 const [imgWidth, imgHeight] = [500, 250];
@@ -36,10 +34,12 @@ export const cancelLoading = (): void => {
 
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
   {
-    card, editing, loading, setLoading,
+    card, editing,
   },
 ) => {
   const { image } = card;
+
+  const [loading, setLoading] = React.useState(false);
 
   const { name } = getClassNames();
 
@@ -85,11 +85,20 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                   if (e.target.files && e.target.files[0]) {
                     const img = e.target.files[0];
                     setLoading(true);
-                    const { url } = await imgWorker.post({
-                      img,
-                      imgHeight,
-                      imgWidth,
-                    });
+                    let url;
+                    try {
+                      url = (await imgWorker.post({
+                        img,
+                        imgHeight,
+                        imgWidth,
+                      })).url;
+                    } catch (err) {
+                      if (err instanceof WorkerTerminatedError) {
+                        setLoading(false);
+                        return;
+                      }
+                      throw err;
+                    }
                     card.update({ image: url });
                     setLoading(false);
                   }
@@ -107,6 +116,4 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
 CardImageField.propTypes = {
   card: (object as Requireable<ICard>).isRequired,
   editing: bool.isRequired,
-  loading: bool.isRequired,
-  setLoading: func.isRequired,
 };

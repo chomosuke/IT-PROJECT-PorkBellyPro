@@ -29,8 +29,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const app = useApp();
 
   const [isEditing, setIsEditing] = React.useState(editing);
-  // this state is here because cardDetailAction needs to overwrite it.
-  const [imgLoading, setImgLoading] = React.useState(false);
 
   const {
     name, phone, email, jobTitle, company, fields,
@@ -62,11 +60,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
 
   const { root, content } = getClassNames();
 
-  const cancelImgLoading = () => {
-    cancelLoading();
-    setImgLoading(false);
-  };
-
   // no sort, order will be preserved on the server presumably
   return (
     <div className={root}>
@@ -77,8 +70,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             <CardImageField
               card={card}
               editing={isEditing}
-              loading={imgLoading}
-              setLoading={setImgLoading}
             />
           </Stack.Item>
           {mFields.map((field) => (
@@ -115,7 +106,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         onSave={() => {
           card.commit();
           setIsEditing(false);
-          cancelImgLoading();
+          cancelLoading();
         }}
         onCancel={() => {
           if (card.id === undefined) {
@@ -124,11 +115,11 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             app.showCardDetail(card);
             setIsEditing(false);
           }
-          cancelImgLoading();
+          cancelLoading();
         }}
         onDelete={() => {
           card.delete();
-          cancelImgLoading();
+          cancelLoading();
         }}
       />
     </div>

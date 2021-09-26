@@ -1,3 +1,5 @@
+import { WorkerTerminatedError } from './WorkerTerminatedError';
+
 interface PromiseCallbacks<Result> {
   resolve: (value: Result | PromiseLike<Result>) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -9,14 +11,13 @@ export class PromiseWorker<Message, Result> {
 
   private readonly workerFactory: () => Worker;
 
-  private callbacks: (PromiseCallbacks<Result> | undefined)[];
+  private callbacks: (PromiseCallbacks<Result> | undefined)[] = [];
 
   constructor(workerFactory: () => Worker) {
     this.workerFactory = workerFactory;
     this.worker = workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
     this.worker.addEventListener('error', this.onError.bind(this));
-    this.callbacks = [];
   }
 
   post(message: Message, options?: PostMessageOptions): Promise<Result> {
@@ -31,6 +32,7 @@ export class PromiseWorker<Message, Result> {
     this.worker = this.workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
     this.worker.addEventListener('error', this.onError.bind(this));
+    this.callbacks.forEach((callback) => callback?.reject(new WorkerTerminatedError()));
     this.callbacks = [];
   }
 
