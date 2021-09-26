@@ -56,6 +56,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
 
   const close = () => {
     app.showCardDetail(null);
+    cancelLoading(true);
   };
 
   const { root, content } = getClassNames();
@@ -106,7 +107,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         onSave={() => {
           card.commit();
           setIsEditing(false);
-          cancelLoading();
+          cancelLoading(false);
         }}
         onCancel={() => {
           if (card.id === undefined) {
@@ -114,12 +115,12 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           } else {
             app.showCardDetail(card);
             setIsEditing(false);
+            cancelLoading(false);
           }
-          cancelLoading();
         }}
         onDelete={() => {
           card.delete();
-          cancelLoading();
+          cancelLoading(false);
         }}
       />
     </div>

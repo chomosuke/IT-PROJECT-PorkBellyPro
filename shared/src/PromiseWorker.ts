@@ -27,12 +27,12 @@ export class PromiseWorker<Message, Result> {
     });
   }
 
-  restart(): void {
+  restart(reason?: any): void { // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types, max-len
     this.worker.terminate();
     this.worker = this.workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
     this.worker.addEventListener('error', this.onError.bind(this));
-    this.callbacks.forEach((callback) => callback?.reject(new WorkerTerminatedError()));
+    this.callbacks.forEach((callback) => callback?.reject(new WorkerTerminatedError(reason)));
     this.callbacks = [];
   }
 
@@ -46,10 +46,10 @@ export class PromiseWorker<Message, Result> {
   };
 
   private onError = (ev: ErrorEvent) => {
-    const [callbacks, ...rest] = this.callbacks;
+    const [callback, ...rest] = this.callbacks;
     this.callbacks = rest;
-    if (callbacks != null) {
-      const { reject } = callbacks;
+    if (callback != null) {
+      const { reject } = callback;
       reject(ev.error);
     }
   };

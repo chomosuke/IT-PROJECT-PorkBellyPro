@@ -28,8 +28,8 @@ const imgWorker = new PromiseWorker<Message, Result>(
   () => new Worker(new URL('./processImage.ts', import.meta.url)),
 );
 
-export const cancelLoading = (): void => {
-  imgWorker.restart();
+export const cancelLoading = (detailUnmounted: boolean): void => {
+  imgWorker.restart({ detailUnmounted });
 };
 
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
@@ -94,7 +94,9 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                       })).url;
                     } catch (err) {
                       if (err instanceof WorkerTerminatedError) {
-                        setLoading(false);
+                        if (!err.reason.detailUnmounted) {
+                          setLoading(false);
+                        }
                         return;
                       }
                       throw err;
