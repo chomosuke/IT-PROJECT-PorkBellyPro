@@ -7,6 +7,7 @@ import {
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
 import { useApp } from '../AppContext';
+import { cancelLoading } from './cardDetails/CardImageField';
 
 export interface ICardProps {
   card: ICard;
@@ -56,6 +57,9 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
 
   const doShowCardDetail = () => {
     showCardDetail(card);
+
+    // incase image was still loading when user clicked on another card
+    cancelLoading(true);
   };
 
   return (
