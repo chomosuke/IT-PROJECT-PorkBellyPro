@@ -27,7 +27,10 @@ export class PromiseWorker<Message, Result> {
     });
   }
 
-  restart(reason?: any): void { // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types, max-len
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+  restart(reason?: any): void {
+    /* eslint-enable */
     this.worker.terminate();
     this.worker = this.workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
