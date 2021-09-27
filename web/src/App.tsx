@@ -1,5 +1,7 @@
 import { mergeStyleSets } from '@fluentui/react';
-import { ensureArray, ensureNotNull, ensureObject, ensureType } from '@porkbellypro/crm-shared';
+import {
+  ensureArray, ensureNotNull, ensureObject, ensureType,
+} from '@porkbellypro/crm-shared';
 import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -120,7 +122,6 @@ type SetUserCallback = (
 
 function implementDelete(
   card: ICardData,
-  userState: IUserStatic,
   setUser: SetUserCallback,
 ): ICard['delete'] {
   return (async () => {
@@ -136,9 +137,12 @@ function implementDelete(
       },
     });
     if (res.ok) {
-      setUser({
-        ...userState,
-        cards: userState.cards.filter((that) => that !== card),
+      setUser((userStateNullable) => {
+        const userState = ensureNotNull(userStateNullable);
+        return {
+          ...userState,
+          cards: userState.cards.filter((that) => that !== card),
+        };
       });
     }
     return new ResponseStatus(res);
@@ -148,13 +152,12 @@ function implementDelete(
 function implementCard(
   card: ICardData,
   tags: readonly ITag[],
-  userState: IUserStatic,
   setUser: SetUserCallback,
 ): ICard {
   const cardMethods: CardMethods = {
     update() { throw notImplemented(); },
     commit() { return Promise.reject(notImplemented()); },
-    delete: implementDelete(card, userState, setUser),
+    delete: implementDelete(card, setUser),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
     update() { throw notImplemented(); },
@@ -167,7 +170,6 @@ function implementCardOverride(
   data: ICardOverrideData,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   tags: readonly ITag[],
-  userState: IUserStatic,
   setUser: SetUserCallback,
 ): ICard {
   const { base, overrides: { image, tags: tagsOverride, ...overrides } } = data;
@@ -184,16 +186,21 @@ function implementCardOverride(
   }
   const cardMethods: CardMethods = {
     update({ tags: updateTags, ...rest }) {
-      const newOverrides: Partial<ICardProperties> = {
-        ...data.overrides,
-        ...rest,
-      };
-      if (updateTags != null) {
-        newOverrides.tags = updateTags.map((tag) => ({ id: tag.id }));
-      }
-      setDetail({
-        ...data,
-        overrides: newOverrides,
+      setDetail((detailNullable) => {
+        const detail = ensureNotNull(detailNullable);
+        const newOverrides: Partial<ICardProperties> = {
+          ...detail.overrides,
+          ...rest,
+        };
+
+        if (updateTags != null) {
+          newOverrides.tags = updateTags.map((tag) => ({ id: tag.id }));
+        }
+
+        return {
+          ...detail,
+          overrides: newOverrides,
+        };
       });
     },
     async commit() {
@@ -243,17 +250,23 @@ function implementCardOverride(
         const raw = await res.json();
         const updated = cardsFromRaw(raw);
         if (put) {
-          setUser({
-            ...userState,
-            cards: userState.cards.concat(updated),
+          setUser((userStateNullable) => {
+            const userState = ensureNotNull(userStateNullable);
+            return {
+              ...userState,
+              cards: userState.cards.concat(updated),
+            };
           });
         } else {
-          setUser({
-            ...userState,
-            cards: userState.cards.map((that) => {
-              if (that === base) return updated;
-              return that;
-            }),
+          setUser((userStateNullable) => {
+            const userState = ensureNotNull(userStateNullable);
+            return {
+              ...userState,
+              cards: userState.cards.map((that) => {
+                if (that === base) return updated;
+                return that;
+              }),
+            };
           });
         }
       }
@@ -261,7 +274,7 @@ function implementCardOverride(
     },
     delete: base == null
       ? () => Promise.reject(notImplemented())
-      : implementDelete(base, userState, setUser),
+      : implementDelete(base, setUser),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = (field) => ({
     update({ key, value }) {
@@ -285,7 +298,6 @@ function implementCardOverride(
 function implementTag(
   tag: ITagData,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
-  user: IUserStatic,
   setUser: SetUserCallback,
 ): ITag {
   return {
@@ -306,11 +318,14 @@ function implementTag(
       if (res.ok) {
         const newTag = tagFromRaw(await res.json());
 
-        setUser({
-          ...user,
-          tags: user.tags.map((existing) => (existing.id === newTag.id
-            ? newTag
-            : existing)),
+        setUser((userStateNullable) => {
+          const userState = ensureNotNull(userStateNullable);
+          return {
+            ...userState,
+            tags: userState.tags.map((existing) => (existing.id === newTag.id
+              ? newTag
+              : existing)),
+          };
         },
         false);
       }
@@ -339,13 +354,16 @@ function implementTag(
                 ?.filter((overrideTag) => overrideTag.id !== tag.id),
             },
           }));
-        setUser({
-          ...user,
-          cards: user.cards.map((existing) => ({
-            ...existing,
-            tags: existing.tags.filter((existingTag) => existingTag !== tag.id),
-          })),
-          tags: user.tags.filter((existing) => (existing.id !== tag.id)),
+        setUser((userStateNullable) => {
+          const userState = ensureNotNull(userStateNullable);
+          return {
+            ...userState,
+            cards: userState.cards.map((existing) => ({
+              ...existing,
+              tags: existing.tags.filter((existingTag) => existingTag !== tag.id),
+            })),
+            tags: userState.tags.filter((existing) => (existing.id !== tag.id)),
+          };
         },
         false);
       }
@@ -366,12 +384,12 @@ function implementUser(
     username, settings, cards, tags,
   } = userState;
 
-  const tagsImpl = tags.map((tag) => implementTag(tag, setDetail, userState, setUser));
+  const tagsImpl = tags.map((tag) => implementTag(tag, setDetail, setUser));
 
   const user: IUser = {
     username,
     settings,
-    cards: cards.map((card) => implementCard(card, tagsImpl, userState, setUser)),
+    cards: cards.map((card) => implementCard(card, tagsImpl, setUser)),
     tags: tagsImpl,
   };
 
@@ -551,7 +569,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
         detail,
         setDetail,
         userImpl[1],
-        userState,
         setUser,
       )
       : undefined;
