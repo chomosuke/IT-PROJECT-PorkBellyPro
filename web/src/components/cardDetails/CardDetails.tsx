@@ -5,7 +5,7 @@ import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
 import { CardDetailActions } from './CardDetailActions';
 import { CardExtraField } from './CardExtraField';
-import { CardImageField } from './CardImageField';
+import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
 
@@ -56,6 +56,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
 
   const close = () => {
     app.showCardDetail(null);
+    cancelLoading(true);
   };
 
   const { root, content } = getClassNames();
@@ -67,7 +68,10 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
       <div className={content}>
         <Stack>
           <Stack.Item key='image' align='stretch'>
-            <CardImageField card={card} editing={isEditing} />
+            <CardImageField
+              card={card}
+              editing={isEditing}
+            />
           </Stack.Item>
           {mFields.map((field) => (
             <Stack.Item key={field.key} align='stretch'>
@@ -96,7 +100,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         </Stack>
       </div>
       <CardDetailActions
-        card={card}
         editing={isEditing}
         onBeginEdit={() => {
           setIsEditing(true);
@@ -104,6 +107,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         onSave={() => {
           card.commit();
           setIsEditing(false);
+          cancelLoading(false);
         }}
         onCancel={() => {
           if (card.id === undefined) {
@@ -111,7 +115,12 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           } else {
             app.showCardDetail(card);
             setIsEditing(false);
+            cancelLoading(false);
           }
+        }}
+        onDelete={() => {
+          card.delete();
+          cancelLoading(false);
         }}
       />
     </div>
