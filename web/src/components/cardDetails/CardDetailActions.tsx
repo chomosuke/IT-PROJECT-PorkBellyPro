@@ -1,22 +1,21 @@
 import { DefaultButton, Stack } from '@fluentui/react';
 import {
-  Requireable, bool, func, object,
+  bool, func,
 } from 'prop-types';
 import React from 'react';
-import { ICard } from '../../controllers/Card';
 import { useHome } from '../../HomeContext';
 
 export interface ICardDetailActionsProps {
-  card: ICard;
   editing: boolean;
   onBeginEdit(): void;
   onSave(): void;
   onCancel(): void;
+  onDelete(): void;
 }
 
 export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsProps> = (
   {
-    card, editing, onBeginEdit, onSave, onCancel,
+    editing, onBeginEdit, onSave, onCancel, onDelete,
   },
 ) => {
   const home = useHome();
@@ -49,16 +48,16 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
           </Stack.Item>
         )}
       <Stack.Item key='delete'>
-        <DefaultButton text='delete' onClick={card.delete} />
+        <DefaultButton text='delete' onClick={onDelete} />
       </Stack.Item>
     </Stack>
   );
 };
 
 CardDetailActions.propTypes = {
-  card: (object as Requireable<ICard>).isRequired,
   editing: bool.isRequired,
   onBeginEdit: func.isRequired,
   onSave: func.isRequired,
   onCancel: func.isRequired,
+  onDelete: func.isRequired,
 };

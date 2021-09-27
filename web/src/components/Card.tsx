@@ -7,6 +7,7 @@ import {
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
 import { useHome } from '../HomeContext';
+import { cancelLoading } from './cardDetails/CardImageField';
 
 export interface ICardProps {
   card: ICard;
@@ -21,13 +22,17 @@ const getClassNames = () => {
       height,
       width,
     },
+    cardContent: {
+      height,
+      width,
+    },
     target: {
       cursor: 'pointer',
       height,
+      width,
+      top: '-100%',
       left: '0',
       position: 'relative',
-      top: '-100%',
-      width,
       zIndex: '1',
     },
     imageContainer: {
@@ -54,15 +59,20 @@ ICardProps & React.RefAttributes<HTMLDivElement>
   } = card;
   const { showCardDetail } = useHome();
 
-  const { root, target, imageContainer } = getClassNames();
+  const {
+    root, cardContent, target, imageContainer,
+  } = getClassNames();
 
   const doShowCardDetail = () => {
     showCardDetail(card);
+
+    // incase image was still loading when user clicked on another card
+    cancelLoading(true);
   };
 
   return (
     <div className={root} ref={ref}>
-      <Stack>
+      <Stack className={cardContent}>
         <div className={imageContainer}>
           {image != null && (
             <Image

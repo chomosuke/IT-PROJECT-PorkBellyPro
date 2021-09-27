@@ -10,6 +10,7 @@ import { Card } from '../components/Card';
 import { ICard } from '../controllers/Card';
 import { CardDetails } from '../components/cardDetails/CardDetails';
 import { useViewportSize } from '../ViewportSize';
+import { TagButton } from '../components/TagButton';
 
 export interface IHomeProps {
   detail?: ICard;
@@ -39,6 +40,18 @@ const getClassNames = (expand: boolean, detail: boolean) => {
       gridArea: 'b',
       height: '100%',
       overflow: 'auto',
+    },
+    tagSection: {
+      display: 'flex',
+    },
+    tagList: {
+      // flex: '1',
+      display: 'flex',
+      flexDirection: 'row',
+      overflowX: 'scroll',
+
+      scrollBehavior: 'smooth',
+      margin: '24px 0',
     },
   });
 };
@@ -176,16 +189,19 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
    * autoScroll end
    */
 
-  const { root, cardSection, detailSection } = getClassNames(expand, Boolean(detail));
-  const { user, searchQuery } = useApp();
+  const {
+    root, cardSection, detailSection, tagList, tagSection,
+  } = getClassNames(expand, Boolean(detail));
+  const { user, searchQuery, tagQuery } = useApp();
   if (user == null) throw new Error();
 
-  const { cards } = user;
+  const { cards, tags } = user;
+  const context = useApp();
 
   function filterCard(card: ICard): boolean {
-    const searchedTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
+    const searchTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
 
-    const searchedCard = [
+    const cardTokens = [
       ...card.name.split(/\W/).filter((x) => x.length > 0),
       ...card.phone.split(/\W/).filter((x) => x.length > 0),
       ...card.email.split(/\W/).filter((x) => x.length > 0),
@@ -195,10 +211,18 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
         .reduce((a, b) => a.concat(b), []),
     ];
 
-    return searchedTokens.every((sToken) => searchedCard.some(
-      (cToken) => cToken.toLowerCase().includes(sToken.toLowerCase()),
-    ));
+    return searchTokens.every((searchToken) => cardTokens.some(
+      (cardToken) => cardToken.toLowerCase().includes(searchToken.toLowerCase()),
+    )) && tagQuery.every((qTag) => card.tags.includes(qTag));
   }
+
+  const tagScrollRef = React.createRef<HTMLDivElement>();
+  const scroll = (offset: number) => {
+    const element = tagScrollRef.current;
+    if (element) {
+      element.scrollLeft += offset;
+    }
+  };
 
   return (
     <HomeProvider value={{
@@ -209,6 +233,24 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     >
       <div className={root}>
         <div className={cardSection} ref={cardSectionRef} onScroll={onCardScroll}>
+          <div className={tagSection}>
+            <button type='button' onClick={() => scroll(-200)}> scroll left </button>
+            <div className={tagList} ref={tagScrollRef}>
+              {tags.map((tag) => (
+                <TagButton
+                  key={tag.id}
+                  tag={tag}
+                  onClick={() => {
+                    if (!tagQuery.includes(tag)) {
+                      context.update({ tagQuery: tagQuery.concat(tag) });
+                    }
+                  }}
+                />
+              ))}
+            </div>
+            <button type='button' onClick={() => scroll(200)}> scroll right </button>
+          </div>
+
           <Stack horizontal wrap>
             {cards.filter(filterCard).map((card) => {
               const ref = createRef<HTMLDivElement>();
@@ -219,9 +261,9 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
         </div>
         {detail != null
           && (
-          <div className={detailSection}>
-            <CardDetails key={detail.id} card={detail} editing={detail.id === undefined} />
-          </div>
+            <div className={detailSection}>
+              <CardDetails key={detail.id} card={detail} editing={detail.id === undefined} />
+            </div>
           )}
       </div>
     </HomeProvider>

@@ -1,9 +1,11 @@
-import { PromiseWorker } from '@porkbellypro/crm-shared';
+import { PromiseWorker, WorkerTerminatedError } from '@porkbellypro/crm-shared';
 import React from 'react';
 import {
   DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
 } from '@fluentui/react';
-import { Requireable, bool, object } from 'prop-types';
+import {
+  Requireable, bool, object,
+} from 'prop-types';
 import { ICard } from '../../controllers/Card';
 
 import type { Message, Result } from './processImage';
@@ -23,11 +25,17 @@ const getClassNames = () => mergeStyleSets({
 });
 
 const imgWorker = new PromiseWorker<Message, Result>(
-  new Worker(new URL('./processImage.ts', import.meta.url)),
+  () => new Worker(new URL('./processImage.ts', import.meta.url)),
 );
 
+export const cancelLoading = (detailUnmounted: boolean): void => {
+  imgWorker.restart({ detailUnmounted });
+};
+
 export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> = (
-  { card, editing },
+  {
+    card, editing,
+  },
 ) => {
   const { image } = card;
 
@@ -77,11 +85,22 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
                   if (e.target.files && e.target.files[0]) {
                     const img = e.target.files[0];
                     setLoading(true);
-                    const { url } = await imgWorker.post({
-                      img,
-                      imgHeight,
-                      imgWidth,
-                    });
+                    let url;
+                    try {
+                      url = (await imgWorker.post({
+                        img,
+                        imgHeight,
+                        imgWidth,
+                      })).url;
+                    } catch (err) {
+                      if (err instanceof WorkerTerminatedError) {
+                        if (!err.reason.detailUnmounted) {
+                          setLoading(false);
+                        }
+                        return;
+                      }
+                      throw err;
+                    }
                     card.update({ image: url });
                     setLoading(false);
                   }

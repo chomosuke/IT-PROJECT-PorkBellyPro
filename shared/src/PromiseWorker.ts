@@ -1,3 +1,5 @@
+import { WorkerTerminatedError } from './WorkerTerminatedError';
+
 interface PromiseCallbacks<Result> {
   resolve: (value: Result | PromiseLike<Result>) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -7,10 +9,13 @@ interface PromiseCallbacks<Result> {
 export class PromiseWorker<Message, Result> {
   private worker: Worker;
 
+  private readonly workerFactory: () => Worker;
+
   private callbacks: (PromiseCallbacks<Result> | undefined)[] = [];
 
-  constructor(worker: Worker) {
-    this.worker = worker;
+  constructor(workerFactory: () => Worker) {
+    this.workerFactory = workerFactory;
+    this.worker = workerFactory();
     this.worker.addEventListener('message', this.onMessage.bind(this));
     this.worker.addEventListener('error', this.onError.bind(this));
   }
@@ -20,6 +25,18 @@ export class PromiseWorker<Message, Result> {
       this.callbacks = this.callbacks.concat({ resolve, reject });
       this.worker.postMessage(message, options);
     });
+  }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+  restart(reason?: any): void {
+    /* eslint-enable */
+    this.worker.terminate();
+    this.worker = this.workerFactory();
+    this.worker.addEventListener('message', this.onMessage.bind(this));
+    this.worker.addEventListener('error', this.onError.bind(this));
+    this.callbacks.forEach((callback) => callback?.reject(new WorkerTerminatedError(reason)));
+    this.callbacks = [];
   }
 
   private onMessage = (ev: MessageEvent<Result>) => {
@@ -32,10 +49,10 @@ export class PromiseWorker<Message, Result> {
   };
 
   private onError = (ev: ErrorEvent) => {
-    const [callbacks, ...rest] = this.callbacks;
+    const [callback, ...rest] = this.callbacks;
     this.callbacks = rest;
-    if (callbacks != null) {
-      const { reject } = callbacks;
+    if (callback != null) {
+      const { reject } = callback;
       reject(ev.error);
     }
   };
