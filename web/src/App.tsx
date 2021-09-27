@@ -394,8 +394,6 @@ const AppComponent: React.VoidFunctionComponent = () => {
     if (typeof value === 'function') newState = value(userState);
     else newState = value;
 
-    setUserState(newState);
-
     let newBase: ICardData | undefined;
     if (detail?.base?.id != null && newState != null) {
       newBase = newState.cards.find((card) => card.id === detail?.base?.id);
@@ -421,6 +419,8 @@ const AppComponent: React.VoidFunctionComponent = () => {
         overrides,
       });
     }
+
+    setUserState(newState);
   };
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
