@@ -1,4 +1,5 @@
 import type { CardField } from './CardField';
+import { Hashed } from './Hashed';
 import type { ObjectId } from './ObjectId';
 
 export interface Card {
@@ -9,7 +10,7 @@ export interface Card {
   email: string;
   jobTitle: string;
   company: string;
-  hasImage: boolean;
+  imageHash?: Hashed;
   fields: CardField[];
   tags: ObjectId[];
 }
