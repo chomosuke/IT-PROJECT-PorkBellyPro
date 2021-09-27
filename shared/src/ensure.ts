@@ -31,3 +31,8 @@ export function ensureArray(value: unknown): unknown[] {
 
   return value;
 }
+
+export function ensureNotNull<T>(value: T | null | undefined): T {
+  if (value == null) throw new Error('value is nullish');
+  return value;
+}

@@ -1,5 +1,5 @@
 import { mergeStyleSets } from '@fluentui/react';
-import { ensureArray, ensureObject, ensureType } from '@porkbellypro/crm-shared';
+import { ensureArray, ensureNotNull, ensureObject, ensureType } from '@porkbellypro/crm-shared';
 import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -376,11 +376,6 @@ function implementUser(
   };
 
   return [user, tagsImpl];
-}
-
-function ensureNotNull<T>(value: T | null | undefined): T {
-  if (value == null) throw new Error('value is nullish');
-  return value;
 }
 
 const AppComponent: React.VoidFunctionComponent = () => {
