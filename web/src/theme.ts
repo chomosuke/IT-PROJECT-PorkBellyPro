@@ -18,6 +18,7 @@ import {
   UserCircle,
 } from 'phosphor-react';
 import { createElement, forwardRef } from 'react';
+import { ReadonlyDeep } from 'type-fest';
 
 export interface Palette {
   darkDenim: string;
@@ -85,7 +86,34 @@ function makeIcon(icon: PhosphorIcon, weight: NonNullable<IconProps['weight']>):
   return forwardRef<SVGSVGElement>((props, ref) => createElement(icon, { ...props, weight, ref }));
 }
 
-export const defaultTheme: Theme = {
+function freezeDeep<T>(value: T): ReadonlyDeep<T> {
+  const frozenSet = new WeakSet();
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow, @typescript-eslint/no-explicit-any
+  function recurse(value: any): any {
+    switch (typeof value) {
+      case 'object':
+      case 'function':
+        break;
+      default:
+        return value;
+    }
+
+    if (value in frozenSet) return value;
+
+    frozenSet.add(Object.freeze(value));
+
+    Reflect.ownKeys(value).forEach((key) => {
+      recurse(value[key]);
+    });
+
+    return value;
+  }
+
+  return recurse(value);
+}
+
+export const defaultTheme = freezeDeep<Theme>({
   palette: {
     darkDenim: '#1a3240',
     everblue: '#2f5972',
@@ -136,4 +164,4 @@ export const defaultTheme: Theme = {
     signOutLight: makeIcon(SignOut, 'light'),
     plusCircleLight: makeIcon(PlusCircle, 'light'),
   },
-};
+});
