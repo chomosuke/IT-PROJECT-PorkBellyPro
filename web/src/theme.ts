@@ -1,3 +1,5 @@
+import { IRawStyle } from '@fluentui/react';
+
 export interface Palette {
   darkDenim: string;
   everblue: string;
@@ -10,6 +12,11 @@ export interface Palette {
   sootyBee: string;
 }
 
+export interface Shape {
+  default: IRawStyle;
+}
+
 export interface Theme {
   palette: Palette;
+  shape: Shape;
 }
