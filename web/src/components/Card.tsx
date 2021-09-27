@@ -21,13 +21,17 @@ const getClassNames = () => {
       height,
       width,
     },
+    cardContent: {
+      height,
+      width,
+    },
     target: {
       cursor: 'pointer',
       height,
+      width,
+      top: '-100%',
       left: '0',
       position: 'relative',
-      top: '-100%',
-      width,
       zIndex: '1',
     },
     imageContainer: {
@@ -52,7 +56,9 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
   } = card;
   const { showCardDetail } = useApp();
 
-  const { root, target, imageContainer } = getClassNames();
+  const {
+    root, cardContent, target, imageContainer,
+  } = getClassNames();
 
   const doShowCardDetail = () => {
     showCardDetail(card);
@@ -60,7 +66,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
 
   return (
     <div className={root}>
-      <Stack>
+      <Stack className={cardContent}>
         <div className={imageContainer}>
           {image != null && (
             <Image
