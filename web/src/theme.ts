@@ -132,8 +132,8 @@ export const defaultTheme = freezeDeep<Theme>({
     },
   },
   fontFamily: {
-    roboto: { fontFamily: 'Roboto' },
-    ubuntu: { fontFamily: 'Ubuntu' },
+    roboto: { fontFamily: 'Roboto, sans-sarif' },
+    ubuntu: { fontFamily: 'Ubuntu, sans-serif' },
   },
   fontWeight: {
     light: { fontWeight: '100' },
