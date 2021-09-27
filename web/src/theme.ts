@@ -1,4 +1,5 @@
 import { IRawStyle } from '@fluentui/react';
+import merge from 'lodash.merge';
 import {
   CaretDoubleLeft,
   CaretDoubleRight,
@@ -17,8 +18,10 @@ import {
   Trash,
   UserCircle,
 } from 'phosphor-react';
-import { createElement, forwardRef } from 'react';
-import { ReadonlyDeep } from 'type-fest';
+import {
+  createContext, createElement, forwardRef, useContext, useMemo,
+} from 'react';
+import { PartialDeep, ReadonlyDeep } from 'type-fest';
 
 export interface Palette {
   darkDenim: string;
@@ -165,3 +168,13 @@ export const defaultTheme = freezeDeep<Theme>({
     plusCircleLight: makeIcon(PlusCircle, 'light'),
   },
 });
+
+const ThemeContext = createContext<PartialDeep<Theme>>({});
+
+export const ThemeProvider = ThemeContext.Provider;
+
+export function useTheme(): ReadonlyDeep<Theme> {
+  const partial = useContext(ThemeContext);
+  const merged = useMemo(() => merge({}, defaultTheme, partial), [partial]);
+  return merged;
+}
