@@ -10,6 +10,7 @@ const mockApp: IAppContext = {
   newCard() { throw new Error('Not Implemented'); },
   newTag() { throw new Error('Not Implemented'); },
   update() { throw new Error('Not Implemented'); },
+  showCardDetail() { throw new Error('Not Implemented'); },
   user: null,
   login: jest.fn(),
   logout() { throw new Error('Not Implemented'); },

@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
-import { ICard } from './controllers/Card';
 
 export interface IHomeContext {
   readonly cardDetailExpanded: boolean;
   expandCardDetail(value: boolean): void;
-  showCardDetail(card: ICard | null): void;
+  lockCard(div: HTMLDivElement): void;
+  unlockCard(): void;
+  unlockCardLater(): void;
 }
 
 const homeContext = createContext<IHomeContext | undefined>(undefined);

@@ -14,7 +14,6 @@ import { TagButton } from '../components/TagButton';
 
 export interface IHomeProps {
   detail?: ICard;
-  showCardDetail(card: ICard | null): void;
 }
 
 const getClassNames = (expand: boolean, detail: boolean) => {
@@ -56,10 +55,10 @@ const getClassNames = (expand: boolean, detail: boolean) => {
   });
 };
 
-export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCardDetail }) => {
+export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   // states
   const [expand, setExpand] = useState(false);
-  const [lockedCard, setLockedCard] = useState< { id: ObjectId; yPos: number } | null>(null);
+  const [lockedCard, setLockedCard] = useState< { div: HTMLDivElement; yPos: number } | null>(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
   // start at the top. 0 is top, 1 is bottom
   const [scrollPortion, setScrollPortion] = useState(0);
@@ -73,16 +72,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
   const cardSectionRef = createRef<HTMLDivElement>();
 
   // helpers
-  const cardDivExist = (cardId: ObjectId | undefined) => cardRefs.find(
-    (cardRef) => cardId === cardRef.id,
-  )?.ref?.current != null;
-  const getCardDiv = (cardId: ObjectId) => {
-    const cardDiv = cardRefs.find((cardRef) => cardId === cardRef.id)?.ref?.current;
-    if (cardDiv == null) {
-      throw new Error('card ref not found');
-    }
-    return cardDiv;
-  };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
   // trigger rerender when viewport changes
@@ -93,8 +82,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     // if card is locked, lock its scroll
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
-      if (lockedCard != null && cardDivExist(lockedCard.id)) {
-        const cardDiv = getCardDiv(lockedCard.id);
+      if (lockedCard != null) {
+        const cardDiv = lockedCard.div;
         if (getDivTop(cardDiv) !== lockedCard.yPos) {
           cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
         }
@@ -116,35 +105,28 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     viewPortSize,
   ]);
 
+  // card locking and unlocking
+  const lockCard = (div: HTMLDivElement) => {
+    /*
+     * calculate the YPos now because locked card can only happen after some renders.
+     * you don't want to wait for it to rerender because the card y position might already have
+     * been changed then
+     */
+    setLockedCard({
+      div,
+      yPos: getDivTop(div),
+    });
+  };
+  const unlockCard = () => setLockedCard(null);
+  const unlockCardLater = () => setUnlockOnNextEffect(true);
+
   // unlock after close
   useEffect(() => {
     if (unlockOnNextEffect) {
-      setLockedCard(null);
+      unlockCard();
       setUnlockOnNextEffect(false);
     }
   }, [unlockOnNextEffect]);
-
-  // card locking and unlocking
-  const onShowCardDetail = (card: ICard | null) => {
-    showCardDetail(card);
-
-    if (card?.id == null) {
-      setUnlockOnNextEffect(true);
-    } else {
-      // find card ref
-      const cardDiv = getCardDiv(card.id);
-
-      /*
-       * calculate the YPos now because locked card can only happen after some renders.
-       * you don't want to wait for it to rerender because the card y position might already have
-       * been changed then
-       */
-      setLockedCard({
-        id: card.id,
-        yPos: getDivTop(cardDiv),
-      });
-    }
-  };
 
   /**
    * onScroll:
@@ -155,8 +137,9 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
    * any rerender.
    * Another thing to recognize is that when the viewport resize, Home will be rerender upon
    * every resize.
-   * Hence if we suppress the first onScroll we should beable to suppress, not only all the random
-   * onScroll on resize, but also all the scrollBy, while still capturing user's scroll.
+   * Hence if we suppress the first onScroll after rerender we should be able to suppress, not
+   * only all the random onScroll on resize, but also all the programmatic scrollTop assignment,
+   * while still capturing user's scroll event.
    *
    * Now, that should've been enough, but there's this senario where:
    * User select the last card.
@@ -174,7 +157,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     }
 
     // unlock lockedCard
-    setLockedCard(null);
+    unlockCard();
 
     // record scrollPortion
     const cardSectionDiv = cardSectionRef.current;
@@ -228,7 +211,9 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
     <HomeProvider value={{
       expandCardDetail: setExpand,
       cardDetailExpanded: expand,
-      showCardDetail: onShowCardDetail,
+      lockCard,
+      unlockCard,
+      unlockCardLater,
     }}
     >
       <div className={root}>
@@ -255,7 +240,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
             {cards.filter(filterCard).map((card) => {
               const ref = createRef<HTMLDivElement>();
               cardRefs.push({ id: card.id, ref });
-              return <Card key={card.id} card={card} ref={ref} />;
+              return <Card key={card.id} card={card} />;
             })}
           </Stack>
         </div>
@@ -272,7 +257,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail, showCard
 
 Home.propTypes = {
   detail: PropTypes.object as React.Validator<ICard | null | undefined> | undefined,
-  showCardDetail: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   IImageProps, Image, ImageFit, Label, Stack, mergeStyleSets,
@@ -8,6 +8,7 @@ import {
 import { ICard } from '../controllers/Card';
 import { useHome } from '../HomeContext';
 import { cancelLoading } from './cardDetails/CardImageField';
+import { useApp } from '../AppContext';
 
 export interface ICardProps {
   card: ICard;
@@ -48,26 +49,32 @@ const imageStyles: IImageProps['styles'] = {
   },
 };
 
-export const Card: React.ForwardRefExoticComponent<
-ICardProps & React.RefAttributes<HTMLDivElement>
-> = React.forwardRef<HTMLDivElement, ICardProps>(({ card }, ref) => {
+export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
   const {
     name,
     phone,
     jobTitle,
     image,
   } = card;
-  const { showCardDetail } = useHome();
+  const { showCardDetail } = useApp();
+  const { lockCard } = useHome();
 
   const {
     root, cardContent, target, imageContainer,
   } = getClassNames();
+
+  const ref = useRef<HTMLDivElement>(null);
 
   const doShowCardDetail = () => {
     showCardDetail(card);
 
     // incase image was still loading when user clicked on another card
     cancelLoading(true);
+    if (ref.current != null) {
+      lockCard(ref.current);
+    } else {
+      throw new Error('card ref.current is null.');
+    }
   };
 
   return (
@@ -92,7 +99,7 @@ ICardProps & React.RefAttributes<HTMLDivElement>
       />
     </div>
   );
-});
+};
 
 Card.propTypes = {
   card: (PropTypes.object as React.Requireable<ICard>).isRequired,
