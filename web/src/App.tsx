@@ -311,7 +311,8 @@ function implementTag(
           tags: user.tags.map((existing) => (existing.id === newTag.id
             ? newTag
             : existing)),
-        });
+        },
+        false);
       }
 
       return new ResponseStatus(res);
