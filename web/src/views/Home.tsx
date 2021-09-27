@@ -3,7 +3,6 @@ import React, {
   RefObject, createRef, useEffect, useState,
 } from 'react';
 import { Stack, mergeStyleSets } from '@fluentui/react';
-import { ObjectId } from '@porkbellypro/crm-shared';
 import { useApp } from '../AppContext';
 import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
@@ -58,7 +57,9 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   // states
   const [expand, setExpand] = useState(false);
-  const [lockedCard, setLockedCard] = useState< { div: HTMLDivElement; yPos: number } | null>(null);
+  const [lockedCard, setLockedCard] = useState<
+  { ref: RefObject<HTMLDivElement>; yPos: number } | null
+  >(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
   // start at the top. 0 is top, 1 is bottom
   const [scrollPortion, setScrollPortion] = useState(0);
@@ -68,10 +69,16 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
    */
 
   // refs
-  const cardRefs: { id?: ObjectId; ref: RefObject<HTMLDivElement> }[] = [];
   const cardSectionRef = createRef<HTMLDivElement>();
 
   // helpers
+  const getCurrent = (ref: RefObject<HTMLDivElement>) => {
+    const cardDiv = ref.current;
+    if (cardDiv == null) {
+      throw new Error('locked card is null');
+    }
+    return cardDiv;
+  };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
   // trigger rerender when viewport changes
@@ -83,9 +90,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
       if (lockedCard != null) {
-        const cardDiv = lockedCard.div;
-        if (getDivTop(cardDiv) !== lockedCard.yPos) {
-          cardSectionDiv.scrollTop += getDivTop(cardDiv) - lockedCard.yPos;
+        if (getDivTop(getCurrent(lockedCard.ref)) !== lockedCard.yPos) {
+          cardSectionDiv.scrollTop += getDivTop(getCurrent(lockedCard.ref)) - lockedCard.yPos;
         }
       } else {
         /*
@@ -106,15 +112,15 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   ]);
 
   // card locking and unlocking
-  const lockCard = (div: HTMLDivElement) => {
+  const lockCard = (ref: RefObject<HTMLDivElement>) => {
     /*
      * calculate the YPos now because locked card can only happen after some renders.
      * you don't want to wait for it to rerender because the card y position might already have
      * been changed then
      */
     setLockedCard({
-      div,
-      yPos: getDivTop(div),
+      ref,
+      yPos: getDivTop(getCurrent(ref)),
     });
   };
   const unlockCard = () => setLockedCard(null);
@@ -237,11 +243,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
           </div>
 
           <Stack horizontal wrap>
-            {cards.filter(filterCard).map((card) => {
-              const ref = createRef<HTMLDivElement>();
-              cardRefs.push({ id: card.id, ref });
-              return <Card key={card.id} card={card} />;
-            })}
+            {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
           </Stack>
         </div>
         {detail != null

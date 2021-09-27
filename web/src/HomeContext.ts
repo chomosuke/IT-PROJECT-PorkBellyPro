@@ -1,9 +1,9 @@
-import { createContext, useContext } from 'react';
+import { RefObject, createContext, useContext } from 'react';
 
 export interface IHomeContext {
   readonly cardDetailExpanded: boolean;
   expandCardDetail(value: boolean): void;
-  lockCard(div: HTMLDivElement): void;
+  lockCard(ref: RefObject<HTMLDivElement>): void;
   unlockCard(): void;
   unlockCardLater(): void;
 }

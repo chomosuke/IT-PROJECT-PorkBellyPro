@@ -70,11 +70,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
 
     // incase image was still loading when user clicked on another card
     cancelLoading(true);
-    if (ref.current != null) {
-      lockCard(ref.current);
-    } else {
-      throw new Error('card ref.current is null.');
-    }
+    lockCard(ref);
   };
 
   return (
