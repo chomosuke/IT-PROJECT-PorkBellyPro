@@ -18,13 +18,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
     editing, onBeginEdit, onSave, onCancel, onDelete,
   },
 ) => {
-  const home = useHome();
-
-  if (home === undefined) {
-    return <></>;
-  }
-
-  const { cardDetailExpanded, expandCardDetail } = home;
+  const { cardDetailExpanded, expandCardDetail } = useHome();
 
   return (
     <Stack horizontal horizontalAlign='end'>
