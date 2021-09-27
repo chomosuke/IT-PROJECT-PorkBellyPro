@@ -457,7 +457,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       if (searchQueryUpdate != null) setSearchQuery(searchQueryUpdate);
       if (tagQueryUpdate != null) setTagQuery(tagQueryUpdate.map((tag) => ({ id: tag.id })));
     },
-    showCardDetail(card) {
+    showCardDetail(card: ICard | null) {
       if (userState == null) throw new Error('userState is nullish');
       if (card == null) {
         setDetail(null);

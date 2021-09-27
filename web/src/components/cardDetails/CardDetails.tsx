@@ -3,6 +3,7 @@ import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
+import { useHome } from '../../HomeContext';
 import { CardDetailActions } from './CardDetailActions';
 import { CardExtraField } from './CardExtraField';
 import { CardImageField, cancelLoading } from './CardImageField';
@@ -27,7 +28,8 @@ const getClassNames = () => mergeStyleSets({
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
-  const app = useApp();
+  const { showCardDetail } = useApp();
+  const { unlockCard, unlockCardLater } = useHome();
 
   const [isEditing, setIsEditing] = React.useState(editing);
 
@@ -56,7 +58,8 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   restFields.splice(noteIndex, 1);
 
   const close = () => {
-    app.showCardDetail(null);
+    unlockCardLater();
+    showCardDetail(null);
     cancelLoading(true);
   };
 
@@ -117,12 +120,13 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           if (card.id === undefined) {
             close();
           } else {
-            app.showCardDetail(card);
+            showCardDetail(card);
             setIsEditing(false);
             cancelLoading(false);
           }
         }}
         onDelete={() => {
+          unlockCard();
           card.delete();
           cancelLoading(false);
         }}
