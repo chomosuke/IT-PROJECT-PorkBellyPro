@@ -1,7 +1,7 @@
 import {
   Callout, DefaultButton, ICalloutProps, Stack, TextField, mergeStyles,
 } from '@fluentui/react';
-import PropTypes, { Requireable, Validator } from 'prop-types';
+import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
 import { ITag, ITagProperties } from '../../controllers/Tag';
 
@@ -93,18 +93,11 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
   );
 };
 
-function requireable<T>(validator: Validator<T>) {
-  const asRequireable = validator as unknown as Requireable<T>;
-  const isRequired = asRequireable.isRequired ?? validator;
-  return { isRequired };
-}
-function ensureNotNull<T>(value: T | null | undefined) {
-  if (value == null) throw new Error('value is nullish');
-  return value;
-}
 TagEditor.propTypes = {
   tag: (PropTypes.object as Requireable<ITag>).isRequired,
-  anchor: requireable(ensureNotNull(Callout.propTypes?.target)).isRequired,
+  anchor: (PropTypes.oneOfType([
+    PropTypes.object as Requireable<ICalloutProps['target']>, PropTypes.string,
+  ])).isRequired,
   closingFunction: PropTypes.func,
 };
 
