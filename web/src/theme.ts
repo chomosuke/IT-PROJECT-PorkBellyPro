@@ -131,7 +131,7 @@ export const defaultTheme = freezeDeep<Theme>({
   },
   shape: {
     default: {
-      dropShadow: '2px 4px 4px rgb(0,0,0,0.25)',
+      boxShadow: '2px 4px 4px rgb(0,0,0,0.25)',
       borderRadius: '8px',
     },
   },
