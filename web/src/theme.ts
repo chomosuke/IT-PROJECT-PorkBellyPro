@@ -53,29 +53,28 @@ export interface FontWeight {
 }
 
 export interface FontSize {
-  size16: IRawStyle;
-  size24: IRawStyle;
-  size36: IRawStyle;
+  small: IRawStyle;
+  standard: IRawStyle;
+  title: IRawStyle;
 }
 
 export interface Icon {
-  plusCircleBold: PhosphorIcon;
-  minusCircleBold: PhosphorIcon;
-  userCircleBold: PhosphorIcon;
-  caretDownBold: PhosphorIcon;
-  caretUpBold: PhosphorIcon;
-  caretLeftBold: PhosphorIcon;
-  caretRightBold: PhosphorIcon;
-  caretDoubleLeftBold: PhosphorIcon;
-  caretDoubleRightBold: PhosphorIcon;
-  pencilLineBold: PhosphorIcon;
-  trashBold: PhosphorIcon;
-  checkBold: PhosphorIcon;
-  xBold: PhosphorIcon;
-  magnifyingGlassLight: PhosphorIcon;
-  caretDownLight: PhosphorIcon;
-  signOutLight: PhosphorIcon;
-  plusCircleLight: PhosphorIcon;
+  plusCircle: PhosphorIcon;
+  minusCircle: PhosphorIcon;
+  userCircle: PhosphorIcon;
+  caretDown: PhosphorIcon;
+  caretUp: PhosphorIcon;
+  caretLeft: PhosphorIcon;
+  caretRight: PhosphorIcon;
+  caretDoubleLeft: PhosphorIcon;
+  caretDoubleRight: PhosphorIcon;
+  pencilLine: PhosphorIcon;
+  trash: PhosphorIcon;
+  tick: PhosphorIcon;
+  cross: PhosphorIcon;
+  magnifyingGlass: PhosphorIcon;
+  signOut: PhosphorIcon;
+  plusCircleTag: PhosphorIcon;
 }
 
 export interface Theme {
@@ -147,28 +146,27 @@ export const defaultTheme = freezeDeep<Theme>({
     black: { fontWeight: '900' },
   },
   fontSize: {
-    size16: { fontSize: '16px' },
-    size24: { fontSize: '24px' },
-    size36: { fontSize: '36px' },
+    small: { fontSize: '16px' },
+    standard: { fontSize: '24px' },
+    title: { fontSize: '36px' },
   },
   icon: {
-    plusCircleBold: makeIcon(PlusCircle, 'bold'),
-    minusCircleBold: makeIcon(MinusCircle, 'bold'),
-    userCircleBold: makeIcon(UserCircle, 'bold'),
-    caretDownBold: makeIcon(CaretDown, 'bold'),
-    caretUpBold: makeIcon(CaretUp, 'bold'),
-    caretLeftBold: makeIcon(CaretLeft, 'bold'),
-    caretRightBold: makeIcon(CaretRight, 'bold'),
-    caretDoubleLeftBold: makeIcon(CaretDoubleLeft, 'bold'),
-    caretDoubleRightBold: makeIcon(CaretDoubleRight, 'bold'),
-    pencilLineBold: makeIcon(PencilLine, 'bold'),
-    trashBold: makeIcon(Trash, 'bold'),
-    checkBold: makeIcon(Check, 'bold'),
-    xBold: makeIcon(X, 'bold'),
-    magnifyingGlassLight: makeIcon(MagnifyingGlass, 'light'),
-    caretDownLight: makeIcon(CaretDown, 'light'),
-    signOutLight: makeIcon(SignOut, 'light'),
-    plusCircleLight: makeIcon(PlusCircle, 'light'),
+    plusCircle: makeIcon(PlusCircle, 'bold'),
+    minusCircle: makeIcon(MinusCircle, 'bold'),
+    userCircle: makeIcon(UserCircle, 'bold'),
+    caretDown: makeIcon(CaretDown, 'bold'),
+    caretUp: makeIcon(CaretUp, 'bold'),
+    caretLeft: makeIcon(CaretLeft, 'bold'),
+    caretRight: makeIcon(CaretRight, 'bold'),
+    caretDoubleLeft: makeIcon(CaretDoubleLeft, 'bold'),
+    caretDoubleRight: makeIcon(CaretDoubleRight, 'bold'),
+    pencilLine: makeIcon(PencilLine, 'bold'),
+    trash: makeIcon(Trash, 'bold'),
+    tick: makeIcon(Check, 'bold'),
+    cross: makeIcon(X, 'bold'),
+    magnifyingGlass: makeIcon(MagnifyingGlass, 'light'),
+    signOut: makeIcon(SignOut, 'light'),
+    plusCircleTag: makeIcon(PlusCircle, 'light'),
   },
 });
 

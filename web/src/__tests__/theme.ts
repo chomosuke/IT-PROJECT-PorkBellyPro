@@ -13,13 +13,13 @@ Object {
     },
   },
   "fontSize": Object {
-    "size16": Object {
+    "small": Object {
       "fontSize": "16px",
     },
-    "size24": Object {
+    "standard": Object {
       "fontSize": "24px",
     },
-    "size36": Object {
+    "title": Object {
       "fontSize": "36px",
     },
   },
@@ -38,71 +38,67 @@ Object {
     },
   },
   "icon": Object {
-    "caretDoubleLeftBold": Object {
+    "caretDoubleLeft": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretDoubleRightBold": Object {
+    "caretDoubleRight": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretDownBold": Object {
+    "caretDown": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretDownLight": Object {
+    "caretLeft": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretLeftBold": Object {
+    "caretRight": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretRightBold": Object {
+    "caretUp": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "caretUpBold": Object {
+    "cross": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "checkBold": Object {
+    "magnifyingGlass": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "magnifyingGlassLight": Object {
+    "minusCircle": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "minusCircleBold": Object {
+    "pencilLine": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "pencilLineBold": Object {
+    "plusCircle": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "plusCircleBold": Object {
+    "plusCircleTag": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "plusCircleLight": Object {
+    "signOut": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "signOutLight": Object {
+    "tick": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "trashBold": Object {
+    "trash": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "userCircleBold": Object {
-      "$$typeof": Symbol(react.forward_ref),
-      "render": [Function],
-    },
-    "xBold": Object {
+    "userCircle": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
