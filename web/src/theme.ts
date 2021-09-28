@@ -8,6 +8,7 @@ import {
   CaretRight,
   CaretUp,
   Check,
+  FolderOpen,
   IconProps,
   MagnifyingGlass,
   MinusCircle,
@@ -75,6 +76,7 @@ export interface Icon {
   magnifyingGlass: PhosphorIcon;
   signOut: PhosphorIcon;
   plusCircleTag: PhosphorIcon;
+  folderOpen: PhosphorIcon;
 }
 
 export interface Theme {
@@ -167,6 +169,7 @@ export const defaultTheme = freezeDeep<Theme>({
     magnifyingGlass: makeIcon(MagnifyingGlass, 'light'),
     signOut: makeIcon(SignOut, 'light'),
     plusCircleTag: makeIcon(PlusCircle, 'light'),
+    folderOpen: makeIcon(FolderOpen, 'bold'),
   },
 });
 
