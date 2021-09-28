@@ -117,7 +117,7 @@ Object {
   "shape": Object {
     "default": Object {
       "borderRadius": "8px",
-      "dropShadow": "2px 4px 4px rgb(0,0,0,0.25)",
+      "boxShadow": "2px 4px 4px rgb(0,0,0,0.25)",
     },
   },
 }
