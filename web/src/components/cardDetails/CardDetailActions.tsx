@@ -1,55 +1,104 @@
-import { DefaultButton, Stack } from '@fluentui/react';
+import {
+  IStackTokens, Stack, mergeStyleSets,
+} from '@fluentui/react';
 import {
   bool, func,
 } from 'prop-types';
 import React from 'react';
 import { useHome } from '../../HomeContext';
+import { useTheme } from '../../theme';
 
 export interface ICardDetailActionsProps {
   editing: boolean;
+  newCard: boolean;
   onBeginEdit(): void;
   onSave(): void;
   onCancel(): void;
   onDelete(): void;
 }
 
+const getClassNames = () => mergeStyleSets({
+  iconButton: {
+    cursor: 'pointer',
+  },
+});
+
+const stackTokensRoot: IStackTokens = {
+  childrenGap: '48px',
+  padding: '48px',
+};
+
+const stackTokensRight: IStackTokens = {
+  childrenGap: '48px',
+};
+
 export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsProps> = (
   {
-    editing, onBeginEdit, onSave, onCancel, onDelete,
+    editing, newCard, onBeginEdit, onSave, onCancel, onDelete,
   },
 ) => {
   const { cardDetailExpanded, expandCardDetail } = useHome();
 
+  const theme = useTheme();
+
+  const { iconButton } = getClassNames();
+
   return (
-    <Stack horizontal horizontalAlign='end'>
-      <Stack.Item key='expand'>
-        <DefaultButton text={cardDetailExpanded ? 'collapse' : 'expand'} onClick={() => expandCardDetail(!cardDetailExpanded)} />
-      </Stack.Item>
-      { editing
+    <Stack horizontal horizontalAlign='space-between' tokens={stackTokensRoot}>
+      {cardDetailExpanded
         ? (
-          <>
-            <Stack.Item key='save'>
-              <DefaultButton text='save' onClick={onSave} />
-            </Stack.Item>
-            <Stack.Item key='cancel'>
-              <DefaultButton text='cancel' onClick={onCancel} />
-            </Stack.Item>
-          </>
+          <theme.icon.caretDoubleRight
+            className={iconButton}
+            size={32}
+            onClick={() => expandCardDetail(!cardDetailExpanded)}
+          />
         )
         : (
-          <Stack.Item key='edit'>
-            <DefaultButton text='edit' onClick={onBeginEdit} />
-          </Stack.Item>
+          <theme.icon.caretDoubleLeft
+            className={iconButton}
+            size={32}
+            onClick={() => expandCardDetail(!cardDetailExpanded)}
+          />
         )}
-      <Stack.Item key='delete'>
-        <DefaultButton text='delete' onClick={onDelete} />
-      </Stack.Item>
+      <Stack horizontal tokens={stackTokensRight}>
+        { editing
+          ? (
+            <>
+              <theme.icon.tick
+                className={iconButton}
+                size={32}
+                onClick={onSave}
+              />
+              {!newCard
+            && (
+            <theme.icon.cross
+              className={iconButton}
+              size={32}
+              onClick={onCancel}
+            />
+            )}
+            </>
+          )
+          : (
+            <theme.icon.pencilLine
+              className={iconButton}
+              size={32}
+              onClick={onBeginEdit}
+            />
+          )}
+        <theme.icon.trash
+          className={iconButton}
+          size={32}
+          onClick={newCard ? onCancel : onDelete}
+        />
+      </Stack>
     </Stack>
   );
 };
 
 CardDetailActions.propTypes = {
   editing: bool.isRequired,
+  newCard: bool.isRequired,
   onBeginEdit: func.isRequired,
   onSave: func.isRequired,
   onCancel: func.isRequired,

@@ -108,6 +108,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
       </div>
       <CardDetailActions
         editing={isEditing}
+        newCard={card.id == null}
         onBeginEdit={() => {
           setIsEditing(true);
         }}
