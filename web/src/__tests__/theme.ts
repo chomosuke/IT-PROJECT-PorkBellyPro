@@ -66,7 +66,7 @@ Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
-    "floppyDiskBold": Object {
+    "checkBold": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
@@ -99,6 +99,10 @@ Object {
       "render": [Function],
     },
     "userCircleBold": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "xBold": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },

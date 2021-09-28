@@ -7,7 +7,7 @@ import {
   CaretLeft,
   CaretRight,
   CaretUp,
-  FloppyDisk,
+  Check,
   IconProps,
   MagnifyingGlass,
   MinusCircle,
@@ -17,6 +17,7 @@ import {
   SignOut,
   Trash,
   UserCircle,
+  X,
 } from 'phosphor-react';
 import {
   createContext, createElement, forwardRef, useContext, useMemo,
@@ -69,7 +70,8 @@ export interface Icon {
   caretDoubleRightBold: PhosphorIcon;
   pencilLineBold: PhosphorIcon;
   trashBold: PhosphorIcon;
-  floppyDiskBold: PhosphorIcon;
+  checkBold: PhosphorIcon;
+  xBold: PhosphorIcon;
   magnifyingGlassLight: PhosphorIcon;
   caretDownLight: PhosphorIcon;
   signOutLight: PhosphorIcon;
@@ -161,7 +163,8 @@ export const defaultTheme = freezeDeep<Theme>({
     caretDoubleRightBold: makeIcon(CaretDoubleRight, 'bold'),
     pencilLineBold: makeIcon(PencilLine, 'bold'),
     trashBold: makeIcon(Trash, 'bold'),
-    floppyDiskBold: makeIcon(FloppyDisk, 'bold'),
+    checkBold: makeIcon(Check, 'bold'),
+    xBold: makeIcon(X, 'bold'),
     magnifyingGlassLight: makeIcon(MagnifyingGlass, 'light'),
     caretDownLight: makeIcon(CaretDown, 'light'),
     signOutLight: makeIcon(SignOut, 'light'),
