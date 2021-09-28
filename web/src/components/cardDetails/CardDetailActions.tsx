@@ -3,7 +3,9 @@ import {
   bool, func,
 } from 'prop-types';
 import React from 'react';
+import { useBoolean } from '@fluentui/react-hooks';
 import { useHome } from '../../HomeContext';
+import { DeletingCardWarning } from '../dialogs/DeletingCardWarning';
 
 export interface ICardDetailActionsProps {
   editing: boolean;
@@ -19,6 +21,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
   },
 ) => {
   const home = useHome();
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   if (home === undefined) {
     return <></>;
@@ -28,6 +31,11 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
 
   return (
     <Stack horizontal horizontalAlign='end'>
+      <DeletingCardWarning
+        hideDialog={hideDialog}
+        toggleHideDialog={toggleHideDialog}
+        onDelete={onDelete}
+      />
       <Stack.Item key='expand'>
         <DefaultButton text={cardDetailExpanded ? 'collapse' : 'expand'} onClick={() => expandCardDetail(!cardDetailExpanded)} />
       </Stack.Item>
@@ -48,7 +56,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
           </Stack.Item>
         )}
       <Stack.Item key='delete'>
-        <DefaultButton text='delete' onClick={onDelete} />
+        <DefaultButton text='delete' onClick={toggleHideDialog} />
       </Stack.Item>
     </Stack>
   );

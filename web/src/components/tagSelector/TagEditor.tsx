@@ -3,7 +3,9 @@ import {
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
+import { useBoolean } from '@fluentui/react-hooks';
 import { ITag, ITagProperties } from '../../controllers/Tag';
+import { DeletingTagWarning } from '../dialogs/DeletingTagWarning';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
@@ -52,6 +54,7 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
   const [unstagedState, setState] = useState<ITagProperties>(tag);
   const updateLabel = (newLabel: string) => setState({ ...unstagedState, label: newLabel });
   const updateColor = (newColor: string) => setState({ ...unstagedState, color: newColor });
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const deleteTag = async () => {
     tag.delete();
@@ -68,6 +71,11 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
         if (closingFunction) closingFunction();
       }}
     >
+      <DeletingTagWarning
+        hideDialog={hideDialog}
+        toggleHideDialog={toggleHideDialog}
+        onDelete={deleteTag}
+      />
       <TextField
         ariaLabel='New textfield name'
         value={unstagedState.label}
@@ -75,7 +83,7 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
       />
 
       {/* Can replace with Diaglog */}
-      <DefaultButton text='Delete Tag' onClick={deleteTag} />
+      <DefaultButton text='Delete Tag' onClick={toggleHideDialog} />
       {/* color swatches */}
       <Stack horizontal>
         {swatchStyles.map(([color, className]) => (
