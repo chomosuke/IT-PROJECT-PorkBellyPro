@@ -46,7 +46,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
   },
   fieldGroup: {
     ...textStyle,
-    ...theme.shape.default,
+    borderRadius: theme.shape.default.borderRadius,
   },
 });
 
