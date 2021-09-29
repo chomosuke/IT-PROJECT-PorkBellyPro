@@ -16,6 +16,6 @@ runs:
         then
           echo 'Cache hit - skipping build'
         else
-          npm run build-server && npm run build-web
+          npm run build
         fi
       shell: bash
