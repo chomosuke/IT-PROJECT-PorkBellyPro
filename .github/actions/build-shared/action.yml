@@ -8,8 +8,6 @@ runs:
       with:
         key: cache-${{ runner.os }}-build-${{ github.sha }}
         path: |
-          ./dist
-          ./server/bin/
           ./shared/lib/
     - run: |
         if echo ${{ steps.cache-build.outputs.cache-hit }} | grep -c 'true'
