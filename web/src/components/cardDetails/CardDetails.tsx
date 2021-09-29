@@ -1,4 +1,6 @@
-import { DefaultButton, Stack, mergeStyleSets } from '@fluentui/react';
+import {
+  Stack, Text, mergeStyleSets,
+} from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
@@ -17,6 +19,11 @@ export interface ICardDetailsProps {
   editing: boolean;
 }
 
+const textStyle = {
+  lineHeight: '36px',
+  verticalAlign: 'middle',
+};
+
 const getClassNames = (theme: Theme) => mergeStyleSets({
   root: {
     display: 'grid',
@@ -32,6 +39,16 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     marginLeft: 'auto',
     marginRight: '48px',
     marginBottom: '24px',
+  },
+  iconButton: {
+    cursor: 'pointer',
+  },
+  addFieldText: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+    ...textStyle,
   },
 });
 
@@ -73,7 +90,9 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
     cancelLoading(true);
   };
 
-  const { root, content, closeButton } = getClassNames(theme);
+  const {
+    root, content, closeButton, iconButton, addFieldText,
+  } = getClassNames(theme);
 
   // no sort, order will be preserved on the server presumably
   return (
@@ -99,24 +118,29 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          <Stack.Item key='note' align='stretch'>
-            <CardNoteField field={note} editing={isEditing} />
-          </Stack.Item>
           {restFields.map((field) => (
             <Stack.Item align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
+          </Stack.Item>
           {isEditing
             && (
-              <Stack.Item key='add field'>
-                <DefaultButton
-                  text='add field'
-                  onClick={() => {
-                    card.update({ fields: [...fields, { key: '', value: '' }] });
-                  }}
+              <Stack
+                horizontal
+                className={iconButton}
+                onClick={() => {
+                  card.update({ fields: [...fields, { key: '', value: '' }] });
+                }}
+              >
+                <theme.icon.plusCircle
+                  color={theme.palette.justWhite}
+                  size={36}
                 />
-              </Stack.Item>
+                <Text className={addFieldText}>Add field</Text>
+              </Stack>
             )}
         </Stack>
       </div>
