@@ -23,7 +23,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontSize.standard,
     ...theme.fontWeight.medium,
     color: theme.palette.justWhite,
-    width: '120px',
+    minWidth: '120px',
     maxWidth: '120px',
     marginRight: '20px',
     ...textStyle,
@@ -37,7 +37,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   },
 });
 
-const getEditingValueStyle: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
   root: {
     ...theme.shape.default,
   },
@@ -63,20 +63,22 @@ export const CardMandatoryField: React.VoidFunctionComponent<ICardMandatoryField
     return <></>;
   }
   const { viewingKey, viewingValue } = getClassNames(theme);
-  const editingValueStyle = getEditingValueStyle(theme);
+  const editingValueStyles = getEditingValueStyles(theme);
   return (
     <Stack horizontal>
       <Text className={viewingKey}>{key}</Text>
       {editing
         ? (
-          <TextField
-            styles={editingValueStyle}
-            borderless
-            value={value}
-            onChange={(e, nValue) => {
-              if (nValue !== undefined) onEdit(nValue);
-            }}
-          />
+          <Stack.Item grow>
+            <TextField
+              styles={editingValueStyles}
+              borderless
+              value={value}
+              onChange={(e, nValue) => {
+                if (nValue !== undefined) onEdit(nValue);
+              }}
+            />
+          </Stack.Item>
         )
         : <Text className={viewingValue}>{value}</Text>}
     </Stack>
