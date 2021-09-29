@@ -10,6 +10,7 @@ import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
 import { TagPicker } from '../tagSelector/TagPicker';
+import { useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
   card: ICard;
@@ -25,11 +26,19 @@ const getClassNames = () => mergeStyleSets({
   content: {
     overflow: 'auto',
   },
+  closeButton: {
+    cursor: 'pointer',
+    marginLeft: 'auto',
+    marginRight: '48px',
+    marginBottom: '24px',
+  },
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
   const { showCardDetail } = useApp();
   const { unlockCard, unlockCardLater } = useHome();
+
+  const theme = useTheme();
 
   const [isEditing, setIsEditing] = React.useState(editing);
 
@@ -63,12 +72,16 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
     cancelLoading(true);
   };
 
-  const { root, content } = getClassNames();
+  const { root, content, closeButton } = getClassNames();
 
   // no sort, order will be preserved on the server presumably
   return (
     <div className={root}>
-      <DefaultButton text='close' onClick={close} />
+      <theme.icon.cross
+        className={closeButton}
+        size={32}
+        onClick={close}
+      />
       <div className={content}>
         <Stack>
           <Stack.Item key='image' align='stretch'>
