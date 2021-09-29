@@ -1,4 +1,4 @@
-name: build
+name: build-shared
 runs:
   using: composite
   steps:
@@ -16,6 +16,6 @@ runs:
         then
           echo 'Cache hit - skipping build'
         else
-          npm run build-server && npm run build-web
+          npm run build-shared
         fi
       shell: bash
