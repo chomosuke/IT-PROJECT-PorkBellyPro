@@ -20,7 +20,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
   const height = '300px';
   const width = '300px';
 
-  const selectDecorator = keyframes({
+  const focusDecorator = keyframes({
     from: {
       // background: 'rgb(255, 255, 255, 0.15)',
       boxShadow: '2px 4px 4px hsl(0deg 0% 0% / 0.25)',
@@ -57,7 +57,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
         }
         : {}),
       '&:hover': {
-        animationName: selectDecorator,
+        animationName: focusDecorator,
         animationDuration: '0.2s',
         animationFillMode: 'forwards',
       },
