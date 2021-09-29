@@ -49,6 +49,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
         ? (
           <theme.icon.caretDoubleRight
             className={iconButton}
+            color={theme.palette.justWhite}
             size={32}
             onClick={() => expandCardDetail(!cardDetailExpanded)}
           />
@@ -56,6 +57,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
         : (
           <theme.icon.caretDoubleLeft
             className={iconButton}
+            color={theme.palette.justWhite}
             size={32}
             onClick={() => expandCardDetail(!cardDetailExpanded)}
           />
@@ -66,6 +68,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
             <>
               <theme.icon.tick
                 className={iconButton}
+                color={theme.palette.justWhite}
                 size={32}
                 onClick={onSave}
               />
@@ -73,6 +76,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
             && (
             <theme.icon.cross
               className={iconButton}
+              color={theme.palette.justWhite}
               size={32}
               onClick={onCancel}
             />
@@ -82,12 +86,14 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
           : (
             <theme.icon.pencilLine
               className={iconButton}
+              color={theme.palette.justWhite}
               size={32}
               onClick={onBeginEdit}
             />
           )}
         <theme.icon.trash
           className={iconButton}
+          color={theme.palette.justWhite}
           size={32}
           onClick={newCard ? onCancel : onDelete}
         />
