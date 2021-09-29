@@ -10,18 +10,19 @@ import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
 import { TagPicker } from '../tagSelector/TagPicker';
-import { useTheme } from '../../theme';
+import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
   card: ICard;
   editing: boolean;
 }
 
-const getClassNames = () => mergeStyleSets({
+const getClassNames = (theme: Theme) => mergeStyleSets({
   root: {
     display: 'grid',
     height: '100%',
     gridTemplateRows: 'auto 1fr auto',
+    backgroundColor: theme.palette.stoneBlue,
   },
   content: {
     overflow: 'auto',
@@ -72,7 +73,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
     cancelLoading(true);
   };
 
-  const { root, content, closeButton } = getClassNames();
+  const { root, content, closeButton } = getClassNames(theme);
 
   // no sort, order will be preserved on the server presumably
   return (
