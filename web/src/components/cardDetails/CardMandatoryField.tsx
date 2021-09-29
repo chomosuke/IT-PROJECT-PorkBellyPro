@@ -37,9 +37,6 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
 });
 
 const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
-  root: {
-    ...theme.shape.default,
-  },
   field: {
     ...theme.fontFamily.roboto,
     ...theme.fontSize.standard,
@@ -49,7 +46,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
   },
   fieldGroup: {
     ...textStyle,
-    borderRadius: theme.shape.default.borderRadius,
+    ...theme.shape.default,
   },
 });
 
