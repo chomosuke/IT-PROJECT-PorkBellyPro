@@ -12,7 +12,6 @@ export interface ICardMandatoryFieldProps {
 }
 
 const textStyle = {
-  height: '36px',
   lineHeight: '36px',
   verticalAlign: 'middle',
 };
