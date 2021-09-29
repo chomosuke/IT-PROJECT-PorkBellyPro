@@ -40,7 +40,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -55,7 +55,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="56 48 136 128 56 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -63,7 +63,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="136 48 216 128 136 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -74,7 +74,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -89,14 +89,14 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -107,7 +107,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -118,7 +118,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -130,7 +130,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -144,7 +144,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -155,7 +155,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -166,7 +166,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -178,7 +178,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -186,7 +186,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -216,7 +216,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -231,7 +231,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="56 48 136 128 56 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -239,7 +239,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="136 48 216 128 136 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -250,7 +250,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -265,7 +265,7 @@ describe('CardDetailActions unit tests', () => {
       <polyline
         fill="none"
         points="216 72.005 104 184 48 128.005"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -273,7 +273,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -287,7 +287,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -298,7 +298,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -310,7 +310,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -324,7 +324,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -335,7 +335,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -346,7 +346,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -358,7 +358,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -366,7 +366,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -396,7 +396,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -411,7 +411,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="56 48 136 128 56 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -419,7 +419,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="136 48 216 128 136 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -430,7 +430,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -445,14 +445,14 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -463,7 +463,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -474,7 +474,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -486,7 +486,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -500,7 +500,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -511,7 +511,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -522,7 +522,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -534,7 +534,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -542,7 +542,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -572,7 +572,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -587,7 +587,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="56 48 136 128 56 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -595,7 +595,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="136 48 216 128 136 208"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -606,7 +606,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -621,7 +621,7 @@ describe('CardDetailActions unit tests', () => {
       <polyline
         fill="none"
         points="216 72.005 104 184 48 128.005"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -629,7 +629,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -643,7 +643,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -654,7 +654,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -665,7 +665,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -677,7 +677,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -685,7 +685,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -715,7 +715,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -730,7 +730,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="200 208 120 128 200 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -738,7 +738,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="120 208 40 128 120 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -749,7 +749,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -764,14 +764,14 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -782,7 +782,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -793,7 +793,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -805,7 +805,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -819,7 +819,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -830,7 +830,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -841,7 +841,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -853,7 +853,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -861,7 +861,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -891,7 +891,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -906,7 +906,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="200 208 120 128 200 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -914,7 +914,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="120 208 40 128 120 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -925,7 +925,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -940,7 +940,7 @@ describe('CardDetailActions unit tests', () => {
       <polyline
         fill="none"
         points="216 72.005 104 184 48 128.005"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -948,7 +948,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -962,7 +962,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -973,7 +973,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -985,7 +985,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -999,7 +999,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1010,7 +1010,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1021,7 +1021,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1033,7 +1033,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1041,7 +1041,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1071,7 +1071,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -1086,7 +1086,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="200 208 120 128 200 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -1094,7 +1094,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="120 208 40 128 120 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -1105,7 +1105,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -1120,14 +1120,14 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1138,7 +1138,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1149,7 +1149,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1161,7 +1161,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -1175,7 +1175,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1186,7 +1186,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1197,7 +1197,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1209,7 +1209,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1217,7 +1217,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1247,7 +1247,7 @@ describe('CardDetailActions unit tests', () => {
 >
   <svg
     className="iconButton-53"
-    fill="currentColor"
+    fill="#ffffff"
     height={32}
     onClick={[Function]}
     viewBox="0 0 256 256"
@@ -1262,7 +1262,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="200 208 120 128 200 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -1270,7 +1270,7 @@ describe('CardDetailActions unit tests', () => {
     <polyline
       fill="none"
       points="120 208 40 128 120 48"
-      stroke="currentColor"
+      stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="24"
@@ -1281,7 +1281,7 @@ describe('CardDetailActions unit tests', () => {
   >
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -1296,7 +1296,7 @@ describe('CardDetailActions unit tests', () => {
       <polyline
         fill="none"
         points="216 72.005 104 184 48 128.005"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1304,7 +1304,7 @@ describe('CardDetailActions unit tests', () => {
     </svg>
     <svg
       className="iconButton-53"
-      fill="currentColor"
+      fill="#ffffff"
       height={32}
       onClick={[Function]}
       viewBox="0 0 256 256"
@@ -1318,7 +1318,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1329,7 +1329,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1340,7 +1340,7 @@ describe('CardDetailActions unit tests', () => {
       />
       <line
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1352,7 +1352,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
@@ -1360,7 +1360,7 @@ describe('CardDetailActions unit tests', () => {
       <path
         d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
         fill="none"
-        stroke="currentColor"
+        stroke="#ffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="24"
