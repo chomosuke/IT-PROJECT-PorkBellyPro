@@ -26,6 +26,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     maxWidth: '120px',
     marginRight: '20px',
     ...textStyle,
+    whiteSpace: 'pre-wrap',
   },
   viewingValue: {
     ...theme.fontFamily.roboto,
@@ -33,6 +34,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontWeight.light,
     color: theme.palette.justWhite,
     ...textStyle,
+    whiteSpace: 'pre-wrap',
   },
 });
 
@@ -42,6 +44,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
     ...theme.fontSize.standard,
     ...theme.fontWeight.light,
     color: theme.palette.deepSlate,
+    whiteSpace: 'pre-wrap',
     ...textStyle,
   },
   fieldGroup: {

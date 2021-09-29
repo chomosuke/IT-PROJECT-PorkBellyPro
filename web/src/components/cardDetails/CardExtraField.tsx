@@ -25,6 +25,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     minWidth: '120px',
     maxWidth: '120px',
     marginRight: '20px',
+    whiteSpace: 'pre-wrap',
     ...textStyle,
   },
   viewingValue: {
@@ -33,6 +34,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontWeight.light,
     color: theme.palette.justWhite,
     ...textStyle,
+    whiteSpace: 'pre-wrap',
   },
   iconButton: {
     cursor: 'pointer',
@@ -46,6 +48,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
     ...theme.fontWeight.light,
     color: theme.palette.deepSlate,
     ...textStyle,
+    whiteSpace: 'pre-wrap',
   },
   fieldGroup: {
     ...textStyle,
@@ -61,6 +64,7 @@ const getEditingKeyStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme:
     ...theme.fontWeight.medium,
     color: theme.palette.deepSlate,
     ...textStyle,
+    whiteSpace: 'pre-wrap',
   },
   fieldGroup: {
     ...textStyle,
