@@ -1,55 +1,126 @@
 import {
-  DefaultButton, Stack, Text, TextField,
+  ITextFieldProps, Stack, Text, TextField, mergeStyleSets,
 } from '@fluentui/react';
 import { Requireable, bool, object } from 'prop-types';
 import React from 'react';
 import { ICardField } from '../../controllers/CardField';
+import { Theme, useTheme } from '../../theme';
 
 export interface ICardExtraFieldProps {
   field: ICardField;
   editing: boolean;
 }
 
+const textStyle = {
+  lineHeight: '36px',
+  verticalAlign: 'middle',
+};
+
+const getClassNames = (theme: Theme) => mergeStyleSets({
+  viewingKey: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+    minWidth: '120px',
+    maxWidth: '120px',
+    marginRight: '20px',
+    ...textStyle,
+  },
+  viewingValue: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.light,
+    color: theme.palette.justWhite,
+    ...textStyle,
+  },
+  iconButton: {
+    cursor: 'pointer',
+  },
+});
+
+const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+  field: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.light,
+    color: theme.palette.deepSlate,
+    ...textStyle,
+  },
+  fieldGroup: {
+    ...textStyle,
+    borderRadius: theme.shape.default.borderRadius,
+    marginRight: '20px',
+    ...theme.shape.default,
+  },
+});
+
+const getEditingKeyStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+  field: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.medium,
+    color: theme.palette.deepSlate,
+    ...textStyle,
+  },
+  fieldGroup: {
+    ...textStyle,
+    minWidth: '120px',
+    maxWidth: '120px',
+    marginRight: '20px',
+    ...theme.shape.default,
+  },
+});
+
 export const CardExtraField: React.VoidFunctionComponent<ICardExtraFieldProps> = (
   { field, editing },
 ) => {
   const { key, value } = field;
+
+  const theme = useTheme();
+
+  const { viewingKey, viewingValue, iconButton } = getClassNames(theme);
+  const editingKeyStyles = getEditingKeyStyles(theme);
+  const editingValueStyles = getEditingValueStyles(theme);
+
   return (
     <Stack horizontal>
-      <Stack.Item grow key='key'>
-        {editing
-          ? (
+      {editing
+        ? (
+          <TextField
+            styles={editingKeyStyles}
+            borderless
+            value={key}
+            onChange={(e, nValue) => {
+              field.update({ key: nValue });
+            }}
+          />
+        )
+        : <Text className={viewingKey}>{key}</Text>}
+      {editing
+        ? (
+          <Stack.Item grow>
             <TextField
-              value={key}
-              onChange={(e, nValue) => {
-                field.update({ key: nValue });
-              }}
-            />
-          )
-          : <Text>{key}</Text>}
-      </Stack.Item>
-      <Stack.Item grow key='value'>
-        {editing
-          ? (
-            <TextField
+              styles={editingValueStyles}
+              borderless
               value={value}
               onChange={(e, nValue) => {
                 field.update({ value: nValue });
               }}
             />
-          )
-          : <Text>{value}</Text>}
-      </Stack.Item>
+          </Stack.Item>
+        )
+        : <Text className={viewingValue}>{value}</Text>}
       {editing
         && (
-        <Stack.Item key='remove'>
-          <DefaultButton
-            text='remove'
-            onClick={() => {
-              field.remove();
-            }}
-          />
-        </Stack.Item>
+        <theme.icon.minusCircle
+          className={iconButton}
+          color={theme.palette.justWhite}
+          size={36}
+          onClick={() => {
+            field.remove();
+          }}
+        />
         )}
     </Stack>
   );
