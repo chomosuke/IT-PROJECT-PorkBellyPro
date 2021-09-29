@@ -21,6 +21,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   valueViewingText: {
     ...theme.fontFamily.roboto,
     ...theme.fontSize.standard,
+    whiteSpace: 'pre-wrap',
     width: '100%',
   },
 });
