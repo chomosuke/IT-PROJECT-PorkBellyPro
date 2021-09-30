@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {
-  RefObject, createRef, useEffect, useState,
+  RefObject, createRef, useEffect, useRef, useState,
 } from 'react';
 import { Stack, mergeStyleSets } from '@fluentui/react';
 import { useApp } from '../AppContext';
@@ -62,7 +62,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   >(null);
   const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
   // start at the top. 0 is top, 1 is bottom
-  const [scrollPortion, setScrollPortion] = useState(0);
+  const ref = useRef<{ scrollPortion: number }>({ scrollPortion: 0 });
 
   /**
    * autoScroll start
@@ -87,7 +87,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
         if (div == null) {
           // search has filtered the card out, unlock and scroll to the top.
           setLockedCard(null);
-          setScrollPortion(0);
+          ref.current.scrollPortion = 0;
         } else if (getDivTop(div) !== lockedCard.yPos) {
           cardSectionDiv.scrollTop += getDivTop(div) - lockedCard.yPos;
         }
@@ -96,7 +96,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
          * no locked card or locked card already deleted
          * maintain scrollPortion
          */
-        cardSectionDiv.scrollTop = scrollPortion * (
+        cardSectionDiv.scrollTop = ref.current.scrollPortion * (
           cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
         );
       }
@@ -110,18 +110,18 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   ]);
 
   // card locking and unlocking
-  const lockCard = (ref: RefObject<HTMLDivElement>) => {
+  const lockCard = (cardRef: RefObject<HTMLDivElement>) => {
     /*
      * calculate the YPos now because locked card can only happen after some renders.
      * you don't want to wait for it to rerender because the card y position might already have
      * been changed then
      */
-    if (ref.current == null) {
-      throw new Error('ref is null');
+    if (cardRef.current == null) {
+      throw new Error('cardRef is null');
     }
     setLockedCard({
-      ref,
-      yPos: getDivTop(ref.current),
+      ref: cardRef,
+      yPos: getDivTop(cardRef.current),
     });
   };
   const unlockCard = () => setLockedCard(null);
@@ -169,8 +169,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     // record scrollPortion
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
-      setScrollPortion(
-        cardSectionDiv.scrollTop / (cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight),
+      ref.current.scrollPortion = cardSectionDiv.scrollTop / (
+        cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
       );
     }
   };
