@@ -34,18 +34,19 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
     },
     cardGridContainer: {
       gridArea: 'a',
-      overflow: 'auto',
-
       width: 'content-width',
-      paddingLeft: '16vw',
-      paddingRight: (detail ? '4vw' : '16vw'),
+      paddingLeft: '12vw',
+      paddingRight: (detail ? '4vw' : '12vw'),
       paddingBottom: '200px',
+
+      overflow: 'auto',
     },
     cardSection: {
       display: 'grid',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
+      // alignItems: 'center',
       gridTemplateColumns: 'repeat(auto-fill, 300px)',
-      gridGap: '72px 64px',
+      gridGap: '72px 72px',
     },
     detailSection: {
       gridArea: 'b',
@@ -55,7 +56,6 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
     tagSection: {
       display: 'flex',
       margin: '48px 0 72px 0',
-      // position: 'relative',
     },
     scrollButtonContainer: {
       display: 'flex',
@@ -64,11 +64,11 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       cursor: 'pointer',
       border: 'none',
       height: '48px',
-      width: '120px',
+      width: '60px',
       background:
         'linear-gradient(90deg, '
-        + 'rgba(248,248,248,1) 40%, '
-        + 'rgba(248,248,248,0.4) 60%, '
+        + 'rgba(248,248,248,1) 50%, '
+        + 'rgba(248,248,248,0.4) 80%, '
         + 'rgba(248,248,248,0) 100%)',
       position: 'abosolute',
       zIndex: '10',
@@ -78,15 +78,16 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       width: '32px',
       color: theme.palette.darkDenim,
     },
+    spacers: {
+      minWidth: '72px',
+    },
     tagList: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
       overflowX: 'scroll',
       scrollBehavior: 'smooth',
-
-      margin: '0 -100px',
-      // padding: '0 40px',
+      margin: '8px -60px',
       zIndex: '1',
 
       // hide scrollbars across different browsers
@@ -232,7 +233,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
 
   const {
     root, cardGridContainer, cardSection, detailSection, tagList, tagSection,
-    scrollButtonContainer, scrollButton,
+    scrollButtonContainer, scrollButton, spacers,
   } = getClassNames(expand, Boolean(detail), theme);
   const rotate180 = { transform: 'rotate(180deg)' };
 
@@ -278,6 +279,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
               <theme.icon.caretLeft className={scrollButton} />
             </button>
             <div className={tagList} ref={tagScrollRef}>
+              <div className={spacers} />
               {tags.map((tag) => (
                 <TagButton
                   key={tag.id}
@@ -289,6 +291,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
                   }}
                 />
               ))}
+              <div className={spacers} />
+
             </div>
             <button type='button' className={scrollButtonContainer} onClick={() => scroll(viewPortSize.width / 3)} style={rotate180}>
               <theme.icon.caretLeft className={scrollButton} />

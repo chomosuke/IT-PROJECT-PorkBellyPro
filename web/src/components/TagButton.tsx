@@ -13,7 +13,7 @@ export interface ITagButtonProps {
 
 const getClassNames = () => mergeStyleSets({
   tagContainer: {
-    height: '100%',
+    // height: '100%',
   },
 });
 
@@ -23,12 +23,12 @@ export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, o
     root: {
       backgroundColor: tag.color,
       border: 'none',
-      padding: '0 48px',
+      padding: '0 32px',
       margin: '0 12px',
-      height: '48px',
-      borderRadius: '8px',
+      height: '32px',
+      borderRadius: '4px',
       ...theme.fontFamily.roboto,
-      ...theme.fontSize.standard,
+      ...theme.fontSize.small,
       color: theme.palette.justWhite,
     },
   };

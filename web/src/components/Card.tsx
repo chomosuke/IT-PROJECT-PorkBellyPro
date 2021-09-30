@@ -22,14 +22,24 @@ const getClassNames = (selected: boolean, theme: Theme) => {
 
   const focusDecorator = keyframes({
     from: {
-      // background: 'rgb(255, 255, 255, 0.15)',
       boxShadow: '2px 4px 4px hsl(0deg 0% 0% / 0.25)',
     },
     to: {
-      // background: 'rgb(255, 255, 255, 0)',
       boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
     },
   });
+
+  const overflowCutOff = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  };
+
+  const fontStandard = {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.small,
+    color: theme.palette.sootyBee,
+  };
 
   return mergeStyleSets({
     root: {
@@ -71,21 +81,15 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       margin: '16px',
     },
     mainLabel: {
-      ...theme.fontFamily.roboto,
-      ...theme.fontSize.standard,
+      ...fontStandard,
+      fontSize: '18px',
       ...theme.fontWeight.bold,
-      color: theme.palette.sootyBee,
-
-      // subject to change
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
+      ...overflowCutOff,
     },
     subLabel: {
-      ...theme.fontFamily.roboto,
-      ...theme.fontSize.standard,
+      ...fontStandard,
       ...theme.fontWeight.medium,
-      color: theme.palette.sootyBee,
+      ...overflowCutOff,
     },
   });
 };
