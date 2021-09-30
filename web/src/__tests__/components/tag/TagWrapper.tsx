@@ -1,10 +1,10 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { TagWrapper } from '../../components/tagSelector/TagWrapper';
-import { ICard } from '../../controllers/Card';
-import { ITag } from '../../controllers/Tag';
+import { TagWrapper } from '../../../components/tag/TagWrapper';
+import { ICard } from '../../../controllers/Card';
+import { ITag } from '../../../controllers/Tag';
 
-import '../disable-icon-warnings.helpers';
+import '../../disable-icon-warnings.helpers';
 
 const demoTag: ITag = {
   id: '1',

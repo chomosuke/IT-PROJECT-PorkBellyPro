@@ -1,9 +1,9 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { TagEditor } from '../../components/tagSelector/TagEditor';
-import { ITag } from '../../controllers/Tag';
+import { TagEditor } from '../../../components/tag/TagEditor';
+import { ITag } from '../../../controllers/Tag';
 
-import '../disable-icon-warnings.helpers';
+import '../../disable-icon-warnings.helpers';
 
 const demoTag: ITag = {
   id: '1',

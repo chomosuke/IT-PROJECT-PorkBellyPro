@@ -11,7 +11,7 @@ import { CardExtraField } from './CardExtraField';
 import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
-import { TagPicker } from '../tagSelector/TagPicker';
+import { TagPicker } from '../tag/TagPicker';
 import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {

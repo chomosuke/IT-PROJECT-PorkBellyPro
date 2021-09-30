@@ -3,7 +3,7 @@ import {
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
-import { ITag } from '../controllers/Tag';
+import { ITag } from '../../controllers/Tag';
 
 type OnClickHandler = IButtonProps['onClick'];
 

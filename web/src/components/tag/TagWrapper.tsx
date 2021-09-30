@@ -4,7 +4,7 @@ import React, { Requireable } from 'react';
 import PropType from 'prop-types';
 import { ICard } from '../../controllers/Card';
 import { ITag } from '../../controllers/Tag';
-import { Tag } from '../Tag';
+import { Tag } from './Tag';
 
 export interface ITagWrapperProps {
   tag: ITag;

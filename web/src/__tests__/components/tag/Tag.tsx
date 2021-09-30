@@ -1,9 +1,9 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { Tag } from '../../components/Tag';
-import { ITag } from '../../controllers/Tag';
+import { Tag } from '../../../components/tag/Tag';
+import { ITag } from '../../../controllers/Tag';
 
-import '../disable-icon-warnings.helpers';
+import '../../disable-icon-warnings.helpers';
 
 function notImplemented() {
   return new Error('Not implemented');

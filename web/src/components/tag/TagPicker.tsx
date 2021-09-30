@@ -8,7 +8,7 @@ import {
 import { useId } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
 import { useApp } from '../../AppContext';
-import { Tag } from '../Tag';
+import { Tag } from './Tag';
 import { ITag, ITagProperties } from '../../controllers/Tag';
 import { TagWrapper } from './TagWrapper';
 import { ITagEditorProps, TagEditor } from './TagEditor';
@@ -45,23 +45,23 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
   // user variable is used to access the tags available to the user
   return (
     <Stack horizontal>
-      <Stack.Item grow key='field'>
+      <Stack.Item>
         Tags
       </Stack.Item>
-      <Stack.Item grow key='tags'>
-        {/* could style to fit measurements */}
+      <Stack.Item>
         <Stack horizontal>
-          {targetCard?.tags.map((t) => ((editing)
-            ? (
-              <Tag
-                tag={t}
-                key={t.id}
-                onRemove={() => removeTag(t)}
-              />
-            )
-            : <Tag tag={t} key={t.id} />))}
+          {targetCard?.tags.map((t) => (
+            editing
+              ? (
+                <Tag
+                  tag={t}
+                  key={t.id}
+                  onRemove={() => removeTag(t)}
+                />
+              )
+              : <Tag tag={t} key={t.id} />
+          ))}
         </Stack>
-
       </Stack.Item>
       {editing
         && <DefaultButton text='Attach Tags' onClick={() => setPickerActive((old) => !old)} id={pickerTargetId} />}

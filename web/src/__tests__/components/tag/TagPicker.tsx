@@ -1,11 +1,11 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { AppProvider, IAppContext } from '../../AppContext';
-import { TagPicker } from '../../components/tagSelector/TagPicker';
-import { ICard } from '../../controllers/Card';
-import { ITag } from '../../controllers/Tag';
+import { AppProvider, IAppContext } from '../../../AppContext';
+import { TagPicker } from '../../../components/tag/TagPicker';
+import { ICard } from '../../../controllers/Card';
+import { ITag } from '../../../controllers/Tag';
 
-import '../disable-icon-warnings.helpers';
+import '../../disable-icon-warnings.helpers';
 
 function notImplemented() {
   return new Error('Not Implemented');

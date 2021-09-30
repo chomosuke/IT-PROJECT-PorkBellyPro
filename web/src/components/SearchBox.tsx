@@ -4,7 +4,7 @@ import {
 import React from 'react';
 import { useApp } from '../AppContext';
 import { ITag } from '../controllers/Tag';
-import { Tag } from './Tag';
+import { Tag } from './tag/Tag';
 
 const getClassNames = () => mergeStyleSets({
   searchBoxWrap: {
