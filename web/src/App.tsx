@@ -26,7 +26,7 @@ import { Home } from './views/Home';
 import { Login } from './views/Login';
 
 const getClassNames = () => {
-  const headerHeight = '60px';
+  const headerHeight = '48px';
 
   return mergeStyleSets({
     header: {

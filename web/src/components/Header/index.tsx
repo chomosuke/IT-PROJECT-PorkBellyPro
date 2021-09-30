@@ -29,7 +29,9 @@ const getClassNames = () => {
       gridArea: 'mid',
     },
     right: {
+      display: 'flex',
       gridArea: 'right',
+      justifyContent: 'end',
     },
   });
 };
@@ -59,7 +61,16 @@ export const Header: React.VoidFunctionComponent = () => {
     },
   ];
 
-  if (user == null) return null;
+  if (user == null) {
+    return (
+      <div className={root}>
+        <div className={mid}>
+          <Logo center />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={root}>
       <div className={left}>

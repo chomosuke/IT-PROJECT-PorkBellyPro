@@ -44,6 +44,8 @@ const getClassNames = () => {
     root: {
       ...rootCommonStyles,
       color: justWhite,
+      marginLeft: '12px',
+      marginRight: '12px',
     },
     icon: {
       height: '32px',

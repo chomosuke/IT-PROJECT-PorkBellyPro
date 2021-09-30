@@ -1,10 +1,15 @@
 import {
   mergeStyleSets,
 } from '@fluentui/react';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useTheme } from '../../theme';
 
-const getClassNames = () => {
+export interface ILogoProps {
+  center?: boolean;
+}
+
+const getClassNames = (center: boolean) => {
   const {
     fontFamily: { roboto },
     fontWeight: { black },
@@ -20,6 +25,7 @@ const getClassNames = () => {
       display: 'grid',
       fontSize: '28px',
       height: '100%',
+      justifySelf: center ? 'center' : undefined,
       paddingLeft: '12px',
       paddingRight: '12px',
       userSelect: 'none',
@@ -27,14 +33,26 @@ const getClassNames = () => {
   });
 };
 
-export const Logo: React.VoidFunctionComponent = () => {
+export const Logo: React.VoidFunctionComponent<ILogoProps> = (props) => {
+  const { center: centerOption } = props;
+
+  const center = centerOption ?? false;
+
   const {
     root,
-  } = getClassNames();
+  } = getClassNames(center);
 
   return (
     <div className={root}>
       PorkBelly
     </div>
   );
+};
+
+Logo.propTypes = {
+  center: PropTypes.bool,
+};
+
+Logo.defaultProps = {
+  center: false,
 };
