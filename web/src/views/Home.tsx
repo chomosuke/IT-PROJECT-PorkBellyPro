@@ -72,13 +72,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   const cardSectionRef = createRef<HTMLDivElement>();
 
   // helpers
-  const getCurrent = (ref: RefObject<HTMLDivElement>) => {
-    const cardDiv = ref.current;
-    if (cardDiv == null) {
-      throw new Error('locked card is null');
-    }
-    return cardDiv;
-  };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
   // trigger rerender when viewport changes
@@ -90,8 +83,13 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
       if (lockedCard != null) {
-        if (getDivTop(getCurrent(lockedCard.ref)) !== lockedCard.yPos) {
-          cardSectionDiv.scrollTop += getDivTop(getCurrent(lockedCard.ref)) - lockedCard.yPos;
+        const div = lockedCard.ref.current;
+        if (div == null) {
+          // search has filtered the card out, unlock and scroll to the top.
+          setLockedCard(null);
+          setScrollPortion(0);
+        } else if (getDivTop(div) !== lockedCard.yPos) {
+          cardSectionDiv.scrollTop += getDivTop(div) - lockedCard.yPos;
         }
       } else {
         /*
@@ -118,9 +116,12 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
      * you don't want to wait for it to rerender because the card y position might already have
      * been changed then
      */
+    if (ref.current == null) {
+      throw new Error('ref is null');
+    }
     setLockedCard({
       ref,
-      yPos: getDivTop(getCurrent(ref)),
+      yPos: getDivTop(ref.current),
     });
   };
   const unlockCard = () => setLockedCard(null);
