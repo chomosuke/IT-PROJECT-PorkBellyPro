@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Icon as PhosphorIcon } from 'phosphor-react';
 import { ContextualMenu, IContextualMenuItem, mergeStyleSets } from '@fluentui/react';
-import { useTheme } from '../theme';
+import { useTheme } from '../../theme';
 
 export interface IIconButtonDropdownOption {
   label: string;

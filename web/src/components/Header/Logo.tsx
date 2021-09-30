@@ -2,7 +2,7 @@ import {
   mergeStyleSets,
 } from '@fluentui/react';
 import React from 'react';
-import { useTheme } from '../theme';
+import { useTheme } from '../../theme';
 
 const getClassNames = () => {
   const {

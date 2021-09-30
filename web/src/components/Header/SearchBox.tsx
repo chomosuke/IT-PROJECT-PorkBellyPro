@@ -5,10 +5,10 @@ import {
   mergeStyleSets,
 } from '@fluentui/react';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useApp } from '../AppContext';
-import { ITag } from '../controllers/Tag';
-import { useTheme } from '../theme';
-import { Tag } from './Tag';
+import { useApp } from '../../AppContext';
+import { ITag } from '../../controllers/Tag';
+import { useTheme } from '../../theme';
+import { Tag } from '../Tag';
 
 const contentMargin = 8;
 

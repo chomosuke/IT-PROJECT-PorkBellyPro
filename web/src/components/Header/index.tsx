@@ -1,7 +1,7 @@
 import { mergeStyleSets } from '@fluentui/react';
 import React from 'react';
-import { useApp } from '../AppContext';
-import { useTheme } from '../theme';
+import { useApp } from '../../AppContext';
+import { useTheme } from '../../theme';
 import { IIconButtonDropdownOption, IconButton } from './IconButton';
 import { Logo } from './Logo';
 import { SearchBox } from './SearchBox';
