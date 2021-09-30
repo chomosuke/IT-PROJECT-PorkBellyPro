@@ -44,35 +44,15 @@ describe('TagWrapper Render Tests', () => {
     className="tagContainer-53"
   >
     <button
-      className="ms-Button ms-Button--default root-54"
-      data-is-focusable={true}
+      className="button-54"
       onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
       type="button"
     >
-      <span
-        className="ms-Button-flexContainer flexContainer-55"
-        data-automationid="splitbuttonprimary"
-      >
-        <span
-          className="ms-Button-textContainer textContainer-56"
-        >
-          <span
-            className="ms-Button-label label-58"
-            id="id__1"
-          >
-            Big Boss
-          </span>
-        </span>
-      </span>
+      Big Boss
     </button>
   </div>
   <button
-    className="ms-Button ms-Button--default root-62"
+    className="ms-Button ms-Button--default root-56"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -83,15 +63,15 @@ describe('TagWrapper Render Tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-55"
+      className="ms-Button-flexContainer flexContainer-57"
       data-automationid="splitbuttonprimary"
     >
       <span
-        className="ms-Button-textContainer textContainer-56"
+        className="ms-Button-textContainer textContainer-58"
       >
         <span
-          className="ms-Button-label label-58"
-          id="id__4"
+          className="ms-Button-label label-60"
+          id="id__1"
         >
           Edit Tag
         </span>
@@ -108,37 +88,17 @@ describe('TagWrapper Render Tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  id="id__7"
+  id="id__4"
 >
   <div
     className="tagContainer-53"
   >
     <button
-      className="ms-Button ms-Button--default root-54"
-      data-is-focusable={true}
+      className="button-54"
       onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
       type="button"
     >
-      <span
-        className="ms-Button-flexContainer flexContainer-55"
-        data-automationid="splitbuttonprimary"
-      >
-        <span
-          className="ms-Button-textContainer textContainer-56"
-        >
-          <span
-            className="ms-Button-label label-58"
-            id="id__8"
-          >
-            Big Boss
-          </span>
-        </span>
-      </span>
+      Big Boss
     </button>
   </div>
 </div>
@@ -155,41 +115,21 @@ describe('TagWrapper Render Tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  id="id__11"
+  id="id__5"
 >
   <div
     className="tagContainer-53"
   >
     <button
-      className="ms-Button ms-Button--default root-54"
-      data-is-focusable={true}
+      className="button-54"
       onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
       type="button"
     >
-      <span
-        className="ms-Button-flexContainer flexContainer-55"
-        data-automationid="splitbuttonprimary"
-      >
-        <span
-          className="ms-Button-textContainer textContainer-56"
-        >
-          <span
-            className="ms-Button-label label-58"
-            id="id__12"
-          >
-            Big Boss
-          </span>
-        </span>
-      </span>
+      Big Boss
     </button>
   </div>
   <button
-    className="ms-Button ms-Button--default root-62"
+    className="ms-Button ms-Button--default root-56"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -200,15 +140,15 @@ describe('TagWrapper Render Tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-55"
+      className="ms-Button-flexContainer flexContainer-57"
       data-automationid="splitbuttonprimary"
     >
       <span
-        className="ms-Button-textContainer textContainer-56"
+        className="ms-Button-textContainer textContainer-58"
       >
         <span
-          className="ms-Button-label label-58"
-          id="id__15"
+          className="ms-Button-label label-60"
+          id="id__6"
         >
           Edit Tag
         </span>

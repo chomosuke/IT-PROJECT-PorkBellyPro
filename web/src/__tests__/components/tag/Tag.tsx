@@ -26,64 +26,50 @@ describe('Tag component unit tests', () => {
 <div
   className="tagContainer-53"
 >
-  <div
-    className="ms-Stack css-54"
+  <button
+    className="button-54"
+    onClick={[Function]}
+    type="button"
   >
-    <button
-      className="ms-Button ms-Button--default root-55"
-      data-is-focusable={true}
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
-      type="button"
-    >
-      <span
-        className="ms-Button-flexContainer flexContainer-56"
-        data-automationid="splitbuttonprimary"
-      >
-        <span
-          className="ms-Button-textContainer textContainer-57"
-        >
-          <span
-            className="ms-Button-label label-59"
-            id="id__0"
-          >
-            Tag name
-          </span>
-        </span>
-      </span>
-    </button>
-    <button
-      className="ms-Button ms-Button--icon root-63"
-      data-is-focusable={true}
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
-      type="button"
-    >
-      <span
-        className="ms-Button-flexContainer flexContainer-56"
-        data-automationid="splitbuttonprimary"
-      >
-        <i
-          aria-hidden={true}
-          className="ms-Icon root-37 ms-Button-icon icon-58"
-          data-icon-name="CalculatorMultiply"
-          style={
-            Object {
-              "fontFamily": undefined,
-            }
-          }
-        />
-      </span>
-    </button>
-  </div>
+    Tag name
+  </button>
+  <svg
+    className="cross-55"
+    fill="#ffffff"
+    height={16}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={16}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <line
+      fill="none"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+      x1="200"
+      x2="56"
+      y1="56"
+      y2="200"
+    />
+    <line
+      fill="none"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+      x1="200"
+      x2="56"
+      y1="200"
+      y2="56"
+    />
+  </svg>
 </div>
 `);
   });
@@ -105,31 +91,11 @@ describe('Tag component unit tests', () => {
   className="tagContainer-53"
 >
   <button
-    className="ms-Button ms-Button--default root-55"
-    data-is-focusable={true}
+    className="button-54"
     onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
     type="button"
   >
-    <span
-      className="ms-Button-flexContainer flexContainer-56"
-      data-automationid="splitbuttonprimary"
-    >
-      <span
-        className="ms-Button-textContainer textContainer-57"
-      >
-        <span
-          className="ms-Button-label label-59"
-          id="id__6"
-        >
-          Tag name
-        </span>
-      </span>
-    </span>
+    Tag name
   </button>
 </div>
 `);

@@ -120,7 +120,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             </Stack.Item>
           ))}
           {restFields.map((field) => (
-            <Stack.Item align='stretch'>
+            <Stack.Item key={field.key} align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
