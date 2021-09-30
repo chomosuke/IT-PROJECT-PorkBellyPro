@@ -18,7 +18,6 @@ export interface ITagProps {
 const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) => {
   const {
     fontFamily: { roboto },
-    fontSize: { small },
     fontWeight: { medium },
     palette: { justWhite },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
@@ -37,29 +36,33 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
     root: {
       backgroundColor: tagColor,
       borderRadius: '8px',
+      cursor: 'default',
       display: 'flex',
-      height: '24px',
+      height: '16px',
+      marginBottom: 'auto',
+      marginTop: 'auto',
+      whiteSpace: 'pre',
       ...rootOptionalStyles,
     },
     labelSpan: {
       ...roboto,
-      ...small,
       ...medium,
       color: justWhite,
+      fontSize: '12px',
       marginBottom: 'auto',
-      marginLeft: '32px',
+      marginLeft: '24px',
       marginTop: 'auto',
       userSelect: 'none',
     },
     rightSpan: {
       display: 'flex',
-      width: '32px',
+      width: '24px',
       ...rightSpanOptionalStyles,
     },
     crossIcon: {
-      height: '16px',
+      height: '12px',
       margin: 'auto',
-      width: '16px',
+      width: '12px',
     },
   });
 };
