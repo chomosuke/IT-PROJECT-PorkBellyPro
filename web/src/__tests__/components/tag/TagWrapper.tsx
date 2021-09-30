@@ -41,18 +41,20 @@ describe('TagWrapper Render Tests', () => {
   id="id__0"
 >
   <div
-    className="tagContainer-53"
+    className="root-53"
   >
-    <button
-      className="button-54"
+    <span
+      className="labelSpan-54"
       onClick={[Function]}
-      type="button"
     >
       Big Boss
-    </button>
+    </span>
+    <span
+      className="rightSpan-55"
+    />
   </div>
   <button
-    className="ms-Button ms-Button--default root-56"
+    className="ms-Button ms-Button--default root-57"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -63,14 +65,14 @@ describe('TagWrapper Render Tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-57"
+      className="ms-Button-flexContainer flexContainer-58"
       data-automationid="splitbuttonprimary"
     >
       <span
-        className="ms-Button-textContainer textContainer-58"
+        className="ms-Button-textContainer textContainer-59"
       >
         <span
-          className="ms-Button-label label-60"
+          className="ms-Button-label label-61"
           id="id__1"
         >
           Edit Tag
@@ -91,15 +93,17 @@ describe('TagWrapper Render Tests', () => {
   id="id__4"
 >
   <div
-    className="tagContainer-53"
+    className="root-53"
   >
-    <button
-      className="button-54"
+    <span
+      className="labelSpan-54"
       onClick={[Function]}
-      type="button"
     >
       Big Boss
-    </button>
+    </span>
+    <span
+      className="rightSpan-55"
+    />
   </div>
 </div>
 `);
@@ -118,18 +122,20 @@ describe('TagWrapper Render Tests', () => {
   id="id__5"
 >
   <div
-    className="tagContainer-53"
+    className="root-53"
   >
-    <button
-      className="button-54"
+    <span
+      className="labelSpan-54"
       onClick={[Function]}
-      type="button"
     >
       Big Boss
-    </button>
+    </span>
+    <span
+      className="rightSpan-55"
+    />
   </div>
   <button
-    className="ms-Button ms-Button--default root-56"
+    className="ms-Button ms-Button--default root-57"
     data-is-focusable={true}
     onClick={[Function]}
     onKeyDown={[Function]}
@@ -140,14 +146,14 @@ describe('TagWrapper Render Tests', () => {
     type="button"
   >
     <span
-      className="ms-Button-flexContainer flexContainer-57"
+      className="ms-Button-flexContainer flexContainer-58"
       data-automationid="splitbuttonprimary"
     >
       <span
-        className="ms-Button-textContainer textContainer-58"
+        className="ms-Button-textContainer textContainer-59"
       >
         <span
-          className="ms-Button-label label-60"
+          className="ms-Button-label label-61"
           id="id__6"
         >
           Edit Tag

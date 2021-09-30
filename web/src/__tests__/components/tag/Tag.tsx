@@ -24,52 +24,55 @@ describe('Tag component unit tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="tagContainer-53"
+  className="root-53"
 >
-  <button
-    className="button-54"
+  <span
+    className="labelSpan-54"
     onClick={[Function]}
-    type="button"
   >
     Tag name
-  </button>
-  <svg
-    className="cross-55"
-    fill="#ffffff"
-    height={16}
+  </span>
+  <span
+    className="rightSpan-55"
     onClick={[Function]}
-    viewBox="0 0 256 256"
-    width={16}
-    xmlns="http://www.w3.org/2000/svg"
   >
-    <rect
-      fill="none"
-      height="256"
-      width="256"
-    />
-    <line
-      fill="none"
-      stroke="#ffffff"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="24"
-      x1="200"
-      x2="56"
-      y1="56"
-      y2="200"
-    />
-    <line
-      fill="none"
-      stroke="#ffffff"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="24"
-      x1="200"
-      x2="56"
-      y1="200"
-      y2="56"
-    />
-  </svg>
+    <svg
+      className="crossIcon-56"
+      fill="#ffffff"
+      height="1em"
+      viewBox="0 0 256 256"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="56"
+        y2="200"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="200"
+        y2="56"
+      />
+    </svg>
+  </span>
 </div>
 `);
   });
@@ -88,15 +91,17 @@ describe('Tag component unit tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="tagContainer-53"
+  className="root-53"
 >
-  <button
-    className="button-54"
+  <span
+    className="labelSpan-54"
     onClick={[Function]}
-    type="button"
   >
     Tag name
-  </button>
+  </span>
+  <span
+    className="rightSpan-57"
+  />
 </div>
 `);
   });
