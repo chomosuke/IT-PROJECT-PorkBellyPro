@@ -1,70 +1,88 @@
-import {
-  mergeStyleSets,
-} from '@fluentui/react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
+import { mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
 import { ITag } from '../../controllers/Tag';
-import { Theme, useTheme } from '../../theme';
+import { useTheme } from '../../theme';
+
+type OnClickHandler = React.DOMAttributes<HTMLSpanElement>['onClick'];
 
 export interface ITagProps {
   tag: ITag;
-  onClick?: () => void;
-  onRemove?: () => void;
+  onClick?: OnClickHandler;
+  onRemove?: OnClickHandler;
 }
 
-const getClassNames = (
-  theme: Theme, canClick: boolean, color: string,
-) => mergeStyleSets({
-  tagContainer: {
-    position: 'relative',
-  },
-  button: {
-    ...(canClick ? { cursor: 'pointer' } : {}),
-    lineHeight: '24px',
-    verticalAlign: 'middle',
-    backgroundColor: color,
-    border: 'none',
-    borderRadius: '8px',
-    paddingLeft: '32px',
-    paddingRight: '32px',
-    whiteSpace: 'pre-wrap',
-    ...theme.fontFamily.roboto,
-    ...theme.fontSize.small,
-    ...theme.fontWeight.medium,
-    color: theme.palette.justWhite,
-  },
-  cross: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: '4px',
-    right: '8px',
-  },
-});
+const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) => {
+  const {
+    fontFamily: { roboto },
+    fontSize: { small },
+    fontWeight: { medium },
+    palette: { justWhite },
+  } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
+
+  const rootOptionalStyles: { cursor?: string } = {};
+  if (hasClick) {
+    rootOptionalStyles.cursor = 'pointer';
+  }
+
+  const rightSpanOptionalStyles: { cursor?: string } = {};
+  if (hasRemove) {
+    rightSpanOptionalStyles.cursor = 'pointer';
+  }
+
+  return mergeStyleSets({
+    root: {
+      backgroundColor: tagColor,
+      borderRadius: '8px',
+      display: 'flex',
+      height: '24px',
+      ...rootOptionalStyles,
+    },
+    labelSpan: {
+      ...roboto,
+      ...small,
+      ...medium,
+      color: justWhite,
+      marginBottom: 'auto',
+      marginLeft: '32px',
+      marginTop: 'auto',
+      userSelect: 'none',
+    },
+    rightSpan: {
+      display: 'flex',
+      width: '32px',
+      ...rightSpanOptionalStyles,
+    },
+    crossIcon: {
+      height: '16px',
+      margin: 'auto',
+      width: '16px',
+    },
+  });
+};
 
 export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRemove }) => {
-  const theme = useTheme();
+  const {
+    icon: { cross: Cross },
+    palette: { justWhite },
+  } = useTheme();
 
-  const { tagContainer, button, cross } = getClassNames(theme, onClick != null, tag.color);
+  const {
+    root,
+    labelSpan,
+    rightSpan,
+    crossIcon,
+  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove));
 
-  // otherwise only show the tag itself
   return (
-    <div className={tagContainer}>
-      <button
-        type='button'
-        className={button}
-        onClick={onClick}
-      >
-        {tag.label}
-      </button>
-      {onRemove != null
-        && (
-        <theme.icon.cross
-          className={cross}
-          color={theme.palette.justWhite}
-          size={16}
-          onClick={onRemove}
-        />
-        )}
+    <div className={root}>
+      <span className={labelSpan} onClick={onClick}>{tag.label}</span>
+      <span className={rightSpan} onClick={onRemove}>
+        {onRemove && <Cross className={crossIcon} color={justWhite} />}
+      </span>
     </div>
   );
 };
