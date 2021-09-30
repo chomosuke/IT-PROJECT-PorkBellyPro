@@ -54,21 +54,37 @@ const getClassNames = (expand: boolean, detail: boolean) => {
   });
 };
 
+interface ILockedCard {
+  ref: RefObject<HTMLDivElement>;
+  yPos: number;
+}
+
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   // states
   const [expand, setExpand] = useState(false);
-  const [lockedCard, setLockedCard] = useState<
-  { ref: RefObject<HTMLDivElement>; yPos: number } | null
-  >(null);
-  const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
-  // start at the top. 0 is top, 1 is bottom
-  const ref = useRef<{ scrollPortion: number }>({ scrollPortion: 0 });
 
   /**
    * autoScroll start
    */
 
   // refs
+  const ref = useRef<{
+    // start at the top. 0 is top, 1 is bottom
+    scrollPortion: number;
+    unlockOnNextEffect: boolean;
+    lockedCard: ILockedCard | null;
+  }>({ scrollPortion: 0, unlockOnNextEffect: false, lockedCard: null });
+  const { scrollPortion, unlockOnNextEffect, lockedCard } = ref.current;
+  const setLockedCard = (value: ILockedCard | null) => {
+    ref.current.lockedCard = value;
+  };
+  const setScrollPortion = (value: number) => {
+    ref.current.scrollPortion = value;
+  };
+  const setUnlockOnNextEffect = (value: boolean) => {
+    ref.current.unlockOnNextEffect = value;
+  };
+
   const cardSectionRef = createRef<HTMLDivElement>();
 
   // helpers
@@ -76,38 +92,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
 
   // trigger rerender when viewport changes
   const viewPortSize = useViewportSize();
-
-  // autoScroll
-  useEffect(() => {
-    // if card is locked, lock its scroll
-    const cardSectionDiv = cardSectionRef.current;
-    if (cardSectionDiv != null) {
-      if (lockedCard != null) {
-        const div = lockedCard.ref.current;
-        if (div == null) {
-          // search has filtered the card out, unlock and scroll to the top.
-          setLockedCard(null);
-          ref.current.scrollPortion = 0;
-        } else if (getDivTop(div) !== lockedCard.yPos) {
-          cardSectionDiv.scrollTop += getDivTop(div) - lockedCard.yPos;
-        }
-      } else {
-        /*
-         * no locked card or locked card already deleted
-         * maintain scrollPortion
-         */
-        cardSectionDiv.scrollTop = ref.current.scrollPortion * (
-          cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
-        );
-      }
-    }
-  },
-  // the change of below values means a change in cardGrid size
-  [ // eslint-disable-line react-hooks/exhaustive-deps
-    detail,
-    expand,
-    viewPortSize,
-  ]);
 
   // card locking and unlocking
   const lockCard = (cardRef: RefObject<HTMLDivElement>) => {
@@ -133,7 +117,39 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
       unlockCard();
       setUnlockOnNextEffect(false);
     }
-  }, [unlockOnNextEffect]);
+  }, [unlockOnNextEffect]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // autoScroll
+  useEffect(() => {
+    // if card is locked, lock its scroll
+    const cardSectionDiv = cardSectionRef.current;
+    if (cardSectionDiv != null) {
+      if (lockedCard != null) {
+        const div = lockedCard.ref.current;
+        if (div == null) {
+          // search has filtered the card out, unlock and scroll to the top.
+          unlockCard();
+          setScrollPortion(0);
+        } else if (getDivTop(div) !== lockedCard.yPos) {
+          cardSectionDiv.scrollTop += getDivTop(div) - lockedCard.yPos;
+        }
+      } else {
+        /*
+         * no locked card or locked card already deleted
+         * maintain scrollPortion
+         */
+        cardSectionDiv.scrollTop = scrollPortion * (
+          cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
+        );
+      }
+    }
+  },
+  // the change of below values means a change in cardGrid size
+  [ // eslint-disable-line react-hooks/exhaustive-deps
+    detail,
+    expand,
+    viewPortSize,
+  ]);
 
   /**
    * onScroll:
@@ -169,8 +185,8 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     // record scrollPortion
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
-      ref.current.scrollPortion = cardSectionDiv.scrollTop / (
-        cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight
+      setScrollPortion(
+        cardSectionDiv.scrollTop / (cardSectionDiv.scrollHeight - cardSectionDiv.clientHeight),
       );
     }
   };
