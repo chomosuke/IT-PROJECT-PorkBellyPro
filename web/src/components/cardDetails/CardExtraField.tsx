@@ -122,7 +122,6 @@ export const CardExtraField: React.VoidFunctionComponent<ICardExtraFieldProps> =
           </Stack.Item>
         )
         : <Text className={viewingValue}>{value}</Text>}
-      <div />
       {editing
         && (
         <theme.icon.minusCircle
