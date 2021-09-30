@@ -1,55 +1,40 @@
 import {
-  IStyle, IStyleFunctionOrObject, Label, mergeStyleSets,
+  mergeStyleSets,
 } from '@fluentui/react';
-import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
+import { useTheme } from '../theme';
 
-export type ILogoStyleProps = Record<string, never>;
+const getClassNames = () => {
+  const {
+    fontFamily: { roboto },
+    fontWeight: { black },
+    palette: { justWhite },
+  } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
 
-export interface ILogoStyles {
-  root?: IStyle;
-}
-
-export interface ILogoProps {
-  styles?: IStyleFunctionOrObject<ILogoStyleProps, ILogoStyles>;
-}
-
-const getClassNames = (
-  styles?: IStyleFunctionOrObject<ILogoStyleProps, ILogoStyles>,
-) => mergeStyleSets(
-  {
+  return mergeStyleSets({
     root: {
-      height: '32px',
+      ...roboto,
+      ...black,
+      alignContent: 'center',
+      color: justWhite,
+      display: 'grid',
+      fontSize: '28px',
+      height: '100%',
+      paddingLeft: '12px',
+      paddingRight: '12px',
+      userSelect: 'none',
     },
-  },
-  styles,
-);
+  });
+};
 
-export const Logo: React.VoidFunctionComponent<ILogoProps> = (props) => {
-  const { styles } = props;
-  const { root } = getClassNames(styles);
-
-  const labelStyles = {
-    root: {
-      height: '32px',
-      margin: '0 8px 0 8px',
-    },
-  };
+export const Logo: React.VoidFunctionComponent = () => {
+  const {
+    root,
+  } = getClassNames();
 
   return (
     <div className={root}>
-      <Label styles={labelStyles}>PorkBelly</Label>
+      PorkBelly
     </div>
   );
-};
-
-Logo.propTypes = {
-  styles: (PropTypes.object as Requireable<
-  IStyleFunctionOrObject<ILogoStyleProps, ILogoStyles>
-  | null
-  | undefined>),
-};
-
-Logo.defaultProps = {
-  styles: undefined,
 };
