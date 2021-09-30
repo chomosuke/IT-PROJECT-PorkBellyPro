@@ -132,9 +132,12 @@ export const IconButton: VoidFunctionComponent<IIconButtonProps> = (props) => {
       <div ref={rootRef} className={root} onClick={onClick ?? caretOnClick}>
         {Icon && <Icon className={icon} />}
         <span>{label}</span>
-        {hasDropdown && [
-          <div className={separator} />, <CaretDown className={caret} onClick={caretOnClick} />,
-        ]}
+        {hasDropdown && (
+        <>
+          <div className={separator} />
+          <CaretDown className={caret} onClick={caretOnClick} />
+        </>
+        )}
       </div>
       {hasDropdown && (
       <ContextualMenu
