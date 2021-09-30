@@ -54,6 +54,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
     ...textStyle,
     borderRadius: theme.shape.default.borderRadius,
     marginRight: '20px',
+    height: '100%',
   },
 });
 
@@ -72,6 +73,7 @@ const getEditingKeyStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme:
     maxWidth: '120px',
     marginRight: '20px',
     borderRadius: theme.shape.default.borderRadius,
+    height: '100%',
   },
 });
 
