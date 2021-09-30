@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {
-  RefObject, createRef, useEffect, useState,
+  RefObject, createRef, useEffect, useRef, useState,
 } from 'react';
 import { Stack, mergeStyleSets } from '@fluentui/react';
 import { useApp } from '../AppContext';
@@ -54,35 +54,70 @@ const getClassNames = (expand: boolean, detail: boolean) => {
   });
 };
 
+interface ILockedCard {
+  ref: RefObject<HTMLDivElement>;
+  yPos: number;
+}
+
 export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   // states
   const [expand, setExpand] = useState(false);
-  const [lockedCard, setLockedCard] = useState<
-  { ref: RefObject<HTMLDivElement>; yPos: number } | null
-  >(null);
-  const [unlockOnNextEffect, setUnlockOnNextEffect] = useState(false);
-  // start at the top. 0 is top, 1 is bottom
-  const [scrollPortion, setScrollPortion] = useState(0);
 
   /**
    * autoScroll start
    */
 
   // refs
+  const ref = useRef<{
+    // start at the top. 0 is top, 1 is bottom
+    scrollPortion: number;
+    unlockOnNextEffect: boolean;
+    lockedCard: ILockedCard | null;
+  }>({ scrollPortion: 0, unlockOnNextEffect: false, lockedCard: null });
+  const { scrollPortion, unlockOnNextEffect, lockedCard } = ref.current;
+  const setLockedCard = (value: ILockedCard | null) => {
+    ref.current.lockedCard = value;
+  };
+  const setScrollPortion = (value: number) => {
+    ref.current.scrollPortion = value;
+  };
+  const setUnlockOnNextEffect = (value: boolean) => {
+    ref.current.unlockOnNextEffect = value;
+  };
+
   const cardSectionRef = createRef<HTMLDivElement>();
 
   // helpers
-  const getCurrent = (ref: RefObject<HTMLDivElement>) => {
-    const cardDiv = ref.current;
-    if (cardDiv == null) {
-      throw new Error('locked card is null');
-    }
-    return cardDiv;
-  };
   const getDivTop = (div: HTMLDivElement) => div.getBoundingClientRect().top;
 
   // trigger rerender when viewport changes
   const viewPortSize = useViewportSize();
+
+  // card locking and unlocking
+  const lockCard = (cardRef: RefObject<HTMLDivElement>) => {
+    /*
+     * calculate the YPos now because locked card can only happen after some renders.
+     * you don't want to wait for it to rerender because the card y position might already have
+     * been changed then
+     */
+    if (cardRef.current == null) {
+      throw new Error('cardRef is null');
+    }
+    setLockedCard({
+      ref: cardRef,
+      yPos: getDivTop(cardRef.current),
+    });
+  };
+  const unlockCard = () => setLockedCard(null);
+  const unlockCardLater = () => setUnlockOnNextEffect(true);
+
+  // unlock after close
+  useEffect(() => {
+    if (unlockOnNextEffect) {
+      unlockCard();
+      setUnlockOnNextEffect(false);
+    }
+  }, [unlockOnNextEffect]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // autoScroll
   useEffect(() => {
@@ -90,8 +125,13 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     const cardSectionDiv = cardSectionRef.current;
     if (cardSectionDiv != null) {
       if (lockedCard != null) {
-        if (getDivTop(getCurrent(lockedCard.ref)) !== lockedCard.yPos) {
-          cardSectionDiv.scrollTop += getDivTop(getCurrent(lockedCard.ref)) - lockedCard.yPos;
+        const div = lockedCard.ref.current;
+        if (div == null) {
+          // search has filtered the card out, unlock and scroll to the top.
+          unlockCard();
+          setScrollPortion(0);
+        } else if (getDivTop(div) !== lockedCard.yPos) {
+          cardSectionDiv.scrollTop += getDivTop(div) - lockedCard.yPos;
         }
       } else {
         /*
@@ -110,29 +150,6 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     expand,
     viewPortSize,
   ]);
-
-  // card locking and unlocking
-  const lockCard = (ref: RefObject<HTMLDivElement>) => {
-    /*
-     * calculate the YPos now because locked card can only happen after some renders.
-     * you don't want to wait for it to rerender because the card y position might already have
-     * been changed then
-     */
-    setLockedCard({
-      ref,
-      yPos: getDivTop(getCurrent(ref)),
-    });
-  };
-  const unlockCard = () => setLockedCard(null);
-  const unlockCardLater = () => setUnlockOnNextEffect(true);
-
-  // unlock after close
-  useEffect(() => {
-    if (unlockOnNextEffect) {
-      unlockCard();
-      setUnlockOnNextEffect(false);
-    }
-  }, [unlockOnNextEffect]);
 
   /**
    * onScroll:
