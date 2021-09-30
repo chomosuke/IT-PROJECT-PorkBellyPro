@@ -18,7 +18,6 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     background: theme.palette.quartz,
     height: '100%',
     padding: '120px 0',
-
   },
   bodyContainer: {
     background: theme.palette.justWhite,
@@ -28,7 +27,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
 
     margin: '0 auto',
     padding: '72px 0',
-    borderRadius: '8px',
+    borderRadius: '12px',
   },
   contentWrapper: {
     margin: '0 196px',
@@ -65,6 +64,9 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
     root: {
       height: '60px',
     },
+    fieldGroup: {
+      borderColor: theme.palette.stoneBlue,
+    },
   };
 
   const linkLabelStyles = {
@@ -84,6 +86,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
     rootPressed: {
       background: theme.palette.stoneBlue,
     },
+
   };
 
   return (
