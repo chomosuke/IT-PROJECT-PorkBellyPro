@@ -39,6 +39,7 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       width: 'content-width',
       paddingLeft: '16vw',
       paddingRight: (detail ? '4vw' : '16vw'),
+      paddingBottom: '200px',
     },
     cardSection: {
       display: 'grid',
@@ -54,7 +55,7 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
     tagSection: {
       display: 'flex',
       margin: '48px 0 72px 0',
-      position: 'relative',
+      // position: 'relative',
     },
     scrollButtonContainer: {
       display: 'flex',
@@ -63,10 +64,10 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       cursor: 'pointer',
       border: 'none',
       height: '48px',
-      width: '160px',
+      width: '120px',
       background:
         'linear-gradient(90deg, '
-        + 'rgba(248,248,248,1) 30%, '
+        + 'rgba(248,248,248,1) 40%, '
         + 'rgba(248,248,248,0.4) 60%, '
         + 'rgba(248,248,248,0) 100%)',
       position: 'abosolute',
@@ -75,6 +76,7 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
     scrollButton: {
       height: '32px',
       width: '32px',
+      color: theme.palette.darkDenim,
     },
     tagList: {
       display: 'flex',
@@ -83,8 +85,8 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       overflowX: 'scroll',
       scrollBehavior: 'smooth',
 
-      margin: '0 -140px',
-      padding: '0 60px',
+      margin: '0 -100px',
+      // padding: '0 40px',
       zIndex: '1',
 
       // hide scrollbars across different browsers
