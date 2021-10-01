@@ -26,8 +26,6 @@ const getClassNames = (center: boolean) => {
       fontSize: '28px',
       height: '100%',
       justifySelf: center ? 'center' : undefined,
-      paddingLeft: '12px',
-      paddingRight: '12px',
       userSelect: 'none',
     },
   });
@@ -44,7 +42,7 @@ export const Logo: React.VoidFunctionComponent<ILogoProps> = (props) => {
 
   return (
     <div className={root}>
-      PorkBelly
+      PORKBELLY
     </div>
   );
 };

@@ -44,8 +44,6 @@ const getClassNames = () => {
     root: {
       ...rootCommonStyles,
       color: justWhite,
-      marginLeft: '12px',
-      marginRight: '12px',
     },
     icon: {
       height: '32px',
@@ -138,15 +136,15 @@ export const IconButton: VoidFunctionComponent<IIconButtonProps> = (props) => {
           <CaretDown className={caret} onClick={caretOnClick} />
         </>
         )}
+        {hasDropdown && (
+        <ContextualMenu
+          target={rootRef}
+          items={items}
+          hidden={menuHidden}
+          onDismiss={hideMenu}
+        />
+        )}
       </div>
-      {hasDropdown && (
-      <ContextualMenu
-        target={rootRef}
-        items={items}
-        hidden={menuHidden}
-        onDismiss={hideMenu}
-      />
-      )}
     </>
   );
 };

@@ -22,16 +22,21 @@ const getClassNames = () => {
     },
     left: {
       gridArea: 'left',
+      marginLeft: '14px',
     },
     mid: {
       alignContent: 'center',
       display: 'grid',
       gridArea: 'mid',
+      marginLeft: '14px',
+      marginRight: '14px',
     },
     right: {
       display: 'flex',
+      columnGap: '28px',
       gridArea: 'right',
       justifyContent: 'end',
+      marginRight: '14px',
     },
   });
 };
