@@ -136,11 +136,16 @@ export const IconButton: VoidFunctionComponent<IIconButtonProps> = (props) => {
           <CaretDown className={caret} onClick={caretOnClick} />
         </>
         )}
-        {hasDropdown && (
+        {/**
+         * According to FluentUI guidelines the ContextualMenu should always be rendered and have
+         * its visibility controlled with the hidden prop. While this improves performance, it also
+         * causes a bug where the popup will be drawn at the wrong position when the viewport size
+         * changes while it was open.
+         */}
+        {hasDropdown && !menuHidden && (
         <ContextualMenu
           target={rootRef}
           items={items}
-          hidden={menuHidden}
           onDismiss={hideMenu}
         />
         )}
