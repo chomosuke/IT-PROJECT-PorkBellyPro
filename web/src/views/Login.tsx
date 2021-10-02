@@ -69,12 +69,6 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
     },
   };
 
-  const linkLabelStyles = {
-    root: {
-      // cursor: 'pointer',
-    },
-  };
-
   const buttonStyle = {
     root: {
       background: theme.palette.stoneBlue,
@@ -86,7 +80,6 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
     rootPressed: {
       background: theme.palette.stoneBlue,
     },
-
   };
 
   return (
@@ -120,7 +113,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
             styles={buttonStyle}
           />
           <Stack.Item align='center'>
-            <Label styles={linkLabelStyles}>
+            <Label>
               <Link to={registering ? '/login' : '/register'}>
                 {
                   registering
