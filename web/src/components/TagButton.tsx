@@ -2,6 +2,7 @@ import { DefaultButton, IButtonProps, mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
 import { ITag } from '../controllers/Tag';
+import { useTheme } from '../theme';
 
 type OnClickHandler = IButtonProps['onClick'];
 
@@ -12,19 +13,34 @@ export interface ITagButtonProps {
 
 const getClassNames = () => mergeStyleSets({
   tagContainer: {
-    height: '100%',
-    outerWidth: '60px',
   },
 });
 
 export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, onClick }) => {
+  const theme = useTheme();
   const tagStyles = {
     root: {
       backgroundColor: tag.color,
-      border: 'none',
-      padding: '0 48px',
+      borderStyle: 'solid',
+      borderWidth: '2px',
+      borderColor: tag.color,
+      whiteSpace: 'nowrap',
+      padding: '0 32px',
       margin: '0 12px',
-      outerHeight: '48px',
+      height: '32px',
+      borderRadius: '4px',
+      ...theme.fontFamily.roboto,
+      ...theme.fontSize.small,
+      color: theme.palette.justWhite,
+    },
+    rootHovered: {
+      background: tag.color,
+      color: theme.palette.justWhite,
+      opacity: '0.8',
+    },
+    rootPressed: {
+      background: theme.palette.quartz,
+      color: tag.color,
     },
   };
 

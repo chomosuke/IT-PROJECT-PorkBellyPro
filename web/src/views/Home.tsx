@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, {
   RefObject, createRef, useEffect, useRef, useState,
 } from 'react';
-import { Stack, mergeStyleSets } from '@fluentui/react';
+import { mergeStyleSets } from '@fluentui/react';
 import { useApp } from '../AppContext';
 import { HomeProvider } from '../HomeContext';
 import { Card } from '../components/Card';
@@ -10,12 +10,13 @@ import { ICard } from '../controllers/Card';
 import { CardDetails } from '../components/cardDetails/CardDetails';
 import { useViewportSize } from '../ViewportSize';
 import { TagButton } from '../components/TagButton';
+import { Theme, useTheme } from '../theme';
 
 export interface IHomeProps {
   detail?: ICard;
 }
 
-const getClassNames = (expand: boolean, detail: boolean) => {
+const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
   let templateColumnVar;
   if (detail) {
     templateColumnVar = expand ? '1fr 1fr' : '2fr 1fr';
@@ -25,14 +26,26 @@ const getClassNames = (expand: boolean, detail: boolean) => {
 
   return mergeStyleSets({
     root: {
+      height: '100%',
       display: 'grid',
       gridTemplateAreas: '"a b"',
       gridTemplateColumns: templateColumnVar,
-      height: '100%',
+      background: theme.palette.quartz,
+    },
+    cardGridContainer: {
+      gridArea: 'a',
+      width: 'content-width',
+      paddingLeft: '12vw',
+      paddingRight: (detail ? '4vw' : '12vw'),
+      paddingBottom: '200px',
+
+      overflow: 'auto',
     },
     cardSection: {
-      gridArea: 'a',
-      overflow: 'auto',
+      display: 'grid',
+      justifyContent: 'center',
+      gridTemplateColumns: 'repeat(auto-fill, 300px)',
+      gridGap: '72px 72px',
     },
     detailSection: {
       gridArea: 'b',
@@ -41,15 +54,46 @@ const getClassNames = (expand: boolean, detail: boolean) => {
     },
     tagSection: {
       display: 'flex',
+      margin: '48px 0 72px 0',
+    },
+    scrollButtonContainer: {
+      display: 'flex',
+      justifyContent: 'left',
+      alignItems: 'center',
+      cursor: 'pointer',
+      border: 'none',
+      height: '48px',
+      width: '60px',
+      background:
+        'linear-gradient(90deg, '
+        + 'rgba(248,248,248,1) 50%, '
+        + 'rgba(248,248,248,0.4) 80%, '
+        + 'rgba(248,248,248,0) 100%)',
+      position: 'abosolute',
+      zIndex: '10',
+    },
+    scrollButton: {
+      height: '32px',
+      width: '32px',
+      color: theme.palette.darkDenim,
+    },
+    spacers: {
+      minWidth: '72px',
     },
     tagList: {
-      // flex: '1',
       display: 'flex',
       flexDirection: 'row',
+      width: '100%',
       overflowX: 'scroll',
-
       scrollBehavior: 'smooth',
-      margin: '24px 0',
+      margin: '8px -60px',
+      zIndex: '1',
+
+      // hide scrollbars across different browsers
+      scrollbarWidth: 'none',
+      '::-webkit-scrollbar': {
+        display: 'none',
+      },
     },
   });
 };
@@ -195,14 +239,25 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
    * autoScroll end
    */
 
-  const {
-    root, cardSection, detailSection, tagList, tagSection,
-  } = getClassNames(expand, Boolean(detail));
   const { user, searchQuery, tagQuery } = useApp();
   if (user == null) throw new Error();
 
   const { cards, tags } = user;
   const context = useApp();
+  const theme = useTheme();
+
+  const {
+    root,
+    cardGridContainer,
+    cardSection,
+    detailSection,
+    tagList,
+    tagSection,
+    scrollButtonContainer,
+    scrollButton,
+    spacers,
+  } = getClassNames(expand, Boolean(detail), theme);
+  const rotate180 = { transform: 'rotate(180deg)' };
 
   function filterCard(card: ICard): boolean {
     const searchTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
@@ -240,10 +295,17 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     }}
     >
       <div className={root}>
-        <div className={cardSection} ref={cardSectionRef} onScroll={onCardScroll}>
+        <div className={cardGridContainer} ref={cardSectionRef} onScroll={onCardScroll}>
           <div className={tagSection}>
-            <button type='button' onClick={() => scroll(-200)}> scroll left </button>
+            <button
+              type='button'
+              className={scrollButtonContainer}
+              onClick={() => scroll(-(viewPortSize.width / 3))}
+            >
+              <theme.icon.caretLeft className={scrollButton} />
+            </button>
             <div className={tagList} ref={tagScrollRef}>
+              <div className={spacers} />
               {tags.map((tag) => (
                 <TagButton
                   key={tag.id}
@@ -255,13 +317,26 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
                   }}
                 />
               ))}
+              <div className={spacers} />
             </div>
-            <button type='button' onClick={() => scroll(200)}> scroll right </button>
+            <button
+              type='button'
+              className={scrollButtonContainer}
+              onClick={() => scroll(viewPortSize.width / 3)}
+              style={rotate180}
+            >
+              <theme.icon.caretLeft className={scrollButton} />
+            </button>
           </div>
-
-          <Stack horizontal wrap>
-            {cards.filter(filterCard).map((card) => <Card key={card.id} card={card} />)}
-          </Stack>
+          <div className={cardSection}>
+            {cards.filter(filterCard).map((card) => (
+              <Card
+                key={card.id}
+                selected={card.id === detail?.id}
+                card={card}
+              />
+            ))}
+          </div>
         </div>
         {detail != null
           && (
