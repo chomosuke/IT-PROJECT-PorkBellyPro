@@ -47,6 +47,12 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       width,
       background: theme.palette.justWhite,
       ...theme.shape.default,
+      '&:hover': {
+        borderRadius: '8px',
+        animationName: focusDecorator,
+        animationDuration: '0.2s',
+        animationFillMode: 'forwards',
+      },
     },
     cardContent: {
       height,
@@ -56,6 +62,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       cursor: 'pointer',
       height,
       width,
+      borderRadius: '8px',
       top: '-100%',
       left: '0',
       position: 'relative',
@@ -66,11 +73,6 @@ const getClassNames = (selected: boolean, theme: Theme) => {
           boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
         }
         : {}),
-      '&:hover': {
-        animationName: focusDecorator,
-        animationDuration: '0.2s',
-        animationFillMode: 'forwards',
-      },
     },
     imageContainer: {
       height: '200px',
