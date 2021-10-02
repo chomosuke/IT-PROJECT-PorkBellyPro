@@ -71,7 +71,6 @@ const getClassNames = (selected: boolean, theme: Theme) => {
         animationDuration: '0.2s',
         animationFillMode: 'forwards',
       },
-
     },
     imageContainer: {
       height: '200px',

@@ -13,7 +13,6 @@ export interface ITagButtonProps {
 
 const getClassNames = () => mergeStyleSets({
   tagContainer: {
-    // height: '100%',
   },
 });
 

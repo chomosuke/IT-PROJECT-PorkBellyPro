@@ -44,7 +44,6 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
     cardSection: {
       display: 'grid',
       justifyContent: 'center',
-      // alignItems: 'center',
       gridTemplateColumns: 'repeat(auto-fill, 300px)',
       gridGap: '72px 72px',
     },
@@ -91,7 +90,6 @@ const getClassNames = (expand: boolean, detail: boolean, theme: Theme) => {
       zIndex: '1',
 
       // hide scrollbars across different browsers
-      overflowStyle: 'none',
       scrollbarWidth: 'none',
       '::-webkit-scrollbar': {
         display: 'none',
@@ -232,8 +230,15 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   const theme = useTheme();
 
   const {
-    root, cardGridContainer, cardSection, detailSection, tagList, tagSection,
-    scrollButtonContainer, scrollButton, spacers,
+    root,
+    cardGridContainer,
+    cardSection,
+    detailSection,
+    tagList,
+    tagSection,
+    scrollButtonContainer,
+    scrollButton,
+    spacers,
   } = getClassNames(expand, Boolean(detail), theme);
   const rotate180 = { transform: 'rotate(180deg)' };
 
@@ -275,7 +280,11 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
       <div className={root}>
         <div className={cardGridContainer} ref={cardSectionRef} onScroll={onCardScroll}>
           <div className={tagSection}>
-            <button type='button' className={scrollButtonContainer} onClick={() => scroll(-(viewPortSize.width / 3))}>
+            <button
+              type='button'
+              className={scrollButtonContainer}
+              onClick={() => scroll(-(viewPortSize.width / 3))}
+            >
               <theme.icon.caretLeft className={scrollButton} />
             </button>
             <div className={tagList} ref={tagScrollRef}>
@@ -292,9 +301,13 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
                 />
               ))}
               <div className={spacers} />
-
             </div>
-            <button type='button' className={scrollButtonContainer} onClick={() => scroll(viewPortSize.width / 3)} style={rotate180}>
+            <button
+              type='button'
+              className={scrollButtonContainer}
+              onClick={() => scroll(viewPortSize.width / 3)}
+              style={rotate180}
+            >
               <theme.icon.caretLeft className={scrollButton} />
             </button>
           </div>
