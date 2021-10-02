@@ -21,7 +21,10 @@ export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, o
   const tagStyles = {
     root: {
       backgroundColor: tag.color,
-      border: 'none',
+      borderStyle: 'solid',
+      borderWidth: '2px',
+      borderColor: tag.color,
+      whiteSpace: 'nowrap',
       padding: '0 32px',
       margin: '0 12px',
       height: '32px',
@@ -29,6 +32,15 @@ export const TagButton: React.VoidFunctionComponent<ITagButtonProps> = ({ tag, o
       ...theme.fontFamily.roboto,
       ...theme.fontSize.small,
       color: theme.palette.justWhite,
+    },
+    rootHovered: {
+      background: tag.color,
+      color: theme.palette.justWhite,
+      opacity: '0.8',
+    },
+    rootPressed: {
+      background: theme.palette.quartz,
+      color: tag.color,
     },
   };
 
