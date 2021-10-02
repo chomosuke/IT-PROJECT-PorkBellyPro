@@ -31,109 +31,112 @@ describe('Login view render tests', () => {
     ).toJSON();
     expect(tree).toMatchInlineSnapshot(`
 <div
-  className="bodyStyle-53"
-  id="container"
+  className="root-53"
 >
   <div
-    className="ms-Stack css-54"
+    className="bodyContainer-54"
   >
     <div
-      className="ms-TextField root-56"
+      className="ms-Stack contentWrapper-56"
     >
       <div
-        className="ms-TextField-wrapper"
+        className="ms-TextField root-58"
       >
         <div
-          className="ms-TextField-fieldGroup fieldGroup-57"
+          className="ms-TextField-wrapper"
         >
-          <input
-            aria-invalid={false}
-            className="ms-TextField-field field-58"
-            id="TextField0"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            onInput={[Function]}
-            placeholder="Username"
-            type="text"
-            value=""
-          />
+          <div
+            className="ms-TextField-fieldGroup fieldGroup-59"
+          >
+            <input
+              aria-invalid={false}
+              className="ms-TextField-field field-60"
+              id="TextField0"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              onInput={[Function]}
+              placeholder="Username"
+              type="text"
+              value=""
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <div
-      className="ms-TextField root-56"
-    >
       <div
-        className="ms-TextField-wrapper"
+        className="ms-TextField root-58"
       >
         <div
-          className="ms-TextField-fieldGroup fieldGroup-57"
+          className="ms-TextField-wrapper"
         >
-          <input
-            aria-invalid={false}
-            className="ms-TextField-field field-58"
-            id="TextField3"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            onInput={[Function]}
-            placeholder="Password"
-            type="password"
-            value=""
-          />
+          <div
+            className="ms-TextField-fieldGroup fieldGroup-59"
+          >
+            <input
+              aria-invalid={false}
+              className="ms-TextField-field field-60"
+              id="TextField3"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              onInput={[Function]}
+              placeholder="Password"
+              type="password"
+              value=""
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <button
-      className="ms-Button ms-Button--primary root-67"
-      data-is-focusable={true}
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      onKeyPress={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseUp={[Function]}
-      type="button"
-    >
-      <span
-        className="ms-Button-flexContainer flexContainer-68"
-        data-automationid="splitbuttonprimary"
+      <button
+        className="ms-Button ms-Button--primary root-69"
+        data-is-focusable={true}
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onKeyPress={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        type="button"
       >
         <span
-          className="ms-Button-textContainer textContainer-69"
+          className="ms-Button-flexContainer flexContainer-70"
+          data-automationid="splitbuttonprimary"
         >
           <span
-            className="ms-Button-label label-71"
-            id="id__6"
+            className="ms-Button-textContainer textContainer-71"
           >
-            Log in
+            <span
+              className="ms-Button-label label-73"
+              id="id__6"
+            >
+              Log in
+            </span>
           </span>
         </span>
-      </span>
-    </button>
-    <div
-      className="ms-StackItem css-75"
-    >
-      <label
-        className="ms-Label root-76"
+      </button>
+      <div
+        className="ms-StackItem css-77"
       >
-        <a
-          href="/register"
-          onClick={[Function]}
+        <label
+          className="ms-Label root-78"
         >
-          Register to get started
-        </a>
-      </label>
-    </div>
-    <div
-      className="ms-StackItem css-75"
-    >
-      <label
-        className="ms-Label root-77"
+          <a
+            href="/register"
+            onClick={[Function]}
+          >
+            Register to get started
+          </a>
+        </label>
+      </div>
+      <div
+        className="ms-StackItem css-77"
       >
-        Can't log in?
-      </label>
+        <label
+          className="ms-Label root-78"
+        >
+          Can't log in?
+        </label>
+      </div>
     </div>
   </div>
 </div>
