@@ -36,8 +36,6 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontWeight.light,
     color: theme.palette.justWhite,
     ...textStyle,
-    minWidth: '120px',
-    maxWidth: '129px',
     whiteSpace: 'pre-wrap',
     overflowWrap: 'break-word',
     overflow: 'hidden',
