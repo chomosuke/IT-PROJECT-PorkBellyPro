@@ -59,48 +59,69 @@ describe('TagPicker render tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
+  className="ms-Stack css-56"
 >
-  <div
-    className="ms-StackItem css-54"
+  <span
+    className="text-57"
   >
     Tags
-  </div>
+  </span>
   <div
-    className="ms-StackItem css-54"
+    className="ms-Stack css-59"
   >
     <div
-      className="ms-Stack css-53"
-    />
-  </div>
-  <button
-    className="ms-Button ms-Button--default root-55"
-    data-is-focusable={true}
-    id="picker-target0"
-    onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
-    type="button"
-  >
-    <span
-      className="ms-Button-flexContainer flexContainer-56"
-      data-automationid="splitbuttonprimary"
+      className="ms-Stack-inner css-58"
     >
-      <span
-        className="ms-Button-textContainer textContainer-57"
+      <svg
+        className="addButton-54"
+        fill="#ffffff"
+        height={24}
+        id="picker-target0"
+        onClick={[Function]}
+        viewBox="0 0 256 256"
+        width={24}
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <span
-          className="ms-Button-label label-59"
-          id="id__1"
-        >
-          Attach Tags
-        </span>
-      </span>
-    </span>
-  </button>
+        <rect
+          fill="none"
+          height="256"
+          width="256"
+        />
+        <circle
+          cx="128"
+          cy="128"
+          fill="none"
+          r="96"
+          stroke="#ffffff"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        />
+        <line
+          fill="none"
+          stroke="#ffffff"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+          x1="88"
+          x2="168"
+          y1="128"
+          y2="128"
+        />
+        <line
+          fill="none"
+          stroke="#ffffff"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+          x1="128"
+          x2="128"
+          y1="88"
+          y2="168"
+        />
+      </svg>
+    </div>
+  </div>
 </div>
 `);
   });
@@ -113,18 +134,18 @@ describe('TagPicker render tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
+  className="ms-Stack css-56"
 >
-  <div
-    className="ms-StackItem css-54"
+  <span
+    className="text-57"
   >
     Tags
-  </div>
+  </span>
   <div
-    className="ms-StackItem css-54"
+    className="ms-Stack css-59"
   >
     <div
-      className="ms-Stack css-53"
+      className="ms-Stack-inner css-58"
     />
   </div>
 </div>
