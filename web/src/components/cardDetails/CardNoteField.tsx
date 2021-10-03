@@ -23,6 +23,8 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontSize.standard,
     whiteSpace: 'pre-wrap',
     width: '100%',
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
   },
 });
 

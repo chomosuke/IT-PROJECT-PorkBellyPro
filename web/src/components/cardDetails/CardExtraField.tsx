@@ -25,8 +25,10 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     minWidth: '120px',
     maxWidth: '120px',
     marginRight: '20px',
-    whiteSpace: 'pre-wrap',
     ...textStyle,
+    whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
   },
   viewingValue: {
     ...theme.fontFamily.roboto,
@@ -34,7 +36,11 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.fontWeight.light,
     color: theme.palette.justWhite,
     ...textStyle,
+    minWidth: '120px',
+    maxWidth: '129px',
     whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
   },
   iconButton: {
     cursor: 'pointer',

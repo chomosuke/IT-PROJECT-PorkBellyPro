@@ -27,6 +27,8 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     marginRight: '20px',
     ...textStyle,
     whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
   },
   viewingValue: {
     ...theme.fontFamily.roboto,
@@ -35,6 +37,8 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     color: theme.palette.justWhite,
     ...textStyle,
     whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
   },
 });
 

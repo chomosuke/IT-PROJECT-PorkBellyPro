@@ -1,17 +1,16 @@
-import { PromiseWorker, WorkerTerminatedError } from '@porkbellypro/crm-shared';
-import React from 'react';
 import {
   IImageProps, Image, ImageFit, mergeStyleSets,
 } from '@fluentui/react';
+import { PromiseWorker, WorkerTerminatedError } from '@porkbellypro/crm-shared';
+import React from 'react';
 import {
   Requireable, bool, object,
 } from 'prop-types';
 import Loader from 'react-loader-spinner';
 import { ICard } from '../../controllers/Card';
-
-import type { Message, Result } from './processImage';
 import { useHome } from '../../HomeContext';
 import { Theme, useTheme } from '../../theme';
+import type { Message, Result } from './processImage';
 
 export interface ICardImageFieldProps {
   card: ICard;
