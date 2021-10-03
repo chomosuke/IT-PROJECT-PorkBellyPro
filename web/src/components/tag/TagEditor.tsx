@@ -18,18 +18,20 @@ const getSwatchClassNames = (selectedColor: string) => {
   const width = 24;
   // Extracted from Figma
   const colors = [
-    '#BF7829',
-    '#127976',
-    '#D61317',
-    '#F3B27A',
-    '#E5E5E5',
-    '#77A69E',
-    '#BC8282',
-    '#78AFB2',
-    '#84A9C3',
-    '#5D68A6',
+    '#bc8282',
+    '#78afb2',
+    '#2e2c2a',
+    '#84a9c3',
+    '#5d68a6',
     '#662525',
-    '#FBE900',
+    '#fbe900',
+    '#bf7829',
+    '#127976',
+    '#d61317',
+    '#f3b27a',
+    '#e5e5e5',
+    '#77a69e',
+    '#bc8282',
   ];
 
   return colors.map((color) => [color,
