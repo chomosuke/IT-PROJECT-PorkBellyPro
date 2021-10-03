@@ -1,10 +1,11 @@
-import { DefaultButton } from '@fluentui/react';
+import { Stack, mergeStyleSets } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import React, { Requireable } from 'react';
 import PropType from 'prop-types';
 import { ICard } from '../../controllers/Card';
 import { ITag } from '../../controllers/Tag';
 import { Tag } from './Tag';
+import { useTheme } from '../../theme';
 
 export interface ITagWrapperProps {
   tag: ITag;
@@ -12,10 +13,20 @@ export interface ITagWrapperProps {
   setTagEdit?: (id: string) => void;
 }
 
+const getClassName = () => mergeStyleSets({
+  iconButton: {
+    cursor: 'pointer',
+    marginRight: '8px',
+  },
+});
+
 export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
   tag, card, setTagEdit,
 }) => {
+  const theme = useTheme();
   const targetElemId = useId();
+
+  const { iconButton } = getClassName();
 
   const attachTag = () => {
     if (card && !card.tags.includes(tag)) {
@@ -24,16 +35,18 @@ export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
   };
 
   return (
-    <div id={targetElemId}>
+    <Stack horizontal id={targetElemId} horizontalAlign='space-between'>
       <Tag tag={tag} onClick={attachTag} />
       {setTagEdit
         && (
-        <DefaultButton
-          text='Edit Tag'
-          onClick={() => setTagEdit(targetElemId)}
-        />
+          <theme.icon.dotsThree
+            className={iconButton}
+            size={24}
+            color={theme.palette.justWhite}
+            onClick={() => setTagEdit(targetElemId)}
+          />
         )}
-    </div>
+    </Stack>
   );
 };
 
