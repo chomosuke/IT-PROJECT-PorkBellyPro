@@ -38,49 +38,52 @@ describe('TagWrapper Render Tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
+  className="ms-Stack css-54"
   id="id__0"
 >
   <div
-    className="root-54"
+    className="root-55"
   >
     <span
-      className="labelSpan-55"
+      className="labelSpan-56"
       onClick={[Function]}
     >
       Big Boss
     </span>
     <span
-      className="rightSpan-56"
+      className="rightSpan-57"
     />
   </div>
-  <button
-    className="ms-Button ms-Button--default root-58"
-    data-is-focusable={true}
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={24}
     onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
-    type="button"
+    viewBox="0 0 256 256"
+    width={24}
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <span
-      className="ms-Button-flexContainer flexContainer-59"
-      data-automationid="splitbuttonprimary"
-    >
-      <span
-        className="ms-Button-textContainer textContainer-60"
-      >
-        <span
-          className="ms-Button-label label-62"
-          id="id__1"
-        >
-          Edit Tag
-        </span>
-      </span>
-    </span>
-  </button>
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <circle
+      cx="128"
+      cy="128"
+      r="16"
+    />
+    <circle
+      cx="64"
+      cy="128"
+      r="16"
+    />
+    <circle
+      cx="192"
+      cy="128"
+      r="16"
+    />
+  </svg>
 </div>
 `);
   });
@@ -91,20 +94,20 @@ describe('TagWrapper Render Tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
-  id="id__4"
+  className="ms-Stack css-54"
+  id="id__1"
 >
   <div
-    className="root-54"
+    className="root-55"
   >
     <span
-      className="labelSpan-55"
+      className="labelSpan-56"
       onClick={[Function]}
     >
       Big Boss
     </span>
     <span
-      className="rightSpan-56"
+      className="rightSpan-57"
     />
   </div>
 </div>
@@ -121,49 +124,52 @@ describe('TagWrapper Render Tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-53"
-  id="id__5"
+  className="ms-Stack css-54"
+  id="id__2"
 >
   <div
-    className="root-54"
+    className="root-55"
   >
     <span
-      className="labelSpan-55"
+      className="labelSpan-56"
       onClick={[Function]}
     >
       Big Boss
     </span>
     <span
-      className="rightSpan-56"
+      className="rightSpan-57"
     />
   </div>
-  <button
-    className="ms-Button ms-Button--default root-58"
-    data-is-focusable={true}
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={24}
     onClick={[Function]}
-    onKeyDown={[Function]}
-    onKeyPress={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseUp={[Function]}
-    type="button"
+    viewBox="0 0 256 256"
+    width={24}
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <span
-      className="ms-Button-flexContainer flexContainer-59"
-      data-automationid="splitbuttonprimary"
-    >
-      <span
-        className="ms-Button-textContainer textContainer-60"
-      >
-        <span
-          className="ms-Button-label label-62"
-          id="id__6"
-        >
-          Edit Tag
-        </span>
-      </span>
-    </span>
-  </button>
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <circle
+      cx="128"
+      cy="128"
+      r="16"
+    />
+    <circle
+      cx="64"
+      cy="128"
+      r="16"
+    />
+    <circle
+      cx="192"
+      cy="128"
+      r="16"
+    />
+  </svg>
 </div>
 `);
   });
