@@ -59,23 +59,23 @@ describe('TagPicker render tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-60"
+  className="ms-Stack css-59"
 >
   <span
-    className="text-61"
+    className="text-60"
   >
     Tags
   </span>
   <div
-    className="ms-StackItem css-62"
+    className="ms-StackItem css-61"
   >
     <div>
       <div
-        className="ms-Stack css-64"
+        className="ms-Stack css-63"
         id="picker-target0"
       >
         <div
-          className="ms-Stack-inner css-63"
+          className="ms-Stack-inner css-62"
         >
           <svg
             className="addButton-54"
@@ -140,23 +140,23 @@ describe('TagPicker render tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-60"
+  className="ms-Stack css-59"
 >
   <span
-    className="text-61"
+    className="text-60"
   >
     Tags
   </span>
   <div
-    className="ms-StackItem css-62"
+    className="ms-StackItem css-61"
   >
     <div>
       <div
-        className="ms-Stack css-64"
+        className="ms-Stack css-63"
         id="picker-target1"
       >
         <div
-          className="ms-Stack-inner css-63"
+          className="ms-Stack-inner css-62"
         />
       </div>
     </div>

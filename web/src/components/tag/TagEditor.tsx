@@ -1,14 +1,17 @@
 import {
-  Callout, DefaultButton, ICalloutProps, Stack, TextField, mergeStyles,
+  Callout, DirectionalHint, ICalloutProps, ITextFieldProps, Stack, Text, TextField,
+  mergeStyleSets, mergeStyles,
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
 import { ITag, ITagProperties } from '../../controllers/Tag';
+import { Theme, useTheme } from '../../theme';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
   tag: ITag;
   anchor: ICalloutProps['target'];
+  width: number;
   closingFunction?: () => void;
 }
 
@@ -31,7 +34,6 @@ const getSwatchClassNames = (selectedColor: string) => {
     '#f3b27a',
     '#e5e5e5',
     '#77a69e',
-    '#bc8282',
   ];
 
   return colors.map((color) => [color,
@@ -40,16 +42,65 @@ const getSwatchClassNames = (selectedColor: string) => {
       width,
       borderRadius,
       backgroundColor: color,
+      cursor: 'pointer',
     },
     // when selectedColor matches then we have feedback on what color is selected
     (color === selectedColor) && {
-      border: '2px solid black',
+      border: '2px solid white',
       boxSizing: 'border-box',
     }])]);
 };
 
+const getCalloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme) => ({
+  root: {
+    ...theme.shape.default,
+    backgroundColor: theme.palette.stoneBlue,
+  },
+  calloutMain: {
+    ...theme.shape.default,
+    backgroundColor: theme.palette.stoneBlue,
+    overflow: 'hidden',
+  },
+});
+
+const getNewFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+  field: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.small,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+    whiteSpace: 'pre-wrap',
+    height: '24px',
+  },
+  fieldGroup: {
+    height: '24px',
+    borderRadius: theme.shape.default.borderRadius,
+    backgroundColor: theme.palette.moldyCheese,
+  },
+});
+
+const getClassNames = (theme: Theme) => mergeStyleSets({
+  tagStackItem: {
+    margin: '8px',
+  },
+  separator: {
+    borderColor: theme.palette.justWhite,
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+  deleteButton: {
+    cursor: 'pointer',
+  },
+  removeTagText: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.small,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+  },
+});
+
 export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
-  tag, anchor, closingFunction,
+  tag, anchor, width, closingFunction,
 }) => {
   const [unstagedState, setState] = useState<ITagProperties>(tag);
   const updateLabel = (newLabel: string) => setState({ ...unstagedState, label: newLabel });
@@ -62,6 +113,12 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
 
   const swatchStyles = getSwatchClassNames(unstagedState.color);
 
+  const theme = useTheme();
+
+  const {
+    tagStackItem, separator, deleteButton, removeTagText,
+  } = getClassNames(theme);
+
   return (
     <Callout
       target={anchor}
@@ -69,17 +126,34 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
         tag.commit(unstagedState);
         if (closingFunction) closingFunction();
       }}
+      isBeakVisible={false}
+      minPagePadding={0}
+      directionalHint={DirectionalHint.bottomCenter}
+      calloutMaxWidth={width}
+      calloutMinWidth={width}
+      styles={getCalloutStyle(theme)}
     >
-      <TextField
-        ariaLabel='New textfield name'
-        value={unstagedState.label}
-        onChange={(ev) => updateLabel(ev.currentTarget.value)}
-      />
-
-      {/* Can replace with Diaglog */}
-      <DefaultButton text='Delete Tag' onClick={deleteTag} />
-      {/* color swatches */}
-      <Stack horizontal>
+      <Stack.Item key='separator' align='stretch' className={tagStackItem}>
+        <TextField
+          borderless
+          ariaLabel='New textfield name'
+          value={unstagedState.label}
+          onChange={(ev) => updateLabel(ev.currentTarget.value)}
+          styles={getNewFieldStyles(theme)}
+        />
+      </Stack.Item>
+      <Stack.Item key='separator' align='stretch' className={tagStackItem}>
+        <Stack horizontal tokens={{ childrenGap: '8px' }} onClick={deleteTag} className={deleteButton}>
+          <theme.icon.trash size={24} color={theme.palette.justWhite} />
+          <Stack.Item align='center'>
+            <Text className={removeTagText}>remove tag</Text>
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+      <Stack.Item key='separator' align='stretch' className={tagStackItem}>
+        <div className={separator} />
+      </Stack.Item>
+      <Stack horizontal wrap tokens={{ childrenGap: '12px 20px', padding: '8px' }}>
         {swatchStyles.map(([color, className]) => (
           // Colour swatches
           <div
@@ -100,6 +174,7 @@ TagEditor.propTypes = {
   anchor: (PropTypes.oneOfType([
     PropTypes.object as Requireable<ICalloutProps['target']>, PropTypes.string,
   ])).isRequired,
+  width: PropTypes.number.isRequired,
   closingFunction: PropTypes.func,
 };
 

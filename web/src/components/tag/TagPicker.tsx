@@ -44,9 +44,6 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     paddingTop: '6px',
     paddingRight: '6px',
   },
-  calloutStack: {
-    backgroundColor: theme.palette.stoneBlue,
-  },
   tagStackItem: {
     margin: '8px',
   },
@@ -77,21 +74,21 @@ const getSearchFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme
     ...theme.fontFamily.roboto,
     ...theme.fontSize.small,
     ...theme.fontWeight.medium,
-    color: theme.palette.moldyCheese,
+    color: theme.palette.justWhite,
     whiteSpace: 'pre-wrap',
     height: '24px',
   },
   fieldGroup: {
     height: '24px',
     borderRadius: theme.shape.default.borderRadius,
-    backgroundColor: theme.palette.cloudyDay,
+    backgroundColor: theme.palette.moldyCheese,
   },
 });
 
 const getTagFinderStackStyle: (theme: Theme) => IStackProps['styles'] = (theme: Theme) => ({
   root: {
     borderRadius: theme.shape.default.borderRadius,
-    backgroundColor: theme.palette.cloudyDay,
+    backgroundColor: theme.palette.moldyCheese,
   },
 });
 
@@ -109,7 +106,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
 
   const theme = useTheme();
   const {
-    text, addButton, tagContainer, calloutStack, tagStackItem, separator, createTag,
+    text, addButton, tagContainer, tagStackItem, separator, createTag,
   } = getClassNames(theme);
 
   const valueDivRef = createRef<HTMLDivElement>();
@@ -174,7 +171,6 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
         ? (
           <Callout
             coverTarget
-            alignTargetEdge
             target={`#${pickerTargetId}`}
             isBeakVisible={false}
             minPagePadding={0}
@@ -186,7 +182,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             calloutMaxWidth={calloutWidth}
             styles={getCalloutStyle(theme)}
           >
-            <Stack className={calloutStack}>
+            <Stack>
               <Stack.Item key='tags' align='stretch' className={tagStackItem}>
                 <Stack horizontal wrap id={pickerTargetId}>
                   {targetCard?.tags.map((t) => (
@@ -200,14 +196,14 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   ))}
                 </Stack>
               </Stack.Item>
-              <Stack.Item key='tags' align='stretch' className={tagStackItem}>
+              <Stack.Item key='separator' align='stretch' className={tagStackItem}>
                 <div className={separator} />
               </Stack.Item>
               <Stack.Item key='tagFinder' align='stretch' className={tagStackItem}>
                 <Stack horizontal styles={getTagFinderStackStyle(theme)}>
                   <Stack.Item key='searchBox' grow>
                     <TextField
-                      placeholder='Tag Name'
+                      placeholder='create new tag'
                       value={tagSearchString}
                       borderless
                       styles={getSearchFieldStyles(theme)}
@@ -244,6 +240,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
           <TagEditor
             anchor={`#${focusedTag.anchor}`}
             tag={focusedTag.tag}
+            width={calloutWidth}
             key='TagEditor'
             closingFunction={() => setFocusedTag(undefined)}
           />

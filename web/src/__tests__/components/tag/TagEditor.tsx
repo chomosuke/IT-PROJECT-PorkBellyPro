@@ -18,7 +18,7 @@ const htmlId = 'TagAnchor';
 describe('TagEditor render tests', () => {
   test('without closingFunction', () => {
     const json = create(
-      <TagEditor anchor={htmlId} tag={demoTag} />,
+      <TagEditor width={100} anchor={htmlId} tag={demoTag} />,
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <span
@@ -30,6 +30,7 @@ describe('TagEditor render tests', () => {
   test('with closingFunction', () => {
     const json = create(
       <TagEditor
+        width={100}
         anchor={htmlId}
         tag={demoTag}
         closingFunction={() => { }}
