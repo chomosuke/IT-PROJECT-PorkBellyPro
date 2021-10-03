@@ -1,9 +1,9 @@
 import React, {
-  Requireable, useState,
+  Requireable, createRef, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Callout, DefaultButton, Stack, Text, TextField, mergeStyleSets,
+  Callout, DefaultButton, DirectionalHint, ICalloutProps, Stack, Text, TextField, mergeStyleSets,
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
@@ -43,6 +43,23 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     paddingTop: '6px',
     paddingRight: '6px',
   },
+  calloutStack: {
+    backgroundColor: theme.palette.stoneBlue,
+  },
+  tagStackItem: {
+    margin: '8px',
+  },
+});
+
+const calloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme) => ({
+  root: {
+    ...theme.shape.default,
+    backgroundColor: theme.palette.stoneBlue,
+  },
+  calloutMain: {
+    ...theme.shape.default,
+    backgroundColor: theme.palette.stoneBlue,
+  },
 });
 
 export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
@@ -54,7 +71,26 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
 
   type ITagAnchor = Pick<ITagEditorProps, 'tag' | 'anchor'>;
   const [focusedTag, setFocusedTag] = useState<ITagAnchor>();
+
   const pickerTargetId = useId('picker-target');
+
+  const theme = useTheme();
+  const {
+    text, addButton, tagContainer, calloutStack, tagStackItem,
+  } = getClassNames(theme);
+
+  const valueDivRef = createRef<HTMLDivElement>();
+  const [calloutWidth, setCalloutWidth] = useState<number>(0);
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    const currentWidth = valueDivRef.current?.clientWidth ?? 0;
+    if (currentWidth !== calloutWidth) {
+      setCalloutWidth(currentWidth);
+    }
+    /**
+     * valueDivRef.current?.clientWidth as dependency isn't correct because width isn't knowable
+     * before render.
+     */
+  });
 
   function getNewTag(): void {
     const tagProps: Partial<ITagProperties> = {
@@ -69,49 +105,54 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
     targetCard.update({ tags: targetCard.tags.filter((that) => that.id !== t.id) });
   }
 
-  const theme = useTheme();
-  const { text, addButton, tagContainer } = getClassNames(theme);
-
   // user variable is used to access the tags available to the user
   return (
     <Stack horizontal>
       <Text className={text}>Tags</Text>
-      <Stack horizontal wrap>
-        {targetCard?.tags.map((t) => (
-          <Stack.Item className={tagContainer}>
-            {editing
-              ? (
-                <Tag
-                  tag={t}
-                  key={t.id}
-                  onRemove={() => removeTag(t)}
-                />
-              )
-              : <Tag tag={t} key={t.id} />}
-          </Stack.Item>
-        ))}
-        {editing
-          && (
-          <theme.icon.plusCircleTag
-            size={24}
-            className={addButton}
-            onClick={() => setPickerActive((old) => !old)}
-            color={theme.palette.justWhite}
-            id={pickerTargetId}
-          />
-          )}
-      </Stack>
-
+      <div ref={valueDivRef}>
+        <Stack horizontal wrap id={pickerTargetId}>
+          {targetCard?.tags.map((t) => (
+            <Stack.Item className={tagContainer}>
+              {editing
+                ? (
+                  <Tag
+                    tag={t}
+                    key={t.id}
+                    onRemove={() => removeTag(t)}
+                  />
+                )
+                : <Tag tag={t} key={t.id} />}
+            </Stack.Item>
+          ))}
+          {editing
+            && (
+            <theme.icon.plusCircleTag
+              size={24}
+              className={addButton}
+              onClick={() => setPickerActive((old) => !old)}
+              color={theme.palette.justWhite}
+            />
+            )}
+        </Stack>
+      </div>
       {pickerActive
         ? (
           <Callout
+            coverTarget
+            alignTargetEdge
             target={`#${pickerTargetId}`}
+            isBeakVisible={false}
+            minPagePadding={0}
             onDismiss={() => {
               if (!focusedTag) setPickerActive(false);
             }}
+            directionalHint={DirectionalHint.topCenter}
+            calloutMinWidth={calloutWidth}
+            calloutMaxWidth={calloutWidth}
+            styles={calloutStyle(theme)}
           >
-            <Stack>
-              <Stack.Item key='tagFinder'>
+            <Stack className={calloutStack}>
+              <Stack.Item key='tagFinder' align='stretch'>
                 <TextField
                   placeholder='Tag Name'
                   value={tagSearchString}
@@ -123,7 +164,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               {user.user?.tags
                 .filter((t) => t.label.toUpperCase().startsWith(tagSearchString.toUpperCase()))
                 .map((t) => (
-                  <Stack.Item key={t.id}>
+                  <Stack.Item key={t.id} align='stretch' className={tagStackItem}>
                     <TagWrapper
                       key={t.id}
                       tag={t}
