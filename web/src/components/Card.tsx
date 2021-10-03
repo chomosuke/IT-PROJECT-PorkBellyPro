@@ -3,25 +3,56 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
-  IImageProps, Image, ImageFit, Label, Stack, mergeStyleSets,
+  IImageProps, Image, ImageFit, Label, Stack, keyframes, mergeStyleSets,
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
 import { useHome } from '../HomeContext';
 import { cancelLoading } from './cardDetails/CardImageField';
 import { useApp } from '../AppContext';
+import { Theme, useTheme } from '../theme';
 
 export interface ICardProps {
   card: ICard;
+  selected: boolean;
 }
 
-const getClassNames = () => {
+const getClassNames = (selected: boolean, theme: Theme) => {
   const height = '300px';
   const width = '300px';
+
+  const focusDecorator = keyframes({
+    from: {
+      boxShadow: '2px 4px 4px hsl(0deg 0% 0% / 0.25)',
+    },
+    to: {
+      boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
+    },
+  });
+
+  const overflowCutOff = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  };
+
+  const fontStandard = {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.small,
+    color: theme.palette.sootyBee,
+  };
 
   return mergeStyleSets({
     root: {
       height,
       width,
+      background: theme.palette.justWhite,
+      ...theme.shape.default,
+      '&:hover': {
+        borderRadius: '8px',
+        animationName: focusDecorator,
+        animationDuration: '0.2s',
+        animationFillMode: 'forwards',
+      },
     },
     cardContent: {
       height,
@@ -31,25 +62,48 @@ const getClassNames = () => {
       cursor: 'pointer',
       height,
       width,
+      borderRadius: '8px',
       top: '-100%',
       left: '0',
       position: 'relative',
       zIndex: '1',
+      ...(selected
+        ? {
+          background: 'rgb(255, 255, 255, 0.05)',
+          boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
+        }
+        : {}),
     },
     imageContainer: {
       height: '200px',
       width,
+    },
+    labelContainer: {
+      margin: '16px',
+    },
+    mainLabel: {
+      ...fontStandard,
+      fontSize: '18px',
+      ...theme.fontWeight.bold,
+      ...overflowCutOff,
+    },
+    subLabel: {
+      ...fontStandard,
+      ...theme.fontWeight.medium,
+      ...overflowCutOff,
     },
   });
 };
 
 const imageStyles: IImageProps['styles'] = {
   root: {
-    height: 200,
+    height: '200px',
+    width: '300px',
+    borderRadius: '8px 8px 0 0',
   },
 };
 
-export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
+export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }) => {
   const {
     name,
     phone,
@@ -58,10 +112,11 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
   } = card;
   const { showCardDetail } = useApp();
   const { lockCard } = useHome();
+  const theme = useTheme();
 
   const {
-    root, cardContent, target, imageContainer,
-  } = getClassNames();
+    root, cardContent, target, imageContainer, mainLabel, subLabel, labelContainer,
+  } = getClassNames(selected, theme);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -80,14 +135,16 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
           {image != null && (
             <Image
               src={image}
-              imageFit={ImageFit.contain}
+              imageFit={ImageFit.cover}
               styles={imageStyles}
             />
           )}
         </div>
-        <Label>{name}</Label>
-        <Label>{phone}</Label>
-        <Label>{jobTitle}</Label>
+        <div className={labelContainer}>
+          <Label className={mainLabel}>{name}</Label>
+          <Label className={subLabel}>{phone}</Label>
+          <Label className={subLabel}>{jobTitle}</Label>
+        </div>
       </Stack>
       <div
         className={target}
@@ -99,4 +156,5 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card }) => {
 
 Card.propTypes = {
   card: (PropTypes.object as React.Requireable<ICard>).isRequired,
+  selected: PropTypes.bool.isRequired,
 };
