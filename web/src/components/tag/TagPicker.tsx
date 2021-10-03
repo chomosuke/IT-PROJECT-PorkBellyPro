@@ -125,6 +125,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
   function getNewTag(): void {
     const tagProps: Partial<ITagProperties> = {
       label: tagSearchString || 'New Tag',
+      color: '#2e2c2a',
     };
     // newTag refreshes context and may lead to loss of data.
     user.newTag(tagProps);
