@@ -1,4 +1,6 @@
-import { DefaultButton, Stack, mergeStyleSets } from '@fluentui/react';
+import {
+  Stack, Text, mergeStyleSets,
+} from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
@@ -10,26 +12,51 @@ import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
 import { TagPicker } from '../tagSelector/TagPicker';
+import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
   card: ICard;
   editing: boolean;
 }
 
-const getClassNames = () => mergeStyleSets({
+const textStyle = {
+  lineHeight: '36px',
+  verticalAlign: 'middle',
+};
+
+const getClassNames = (theme: Theme) => mergeStyleSets({
   root: {
     display: 'grid',
     height: '100%',
     gridTemplateRows: 'auto 1fr auto',
+    backgroundColor: theme.palette.stoneBlue,
   },
   content: {
     overflow: 'auto',
+  },
+  closeButton: {
+    cursor: 'pointer',
+    marginLeft: 'auto',
+    marginRight: '48px',
+    marginBottom: '24px',
+  },
+  iconButton: {
+    cursor: 'pointer',
+  },
+  addFieldText: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+    ...textStyle,
   },
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
   const { showCardDetail } = useApp();
   const { unlockCard, unlockCardLater } = useHome();
+
+  const theme = useTheme();
 
   const [isEditing, setIsEditing] = React.useState(editing);
 
@@ -63,12 +90,19 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
     cancelLoading(true);
   };
 
-  const { root, content } = getClassNames();
+  const {
+    root, content, closeButton, iconButton, addFieldText,
+  } = getClassNames(theme);
 
   // no sort, order will be preserved on the server presumably
   return (
     <div className={root}>
-      <DefaultButton text='close' onClick={close} />
+      <theme.icon.cross
+        className={closeButton}
+        color={theme.palette.justWhite}
+        size={32}
+        onClick={close}
+      />
       <div className={content}>
         <Stack>
           <Stack.Item key='image' align='stretch'>
@@ -85,29 +119,35 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          <Stack.Item key='note' align='stretch'>
-            <CardNoteField field={note} editing={isEditing} />
-          </Stack.Item>
           {restFields.map((field) => (
             <Stack.Item align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
+          </Stack.Item>
           {isEditing
             && (
-              <Stack.Item key='add field'>
-                <DefaultButton
-                  text='add field'
-                  onClick={() => {
-                    card.update({ fields: [...fields, { key: '', value: '' }] });
-                  }}
+              <Stack
+                horizontal
+                className={iconButton}
+                onClick={() => {
+                  card.update({ fields: [...fields, { key: '', value: '' }] });
+                }}
+              >
+                <theme.icon.plusCircle
+                  color={theme.palette.justWhite}
+                  size={36}
                 />
-              </Stack.Item>
+                <Text className={addFieldText}>Add field</Text>
+              </Stack>
             )}
         </Stack>
       </div>
       <CardDetailActions
         editing={isEditing}
+        newCard={card.id == null}
         onBeginEdit={() => {
           setIsEditing(true);
         }}
