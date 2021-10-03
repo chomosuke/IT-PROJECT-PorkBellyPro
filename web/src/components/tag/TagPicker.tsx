@@ -3,7 +3,8 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Callout, DefaultButton, DirectionalHint, ICalloutProps, Stack, Text, TextField, mergeStyleSets,
+  Callout, DirectionalHint, ICalloutProps, IStackProps, ITextFieldProps, Stack,
+  Text, TextField, mergeStyleSets,
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
@@ -49,9 +50,18 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   tagStackItem: {
     margin: '8px',
   },
+  separator: {
+    borderColor: theme.palette.justWhite,
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+  createTag: {
+    padding: '4px',
+    cursor: 'pointer',
+  },
 });
 
-const calloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme) => ({
+const getCalloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme) => ({
   root: {
     ...theme.shape.default,
     backgroundColor: theme.palette.stoneBlue,
@@ -59,6 +69,29 @@ const calloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme) =
   calloutMain: {
     ...theme.shape.default,
     backgroundColor: theme.palette.stoneBlue,
+  },
+});
+
+const getSearchFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+  field: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.small,
+    ...theme.fontWeight.medium,
+    color: theme.palette.moldyCheese,
+    whiteSpace: 'pre-wrap',
+    height: '24px',
+  },
+  fieldGroup: {
+    height: '24px',
+    borderRadius: theme.shape.default.borderRadius,
+    backgroundColor: theme.palette.cloudyDay,
+  },
+});
+
+const getTagFinderStackStyle: (theme: Theme) => IStackProps['styles'] = (theme: Theme) => ({
+  root: {
+    borderRadius: theme.shape.default.borderRadius,
+    backgroundColor: theme.palette.cloudyDay,
   },
 });
 
@@ -76,7 +109,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
 
   const theme = useTheme();
   const {
-    text, addButton, tagContainer, calloutStack, tagStackItem,
+    text, addButton, tagContainer, calloutStack, tagStackItem, separator, createTag,
   } = getClassNames(theme);
 
   const valueDivRef = createRef<HTMLDivElement>();
@@ -151,16 +184,43 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             directionalHint={DirectionalHint.topCenter}
             calloutMinWidth={calloutWidth}
             calloutMaxWidth={calloutWidth}
-            styles={calloutStyle(theme)}
+            styles={getCalloutStyle(theme)}
           >
             <Stack className={calloutStack}>
-              <Stack.Item key='tagFinder' align='stretch'>
-                <TextField
-                  placeholder='Tag Name'
-                  value={tagSearchString}
-                  onChange={(event) => setTagSearchString(event.currentTarget.value)}
-                />
-                <DefaultButton text='Create Tag' onClick={getNewTag} />
+              <Stack.Item key='tags' align='stretch' className={tagStackItem}>
+                <Stack horizontal wrap id={pickerTargetId}>
+                  {targetCard?.tags.map((t) => (
+                    <Stack.Item className={tagContainer}>
+                      <Tag
+                        tag={t}
+                        key={t.id}
+                        onRemove={() => removeTag(t)}
+                      />
+                    </Stack.Item>
+                  ))}
+                </Stack>
+              </Stack.Item>
+              <Stack.Item key='tags' align='stretch' className={tagStackItem}>
+                <div className={separator} />
+              </Stack.Item>
+              <Stack.Item key='tagFinder' align='stretch' className={tagStackItem}>
+                <Stack horizontal styles={getTagFinderStackStyle(theme)}>
+                  <Stack.Item key='searchBox' grow>
+                    <TextField
+                      placeholder='Tag Name'
+                      value={tagSearchString}
+                      borderless
+                      styles={getSearchFieldStyles(theme)}
+                      onChange={(event) => setTagSearchString(event.currentTarget.value)}
+                    />
+                  </Stack.Item>
+                  <theme.icon.plusCircleTag
+                    className={createTag}
+                    size={16}
+                    color={theme.palette.justWhite}
+                    onClick={getNewTag}
+                  />
+                </Stack>
               </Stack.Item>
               {/* Tags available to use are listed here */}
               {user.user?.tags
