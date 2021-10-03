@@ -109,32 +109,34 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
   return (
     <Stack horizontal>
       <Text className={text}>Tags</Text>
-      <div ref={valueDivRef}>
-        <Stack horizontal wrap id={pickerTargetId}>
-          {targetCard?.tags.map((t) => (
-            <Stack.Item className={tagContainer}>
-              {editing
-                ? (
-                  <Tag
-                    tag={t}
-                    key={t.id}
-                    onRemove={() => removeTag(t)}
-                  />
-                )
-                : <Tag tag={t} key={t.id} />}
-            </Stack.Item>
-          ))}
-          {editing
-            && (
-            <theme.icon.plusCircleTag
-              size={24}
-              className={addButton}
-              onClick={() => setPickerActive((old) => !old)}
-              color={theme.palette.justWhite}
-            />
-            )}
-        </Stack>
-      </div>
+      <Stack.Item grow>
+        <div ref={valueDivRef}>
+          <Stack horizontal wrap id={pickerTargetId}>
+            {targetCard?.tags.map((t) => (
+              <Stack.Item className={tagContainer}>
+                {editing
+                  ? (
+                    <Tag
+                      tag={t}
+                      key={t.id}
+                      onRemove={() => removeTag(t)}
+                    />
+                  )
+                  : <Tag tag={t} key={t.id} />}
+              </Stack.Item>
+            ))}
+            {editing
+              && (
+              <theme.icon.plusCircleTag
+                size={24}
+                className={addButton}
+                onClick={() => setPickerActive((old) => !old)}
+                color={theme.palette.justWhite}
+              />
+              )}
+          </Stack>
+        </div>
+      </Stack.Item>
       {pickerActive
         ? (
           <Callout
