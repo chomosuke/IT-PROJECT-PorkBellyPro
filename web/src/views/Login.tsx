@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useApp } from '../AppContext';
-import { LoginAndRegisterError } from '../components/dialogs/LoginAndRegisterError';
+import { WarningDialog, dialogType } from '../components/warningDialog';
 import { Theme, useTheme } from '../theme';
 
 export interface ILoginProps {
@@ -87,9 +87,10 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
 
   return (
     <>
-      <LoginAndRegisterError
+      <WarningDialog
         hideDialog={hideDialog}
         toggleHideDialog={toggleHideDialog}
+        type={dialogType.LOGIN_REGISTER}
         registering={registering}
       />
       <div className={root}>

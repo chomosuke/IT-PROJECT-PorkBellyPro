@@ -5,7 +5,7 @@ import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { ITag, ITagProperties } from '../../controllers/Tag';
-import { DeletingTagWarning } from '../dialogs/DeletingTagWarning';
+import { WarningDialog, dialogType } from '../warningDialog';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
@@ -71,9 +71,10 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
         if (closingFunction) closingFunction();
       }}
     >
-      <DeletingTagWarning
+      <WarningDialog
         hideDialog={hideDialog}
         toggleHideDialog={toggleHideDialog}
+        type={dialogType.DELETE_TAG}
         onDelete={deleteTag}
       />
       <TextField

@@ -5,7 +5,7 @@ import {
 import React from 'react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useHome } from '../../HomeContext';
-import { DeletingCardWarning } from '../dialogs/DeletingCardWarning';
+import { WarningDialog, dialogType } from '../warningDialog';
 
 export interface ICardDetailActionsProps {
   editing: boolean;
@@ -31,9 +31,10 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
 
   return (
     <Stack horizontal horizontalAlign='end'>
-      <DeletingCardWarning
+      <WarningDialog
         hideDialog={hideDialog}
         toggleHideDialog={toggleHideDialog}
+        type={dialogType.DELETE_CARD}
         onDelete={onDelete}
       />
       <Stack.Item key='expand'>
