@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ITextFieldProps, TextField } from '@fluentui/react';
 import { func, string } from 'prop-types';
+import { useId } from '@fluentui/react-hooks';
 import { Theme, useTheme } from '../../theme';
 
 export interface ITagSearchFieldProps {
@@ -8,14 +9,17 @@ export interface ITagSearchFieldProps {
   setTagSearchString: (value: string) => void;
 }
 
-const getSearchFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
+const getSearchFieldStyles: (theme: Theme, placeholder: boolean) => ITextFieldProps['styles'] = (
+  theme: Theme, placeholder: boolean,
+) => ({
   field: {
     ...theme.fontFamily.roboto,
     ...theme.fontSize.small,
     ...theme.fontWeight.medium,
-    color: theme.palette.justWhite,
+    color: placeholder ? theme.palette.cloudyDay : theme.palette.justWhite,
     whiteSpace: 'pre-wrap',
-    height: '24px',
+    lineHeight: '24px',
+    verticalAlign: 'middle',
   },
   fieldGroup: {
     height: '24px',
@@ -27,15 +31,38 @@ const getSearchFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme
 export const TagSearchField: React.VoidFunctionComponent<ITagSearchFieldProps> = (
   { tagSearchString, setTagSearchString },
 ) => {
+  const [focused, setFocused] = useState(false);
+
   const theme = useTheme();
+
+  const key = useId('same key');
+  /**
+   * the two TextField below should be recognized by react as the same thing
+   * I gave them the same key just in case.
+   */
   return (
-    <TextField
-      placeholder='create new tag'
-      value={tagSearchString}
-      borderless
-      styles={getSearchFieldStyles(theme)}
-      onChange={(event) => setTagSearchString(event.currentTarget.value)}
-    />
+    tagSearchString === '' && !focused
+      ? (
+        <TextField
+          key={key}
+          value='create new tag'
+          borderless
+          onFocus={() => setFocused(true)}
+          styles={getSearchFieldStyles(theme, true)}
+          onChange={() => { throw new Error('placeholder is being being edited'); }}
+        />
+      )
+      : (
+        <TextField
+          key={key}
+          value={tagSearchString}
+          borderless
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          styles={getSearchFieldStyles(theme, false)}
+          onChange={(event) => setTagSearchString(event.currentTarget.value)}
+        />
+      )
   );
 };
 
