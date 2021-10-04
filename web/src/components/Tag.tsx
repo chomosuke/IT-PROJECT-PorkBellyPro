@@ -38,7 +38,7 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       borderRadius: '8px',
       cursor: 'default',
       display: 'flex',
-      height: '16px',
+      height: '24px',
       marginBottom: 'auto',
       marginTop: 'auto',
       whiteSpace: 'pre',
@@ -48,21 +48,19 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       ...roboto,
       ...medium,
       color: justWhite,
-      fontSize: '12px',
+      fontSize: '16px',
       marginBottom: 'auto',
-      marginLeft: '24px',
+      marginLeft: '32px',
       marginTop: 'auto',
       userSelect: 'none',
     },
     rightSpan: {
       display: 'flex',
-      width: '24px',
+      width: '32px',
       ...rightSpanOptionalStyles,
     },
     crossIcon: {
-      height: '12px',
       margin: 'auto',
-      width: '12px',
     },
   });
 };
@@ -84,7 +82,7 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
     <div className={root}>
       <span className={labelSpan} onClick={onClick}>{tag.label}</span>
       <span className={rightSpan} onClick={onRemove}>
-        {onRemove && <Cross className={crossIcon} color={justWhite} />}
+        {onRemove && <Cross size={16} className={crossIcon} color={justWhite} />}
       </span>
     </div>
   );
