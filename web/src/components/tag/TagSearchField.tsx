@@ -18,8 +18,7 @@ const getSearchFieldStyles: (theme: Theme, placeholder: boolean) => ITextFieldPr
     ...theme.fontWeight.medium,
     color: placeholder ? theme.palette.cloudyDay : theme.palette.justWhite,
     whiteSpace: 'pre-wrap',
-    lineHeight: '24px',
-    verticalAlign: 'middle',
+    paddingBottom: '4px',
   },
   fieldGroup: {
     height: '24px',
