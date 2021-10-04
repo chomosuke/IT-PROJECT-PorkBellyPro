@@ -119,8 +119,9 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          {restFields.map((field) => (
-            <Stack.Item key={field.key} align='stretch'>
+          {restFields.map((field, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Stack.Item key={index} align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
