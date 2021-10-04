@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import {
-  mergeStyleSets,
-} from '@fluentui/react';
+import { mergeStyleSets } from '@fluentui/react';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useApp } from '../../AppContext';
 import { ITag } from '../../controllers/Tag';
@@ -18,6 +16,12 @@ const getClassNames = () => {
     fontWeight: { light },
     palette: { cloudyDay, justWhite, sootyBee },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
+
+  const searchTextStyle = {
+    ...light,
+    ...ubuntu,
+    fontSize: '16px',
+  };
 
   return mergeStyleSets({
     root: {
@@ -42,18 +46,17 @@ const getClassNames = () => {
       marginRight: `${contentMargin}px`,
       marginTop: 'auto',
     },
+    queryContainer: {
+      alignSelf: 'center',
+    },
     placeholder: {
-      ...light,
-      ...ubuntu,
+      ...searchTextStyle,
       color: cloudyDay,
-      fontSize: '16px',
       userSelect: 'none',
     },
     query: {
-      ...light,
-      ...ubuntu,
+      ...searchTextStyle,
       color: sootyBee,
-      fontSize: '16px',
       ':focus': {
         outline: 'none',
       },
@@ -184,6 +187,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
   const {
     root,
     content,
+    queryContainer,
     placeholder,
     query,
   } = getClassNames();
@@ -220,7 +224,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
     <div ref={rootRef} className={root} onClick={rootOnClick}>
       <div className={content}>
         {tagQuery.map((tag) => <Tag key={tag.id} tag={tag} onRemove={tagOnRemove(tag)} />)}
-        <span>
+        <span className={queryContainer}>
           <span
             ref={queryRef}
             className={query}
