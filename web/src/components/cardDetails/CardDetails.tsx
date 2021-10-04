@@ -118,14 +118,10 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           <Stack.Item key='tags' align='stretch'>
             <TagPicker targetCard={card} editing={isEditing} />
           </Stack.Item>
-          {mFields.map((field) => (
-            (field.value !== '' || isEditing)
-              ? (
-                <Stack.Item key={field.key} align='stretch'>
-                  <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
-                </Stack.Item>
-              )
-              : <></>
+          {mFields.filter((field) => (field.value !== '' || isEditing)).map((field) => (
+            <Stack.Item key={field.key} align='stretch'>
+              <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
+            </Stack.Item>
           ))}
           {restFields.map((field, index) => (
             // eslint-disable-next-line react/no-array-index-key
