@@ -3,8 +3,8 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Callout, DirectionalHint, ICalloutProps, IStackProps, ITextFieldProps, Stack,
-  Text, TextField, mergeStyleSets,
+  Callout, DirectionalHint, ICalloutProps, IStackProps, Stack,
+  Text, mergeStyleSets,
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
@@ -14,6 +14,7 @@ import { ITag, ITagProperties } from '../../controllers/Tag';
 import { TagWrapper } from './TagWrapper';
 import { ITagEditorProps, TagEditor } from './TagEditor';
 import { Theme, useTheme } from '../../theme';
+import { TagSearchField } from './TagSearchField';
 
 export interface ITagPickerProps {
   targetCard: ICard;
@@ -66,22 +67,6 @@ const getCalloutStyle: (theme: Theme) => ICalloutProps['styles'] = (theme: Theme
   calloutMain: {
     ...theme.shape.default,
     backgroundColor: theme.palette.stoneBlue,
-  },
-});
-
-const getSearchFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: Theme) => ({
-  field: {
-    ...theme.fontFamily.roboto,
-    ...theme.fontSize.small,
-    ...theme.fontWeight.medium,
-    color: theme.palette.justWhite,
-    whiteSpace: 'pre-wrap',
-    height: '24px',
-  },
-  fieldGroup: {
-    height: '24px',
-    borderRadius: theme.shape.default.borderRadius,
-    backgroundColor: theme.palette.moldyCheese,
   },
 });
 
@@ -144,16 +129,15 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
         <div ref={valueDivRef}>
           <Stack horizontal wrap id={pickerTargetId}>
             {targetCard?.tags.map((t) => (
-              <Stack.Item className={tagContainer}>
+              <Stack.Item key={t.id} className={tagContainer}>
                 {editing
                   ? (
                     <Tag
                       tag={t}
-                      key={t.id}
                       onRemove={() => removeTag(t)}
                     />
                   )
-                  : <Tag tag={t} key={t.id} />}
+                  : <Tag tag={t} />}
               </Stack.Item>
             ))}
             {editing
@@ -187,10 +171,9 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               <Stack.Item key='tags' align='stretch' className={tagStackItem}>
                 <Stack horizontal wrap id={pickerTargetId}>
                   {targetCard?.tags.map((t) => (
-                    <Stack.Item className={tagContainer}>
+                    <Stack.Item key={t.id} className={tagContainer}>
                       <Tag
                         tag={t}
-                        key={t.id}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
@@ -203,12 +186,9 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               <Stack.Item key='tagFinder' align='stretch' className={tagStackItem}>
                 <Stack horizontal styles={getTagFinderStackStyle(theme)}>
                   <Stack.Item key='searchBox' grow>
-                    <TextField
-                      placeholder='create new tag'
-                      value={tagSearchString}
-                      borderless
-                      styles={getSearchFieldStyles(theme)}
-                      onChange={(event) => setTagSearchString(event.currentTarget.value)}
+                    <TagSearchField
+                      tagSearchString={tagSearchString}
+                      setTagSearchString={setTagSearchString}
                     />
                   </Stack.Item>
                   <theme.icon.plusCircleTag
