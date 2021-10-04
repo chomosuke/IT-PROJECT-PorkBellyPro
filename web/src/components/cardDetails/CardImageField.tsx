@@ -1,13 +1,15 @@
+import {
+  IImageProps, Image, ImageFit, mergeStyleSets,
+} from '@fluentui/react';
 import { PromiseWorker, WorkerTerminatedError } from '@porkbellypro/crm-shared';
 import React from 'react';
 import {
-  DefaultButton, Image, ImageFit, Spinner, SpinnerSize, Stack, mergeStyleSets,
-} from '@fluentui/react';
-import {
   Requireable, bool, object,
 } from 'prop-types';
+import Loader from 'react-loader-spinner';
 import { ICard } from '../../controllers/Card';
-
+import { useHome } from '../../HomeContext';
+import { Theme, useTheme } from '../../theme';
 import type { Message, Result } from './processImage';
 
 export interface ICardImageFieldProps {
@@ -15,14 +17,80 @@ export interface ICardImageFieldProps {
   editing: boolean;
 }
 
-const [imgWidth, imgHeight] = [500, 250];
+const [imgWidth, imgHeight] = [600, 300];
 
-const getClassNames = () => mergeStyleSets({
-  name: {
-    backgroundColor: 'gray',
-    textAlign: 'center',
+const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => mergeStyleSets({
+  root: {
+    position: 'relative',
+    margin: 'auto',
+    width: '100%',
+    height: cardDetailExpanded ? '300px' : '200px',
+    // subject to change.
+    maxWidth: '600px',
+  },
+  noImageDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: theme.palette.quartz,
+    ...theme.fontFamily.roboto,
+    ...theme.fontWeight.bold,
+    ...theme.fontSize.title,
+    color: theme.palette.cloudyDay,
+    borderRadius: '12px',
+  },
+  hide: {
+    display: 'none',
+  },
+  uploadImg: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    width: '48px',
+    height: '48px',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    ...theme.shape.default,
+    position: 'absolute',
+    top: '16px',
+    right: '80px',
+  },
+  deleteImg: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    width: '48px',
+    height: '48px',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    ...theme.shape.default,
+    border: 'none',
+    position: 'absolute',
+    top: '16px',
+    right: '16px',
+  },
+  spinnerDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
   },
 });
+
+const imageStyles: IImageProps['styles'] = {
+  root: {
+    width: '100%',
+    height: '100%',
+  },
+  image: {
+    borderRadius: '12px',
+  },
+};
 
 const imgWorker = new PromiseWorker<Message, Result>(
   () => new Worker(new URL('./processImage.ts', import.meta.url)),
@@ -41,77 +109,85 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
 
   const [loading, setLoading] = React.useState(false);
 
-  const { name } = getClassNames();
+  const { cardDetailExpanded } = useHome();
+
+  const theme = useTheme();
+
+  const {
+    noImageDiv, root, uploadImg, deleteImg, hide, spinnerDiv,
+  } = getClassNames(theme, cardDetailExpanded);
+
+  const onChangeImg = async (e: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0];
+      setLoading(true);
+      let url;
+      try {
+        url = (await imgWorker.post({
+          img,
+          imgHeight,
+          imgWidth,
+        })).url;
+      } catch (err) {
+        if (err instanceof WorkerTerminatedError) {
+          if (!err.reason.detailUnmounted) {
+            setLoading(false);
+          }
+          return;
+        }
+        throw err;
+      }
+      card.update({ image: url });
+      setLoading(false);
+    }
+  };
 
   return (
-    <Stack>
-      <Stack.Item key='img'>
-        {
-        image
-          ? (
-            <>
-              <Image
-                src={image}
-                alt='business card'
-                imageFit={ImageFit.contain}
-              />
-              {editing && (
-                <DefaultButton
-                  text='delete'
-                  onClick={() => {
-                    card.update({ image: null });
-                  }}
-                />
-              )}
-            </>
-          )
-          : (
-            <div className={name}>
-              {card.name}
-            </div>
-          )
-      }
-      </Stack.Item>
-      {editing
-        && (
-        <Stack.Item key='input'>
-          <Stack horizontal>
-            <Stack.Item key='input'>
-              <input
-                type='file'
-                name='myImage'
-                accept='image/*'
-                onChange={async (e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    const img = e.target.files[0];
-                    setLoading(true);
-                    let url;
-                    try {
-                      url = (await imgWorker.post({
-                        img,
-                        imgHeight,
-                        imgWidth,
-                      })).url;
-                    } catch (err) {
-                      if (err instanceof WorkerTerminatedError) {
-                        if (!err.reason.detailUnmounted) {
-                          setLoading(false);
-                        }
-                        return;
-                      }
-                      throw err;
-                    }
-                    card.update({ image: url });
-                    setLoading(false);
-                  }
-                }}
-              />
-            </Stack.Item>
-            {loading && <Spinner size={SpinnerSize.small} />}
-          </Stack>
-        </Stack.Item>
+    <div className={root}>
+      {image
+        ? (
+          <Image
+            styles={imageStyles}
+            src={image}
+            alt='business card'
+            imageFit={ImageFit.cover}
+          />
+        )
+        : (
+          <div className={noImageDiv}>
+            no image
+          </div>
         )}
-    </Stack>
+      {editing && (
+      <>
+        <label htmlFor='upload' className={uploadImg}>
+          <input
+            id='upload'
+            className={hide}
+            type='file'
+            name='myImage'
+            accept='image/*'
+            onChange={onChangeImg}
+          />
+          <theme.icon.folderOpen size={28} />
+        </label>
+        <button
+          type='button'
+          className={deleteImg}
+          onClick={() => {
+            card.update({ image: null });
+          }}
+        >
+          <theme.icon.trash size={28} />
+        </button>
+      </>
+      )}
+      {loading && (
+      <div className={spinnerDiv}>
+        <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
+      </div>
+      )}
+    </div>
   );
 };
 

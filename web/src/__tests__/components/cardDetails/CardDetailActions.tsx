@@ -1,0 +1,1373 @@
+import React from 'react';
+import { create } from 'react-test-renderer';
+import { CardDetailActions } from '../../../components/cardDetails/CardDetailActions';
+import { HomeProvider, IHomeContext } from '../../../HomeContext';
+
+function onBeginEdit() {}
+function onSave() {}
+function onCancel() {}
+function onDelete() {}
+
+function notImplemented() {
+  return new Error('Not implemented');
+}
+
+const getHome: (expanded: boolean) => IHomeContext = (expanded: boolean) => ({
+  cardDetailExpanded: expanded,
+  expandCardDetail() { throw notImplemented(); },
+  lockCard() { throw notImplemented(); },
+  unlockCard() { throw notImplemented(); },
+  unlockCardLater() { throw notImplemented(); },
+});
+
+describe('CardDetailActions unit tests', () => {
+  test('existing card viewing expanded', () => {
+    const json = create(
+      <HomeProvider value={getHome(true)}>
+        <CardDetailActions
+          editing={false}
+          newCard={false}
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="56 48 136 128 56 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="136 48 216 128 136 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <path
+        d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="136"
+        x2="192"
+        y1="64"
+        y2="120"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="44"
+        x2="103.99998"
+        y1="156"
+        y2="216"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="216"
+        x2="96"
+        y1="216"
+        y2="216"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('existing card editing expanded', () => {
+    const json = create(
+      <HomeProvider value={getHome(true)}>
+        <CardDetailActions
+          editing
+          newCard={false}
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="56 48 136 128 56 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="136 48 216 128 136 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <polyline
+        fill="none"
+        points="216 72.005 104 184 48 128.005"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="56"
+        y2="200"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="200"
+        y2="56"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('new card viewing expanded', () => {
+    const json = create(
+      <HomeProvider value={getHome(true)}>
+        <CardDetailActions
+          editing={false}
+          newCard
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="56 48 136 128 56 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="136 48 216 128 136 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <path
+        d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="136"
+        x2="192"
+        y1="64"
+        y2="120"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="44"
+        x2="103.99998"
+        y1="156"
+        y2="216"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="216"
+        x2="96"
+        y1="216"
+        y2="216"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('new card editing expanded', () => {
+    const json = create(
+      <HomeProvider value={getHome(true)}>
+        <CardDetailActions
+          editing
+          newCard
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="56 48 136 128 56 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="136 48 216 128 136 208"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <polyline
+        fill="none"
+        points="216 72.005 104 184 48 128.005"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('existing card viewing collapsed', () => {
+    const json = create(
+      <HomeProvider value={getHome(false)}>
+        <CardDetailActions
+          editing={false}
+          newCard={false}
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="200 208 120 128 200 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="120 208 40 128 120 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <path
+        d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="136"
+        x2="192"
+        y1="64"
+        y2="120"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="44"
+        x2="103.99998"
+        y1="156"
+        y2="216"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="216"
+        x2="96"
+        y1="216"
+        y2="216"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('existing card editing collapsed', () => {
+    const json = create(
+      <HomeProvider value={getHome(false)}>
+        <CardDetailActions
+          editing
+          newCard={false}
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="200 208 120 128 200 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="120 208 40 128 120 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <polyline
+        fill="none"
+        points="216 72.005 104 184 48 128.005"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="56"
+        y2="200"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="200"
+        x2="56"
+        y1="200"
+        y2="56"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('new card viewing collapsed', () => {
+    const json = create(
+      <HomeProvider value={getHome(false)}>
+        <CardDetailActions
+          editing={false}
+          newCard
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="200 208 120 128 200 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="120 208 40 128 120 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <path
+        d="M96,216H48a8,8,0,0,1-8-8V163.31371a8,8,0,0,1,2.34315-5.65686l120-120a8,8,0,0,1,11.3137,0l44.6863,44.6863a8,8,0,0,1,0,11.3137Z"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="136"
+        x2="192"
+        y1="64"
+        y2="120"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="44"
+        x2="103.99998"
+        y1="156"
+        y2="216"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="216"
+        x2="96"
+        y1="216"
+        y2="216"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+
+  test('new card editing collapsed', () => {
+    const json = create(
+      <HomeProvider value={getHome(false)}>
+        <CardDetailActions
+          editing
+          newCard
+          onBeginEdit={onBeginEdit}
+          onSave={onSave}
+          onCancel={onCancel}
+          onDelete={onDelete}
+        />
+      </HomeProvider>,
+    ).toJSON();
+    expect(json).toMatchInlineSnapshot(`
+<div
+  className="ms-Stack css-54"
+>
+  <svg
+    className="iconButton-53"
+    fill="#ffffff"
+    height={32}
+    onClick={[Function]}
+    viewBox="0 0 256 256"
+    width={32}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      fill="none"
+      height="256"
+      width="256"
+    />
+    <polyline
+      fill="none"
+      points="200 208 120 128 200 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+    <polyline
+      fill="none"
+      points="120 208 40 128 120 48"
+      stroke="#ffffff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="24"
+    />
+  </svg>
+  <div
+    className="ms-Stack css-55"
+  >
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <polyline
+        fill="none"
+        points="216 72.005 104 184 48 128.005"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+    <svg
+      className="iconButton-53"
+      fill="#ffffff"
+      height={32}
+      onClick={[Function]}
+      viewBox="0 0 256 256"
+      width={32}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        fill="none"
+        height="256"
+        width="256"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="215.99609"
+        x2="39.99609"
+        y1="60"
+        y2="60.00005"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="104"
+        x2="104"
+        y1="104"
+        y2="168"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+        x1="152"
+        x2="152"
+        y1="104"
+        y2="168"
+      />
+      <path
+        d="M200,60V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+      <path
+        d="M168,60V36a16,16,0,0,0-16-16H104A16,16,0,0,0,88,36V60"
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="24"
+      />
+    </svg>
+  </div>
+</div>
+`);
+  });
+});

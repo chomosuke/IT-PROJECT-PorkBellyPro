@@ -20,11 +20,12 @@ export interface IDialogProps {
   type: number;
   registering?: boolean;
   onDelete?: OnClickHandler;
+  newCard?: boolean;
 }
 
 export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
   {
-    hideDialog, toggleHideDialog, type, registering, onDelete,
+    hideDialog, toggleHideDialog, type, registering, onDelete, newCard,
   },
 ) => {
   const theme = useTheme();
@@ -123,6 +124,15 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     styles: dialogContentStyle,
   };
 
+  const newCardContentProps:IDialogContentProps = {
+    type: DialogType.normal,
+    title: 'Warning',
+    closeButtonAriaLabel: 'Close',
+    subText: 'Information discarded won\'t be recoverable, '
+    + 'are you sure you want to discard adding a new card?',
+    styles: dialogContentStyle,
+  };
+
   const tagContentProps = {
     type: DialogType.normal,
     title: 'Warning',
@@ -163,7 +173,26 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     );
   }
   if (type === dialogType.DELETE_CARD) {
-    // case 3: deleting a card
+    if (newCard) {
+      // case 3: deleting a new card
+      return (
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={toggleHideDialog}
+          dialogContentProps={newCardContentProps}
+          styles={dialogStyles}
+        >
+          <DialogFooter>
+            <Stack horizontal horizontalAlign='end'>
+              <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Discard' />
+              <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
+            </Stack>
+          </DialogFooter>
+        </Dialog>
+      );
+    }
+
+    // case 4: deleting an existing card
     return (
       <Dialog
         hidden={hideDialog}
@@ -181,6 +210,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     );
   }
 
+  // case 5: deleting a tag
   return (
     <Dialog
       hidden={hideDialog}
@@ -201,6 +231,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
 WarningDialog.defaultProps = {
   registering: false,
   onDelete: undefined,
+  newCard: false,
 };
 
 WarningDialog.propTypes = {
@@ -209,4 +240,5 @@ WarningDialog.propTypes = {
   type: PropTypes.number.isRequired,
   registering: PropTypes.bool,
   onDelete: PropTypes.func,
+  newCard: PropTypes.bool,
 };
