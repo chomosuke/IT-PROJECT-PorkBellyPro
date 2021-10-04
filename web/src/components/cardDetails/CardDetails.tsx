@@ -119,7 +119,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             <TagPicker targetCard={card} editing={isEditing} />
           </Stack.Item>
           {mFields.map((field) => (
-            field.value !== ''
+            (field.value !== '' || isEditing)
               ? (
                 <Stack.Item key={field.key} align='stretch'>
                   <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
