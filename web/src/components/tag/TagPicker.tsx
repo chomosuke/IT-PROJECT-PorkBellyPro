@@ -202,7 +202,13 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               </Stack.Item>
               {/* Tags available to use are listed here */}
               {user.user?.tags
-                .filter((t) => t.label.toUpperCase().startsWith(tagSearchString.toUpperCase()))
+                .filter((t) => (
+                  tagSearchString.toUpperCase().split(/\W/).filter((x) => x.length > 0)
+                    .every((sToken) => (
+                      t.label.toUpperCase().split(/\W/).filter((x) => x.length > 0)
+                        .some((tToken) => tToken.includes(sToken))
+                    ))
+                ))
                 .map((t) => (
                   <Stack.Item key={t.id} align='stretch' className={tagStackItem}>
                     <TagWrapper
