@@ -12,6 +12,7 @@ export const dialogType = {
   LOGIN_REGISTER: 0,
   DELETE_CARD: 1,
   DELETE_TAG: 2,
+  DELETE_IMG: 3,
 };
 
 export interface IDialogProps {
@@ -141,6 +142,14 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     styles: dialogContentStyle,
   };
 
+  const imgContentProps = {
+    type: DialogType.normal,
+    title: 'Warning',
+    closeButtonAriaLabel: 'Close',
+    subText: 'Deleted image won\'t be recoverable, are you sure you want to do that?',
+    styles: dialogContentStyle,
+  };
+
   if (type === dialogType.LOGIN_REGISTER) {
     // case 1: registeration failure
     if (registering) {
@@ -172,6 +181,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       </Dialog>
     );
   }
+
   if (type === dialogType.DELETE_CARD) {
     if (newCard) {
       // case 3: deleting a new card
@@ -210,12 +220,31 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     );
   }
 
-  // case 5: deleting a tag
+  if (type === dialogType.DELETE_IMG) {
+    // case 5: deleting a tag
+    return (
+      <Dialog
+        hidden={hideDialog}
+        onDismiss={toggleHideDialog}
+        dialogContentProps={tagContentProps}
+        styles={dialogStyles}
+      >
+        <DialogFooter>
+          <Stack horizontal horizontalAlign='end'>
+            <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Delete' />
+            <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
+          </Stack>
+        </DialogFooter>
+      </Dialog>
+    );
+  }
+
+  // case 6: deleting an image
   return (
     <Dialog
       hidden={hideDialog}
       onDismiss={toggleHideDialog}
-      dialogContentProps={tagContentProps}
+      dialogContentProps={imgContentProps}
       styles={dialogStyles}
     >
       <DialogFooter>
