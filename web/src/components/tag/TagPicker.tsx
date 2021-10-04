@@ -40,6 +40,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   },
   addButton: {
     padding: '6px',
+    cursor: 'pointer',
   },
   tagContainer: {
     paddingTop: '6px',
