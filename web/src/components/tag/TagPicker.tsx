@@ -101,6 +101,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
     const currentWidth = valueDivRef.current?.clientWidth ?? 0;
     if (currentWidth !== calloutWidth) {
       setCalloutWidth(currentWidth);
+      console.log(calloutWidth);
     }
     /**
      * valueDivRef.current?.clientWidth as dependency isn't correct because width isn't knowable
@@ -133,7 +134,14 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
               <Stack.Item key={t.id} className={tagContainer}>
                 <Tag
                   tag={t}
-                  maxWidth={calloutWidth}
+                  maxWidth={
+                    /**
+                     * 64 because the padding / margin of Tag, a negative maxWidth will have
+                     * no effect
+                     * 6 because calloutWidth has a tagContainer has a padding / margin of 6
+                     */
+                    Math.max(64, calloutWidth - 6)
+                  }
                   onRemove={editing ? () => removeTag(t) : undefined}
                 />
               </Stack.Item>
@@ -172,7 +180,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     <Stack.Item key={t.id} className={tagContainer}>
                       <Tag
                         tag={t}
-                        maxWidth={calloutWidth - 16}
+                        maxWidth={calloutWidth - 2}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
