@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useHome } from '../../HomeContext';
-import { WarningDialog, dialogType } from '../warningDialog';
+import { WarningDialog } from '../warningDialog';
 import { useTheme } from '../../theme';
 
 export interface ICardDetailActionsProps {
@@ -50,10 +50,17 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
     <>
       <WarningDialog
         hideDialog={hideDialog}
-        toggleHideDialog={toggleHideDialog}
-        type={dialogType.DELETE_CARD}
-        onDelete={newCard ? onCancel : onDelete}
-        newCard={newCard}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={newCard ? onCancel : onDelete}
+        okButtonStr={newCard ? 'Yes, Discard' : 'Yes, Delete'}
+        width='340px'
+        height='240px'
+        title='Warning'
+        subText={newCard
+          ? 'Information discarded won\'t be recoverable, are you sure you want to '
+           + 'discard adding a new card?'
+          : 'Deleted cards won\'t be recoverable, are you sure you want to do that?'}
       />
       <Stack horizontal horizontalAlign='space-between' tokens={stackTokensRoot}>
         {cardDetailExpanded

@@ -5,7 +5,7 @@ import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { ITag, ITagProperties } from '../../controllers/Tag';
-import { WarningDialog, dialogType } from '../warningDialog';
+import { WarningDialog } from '../warningDialog';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
@@ -73,9 +73,14 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
     >
       <WarningDialog
         hideDialog={hideDialog}
-        toggleHideDialog={toggleHideDialog}
-        type={dialogType.DELETE_TAG}
-        onDelete={deleteTag}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={deleteTag}
+        okButtonStr='Yes, Delete'
+        width='340px'
+        height='240px'
+        title='Warning'
+        subText={'Deleted tags won\'t be recoverable, are you sure you want to do that?'}
       />
       <TextField
         ariaLabel='New textfield name'

@@ -1,37 +1,44 @@
 import {
-  DefaultButton, Dialog, DialogFooter, DialogType, IButtonProps, IButtonStyles,
-  IDialogContentProps, PrimaryButton, Stack,
+  DefaultButton, Dialog, DialogFooter, DialogType, IButtonStyles,
+  PrimaryButton, Stack,
 } from '@fluentui/react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useTheme } from '../theme';
 
-  type OnClickHandler = IButtonProps['onClick'];
-
-export const dialogType = {
-  LOGIN_REGISTER: 0,
-  DELETE_CARD: 1,
-  DELETE_TAG: 2,
-  DELETE_IMG: 3,
-};
-
 export interface IDialogProps {
-  hideDialog: boolean | undefined;
-  toggleHideDialog: () => void;
-  type: number;
-  registering?: boolean;
-  onDelete?: OnClickHandler;
-  newCard?: boolean;
+  hideDialog: boolean;
+  title: string;
+  subText: string;
+  closeButtonStr: string;
+  closeButtonOnClick: () => void;
+  okButtonStr?: string;
+  okButtonOnClick?: () => void;
+  width: string | number;
+  height: string | number;
 }
 
 export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
   {
-    hideDialog, toggleHideDialog, type, registering, onDelete, newCard,
+    hideDialog,
+    title,
+    subText,
+    closeButtonStr,
+    closeButtonOnClick,
+    okButtonOnClick,
+    okButtonStr,
+    width,
+    height,
   },
 ) => {
+  if ((okButtonOnClick == null && okButtonStr != null)
+   || (okButtonOnClick != null && okButtonStr == null)) {
+    throw new Error(`okButtonOnClick is ${okButtonOnClick} while okButtonStr is ${okButtonStr}.`);
+  }
+
   const theme = useTheme();
 
-  const primaryBtnStyles:IButtonStyles = {
+  const primaryBtnStyles: IButtonStyles = {
     root: {
       ...theme.fontFamily.roboto,
       ...theme.fontSize.small,
@@ -49,7 +56,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     },
   };
 
-  const secondaryBtnStyles:IButtonStyles = {
+  const secondaryBtnStyles: IButtonStyles = {
     root: {
       ...theme.fontFamily.roboto,
       ...theme.fontSize.small,
@@ -69,11 +76,11 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
 
   const dialogStyles = {
     main: {
-      width: '340px',
+      width,
+      height,
       backgroundColor: theme.palette.everblue,
       borderRadius: '4px',
     },
-
   };
 
   const dialogContentStyle = {
@@ -96,178 +103,60 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       flexDirection: 'column',
       padding: '0px 24px 24px 24px',
     },
-    innerContent: {
-      paddingBottom: '50px',
-    },
   };
 
-  const registerationContentProps = {
+  const contentProps = {
     type: DialogType.normal,
-    title: 'Error',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Your Username has already been taken',
+    title,
+    subText,
     styles: dialogContentStyle,
   };
 
-  const loginContentProps = {
-    type: DialogType.normal,
-    title: 'Error',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Incorrect username or password',
-    styles: dialogContentStyle,
-  };
-
-  const cardContentProps:IDialogContentProps = {
-    type: DialogType.normal,
-    title: 'Warning',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Deleted cards won\'t be recoverable, are you sure you want to do that?',
-    styles: dialogContentStyle,
-  };
-
-  const newCardContentProps:IDialogContentProps = {
-    type: DialogType.normal,
-    title: 'Warning',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Information discarded won\'t be recoverable, '
-    + 'are you sure you want to discard adding a new card?',
-    styles: dialogContentStyle,
-  };
-
-  const tagContentProps = {
-    type: DialogType.normal,
-    title: 'Warning',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Deleted tags won\'t be recoverable, are you sure you want to do that?',
-    styles: dialogContentStyle,
-  };
-
-  const imgContentProps = {
-    type: DialogType.normal,
-    title: 'Warning',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Deleted image won\'t be recoverable, are you sure you want to do that?',
-    styles: dialogContentStyle,
-  };
-
-  if (type === dialogType.LOGIN_REGISTER) {
-    // case 1: registeration failure
-    if (registering) {
-      return (
-        <Dialog
-          hidden={hideDialog}
-          onDismiss={toggleHideDialog}
-          dialogContentProps={registerationContentProps}
-          styles={dialogStyles}
-        >
-          <DialogFooter>
-            <DefaultButton styles={primaryBtnStyles} onClick={toggleHideDialog} text='Close' />
-          </DialogFooter>
-        </Dialog>
-      );
-    }
-
-    // case 2: login failure
-    return (
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={loginContentProps}
-        styles={dialogStyles}
-      >
-        <DialogFooter>
-          <DefaultButton styles={primaryBtnStyles} onClick={toggleHideDialog} text='Close' />
-        </DialogFooter>
-      </Dialog>
-    );
-  }
-
-  if (type === dialogType.DELETE_CARD) {
-    if (newCard) {
-      // case 3: deleting a new card
-      return (
-        <Dialog
-          hidden={hideDialog}
-          onDismiss={toggleHideDialog}
-          dialogContentProps={newCardContentProps}
-          styles={dialogStyles}
-        >
-          <DialogFooter>
-            <Stack horizontal horizontalAlign='end'>
-              <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Discard' />
-              <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
-            </Stack>
-          </DialogFooter>
-        </Dialog>
-      );
-    }
-
-    // case 4: deleting an existing card
-    return (
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={cardContentProps}
-        styles={dialogStyles}
-      >
-        <DialogFooter>
-          <Stack horizontal horizontalAlign='end'>
-            <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Delete' />
-            <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
-          </Stack>
-        </DialogFooter>
-      </Dialog>
-    );
-  }
-
-  if (type === dialogType.DELETE_IMG) {
-    // case 5: deleting a tag
-    return (
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={tagContentProps}
-        styles={dialogStyles}
-      >
-        <DialogFooter>
-          <Stack horizontal horizontalAlign='end'>
-            <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Delete' />
-            <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
-          </Stack>
-        </DialogFooter>
-      </Dialog>
-    );
-  }
-
-  // case 6: deleting an image
   return (
     <Dialog
       hidden={hideDialog}
-      onDismiss={toggleHideDialog}
-      dialogContentProps={imgContentProps}
+      onDismiss={closeButtonOnClick}
+      dialogContentProps={contentProps}
       styles={dialogStyles}
     >
       <DialogFooter>
         <Stack horizontal horizontalAlign='end'>
-          <PrimaryButton styles={primaryBtnStyles} onClick={onDelete} text='Yes, Delete' />
-          <DefaultButton styles={secondaryBtnStyles} onClick={toggleHideDialog} text='Cancel' />
+          {okButtonStr != null
+            && (
+            <PrimaryButton
+              styles={primaryBtnStyles}
+              onClick={okButtonOnClick}
+              text={okButtonStr}
+            />
+            )}
+          <DefaultButton
+            styles={secondaryBtnStyles}
+            onClick={closeButtonOnClick}
+            text={closeButtonStr}
+          />
         </Stack>
       </DialogFooter>
     </Dialog>
   );
 };
 
-WarningDialog.defaultProps = {
-  registering: false,
-  onDelete: undefined,
-  newCard: false,
-};
-
 WarningDialog.propTypes = {
   hideDialog: PropTypes.bool.isRequired,
-  toggleHideDialog: PropTypes.func.isRequired,
-  type: PropTypes.number.isRequired,
-  registering: PropTypes.bool,
-  onDelete: PropTypes.func,
-  newCard: PropTypes.bool,
+  title: PropTypes.string.isRequired,
+  subText: PropTypes.string.isRequired,
+  closeButtonStr: PropTypes.string.isRequired,
+  closeButtonOnClick: PropTypes.func.isRequired,
+  okButtonStr: PropTypes.string,
+  okButtonOnClick: PropTypes.func,
+  width: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.number,
+  ]).isRequired,
+  height: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.number,
+  ]).isRequired,
+};
+
+WarningDialog.defaultProps = {
+  okButtonStr: undefined,
+  okButtonOnClick: undefined,
 };

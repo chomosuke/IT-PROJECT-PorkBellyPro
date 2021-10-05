@@ -12,7 +12,7 @@ import { ICard } from '../../controllers/Card';
 import { useHome } from '../../HomeContext';
 import { Theme, useTheme } from '../../theme';
 import type { Message, Result } from './processImage';
-import { WarningDialog, dialogType } from '../warningDialog';
+import { WarningDialog } from '../warningDialog';
 
 export interface ICardImageFieldProps {
   card: ICard;
@@ -149,12 +149,17 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
     <>
       <WarningDialog
         hideDialog={hideDialog}
-        toggleHideDialog={toggleHideDialog}
-        type={dialogType.DELETE_TAG}
-        onDelete={() => {
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={() => {
           card.update({ image: null });
           toggleHideDialog();
         }}
+        okButtonStr='Yes, Delete'
+        width='340px'
+        height='240px'
+        title='Warning'
+        subText={'Deleted image won\'t be recoverable, are you sure you want to do that?'}
       />
       <div className={root}>
         {image

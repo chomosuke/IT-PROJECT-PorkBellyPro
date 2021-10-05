@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useApp } from '../AppContext';
-import { WarningDialog, dialogType } from '../components/warningDialog';
+import { WarningDialog } from '../components/warningDialog';
 import { Theme, useTheme } from '../theme';
 
 export interface ILoginProps {
@@ -89,9 +89,14 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
     <>
       <WarningDialog
         hideDialog={hideDialog}
-        toggleHideDialog={toggleHideDialog}
-        type={dialogType.LOGIN_REGISTER}
-        registering={registering}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Close'
+        width='340px'
+        height='240px'
+        title='Error'
+        subText={registering
+          ? 'Your Username has already been taken'
+          : 'Incorrect username or password'}
       />
       <div className={root}>
         <div className={bodyContainer}>
