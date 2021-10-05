@@ -6,7 +6,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useApp } from '../../AppContext';
 import { ITag } from '../../controllers/Tag';
 import { useTheme } from '../../theme';
-import { Tag } from '../Tag';
+import { Tag } from '../tag/Tag';
 
 const contentMargin = 8;
 

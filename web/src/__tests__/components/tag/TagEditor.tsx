@@ -1,9 +1,9 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { TagEditor } from '../../components/tagSelector/TagEditor';
-import { ITag } from '../../controllers/Tag';
+import { TagEditor } from '../../../components/tag/TagEditor';
+import { ITag } from '../../../controllers/Tag';
 
-import '../disable-icon-warnings.helpers';
+import '../../disable-icon-warnings.helpers';
 
 const demoTag: ITag = {
   id: '1',
@@ -18,7 +18,7 @@ const htmlId = 'TagAnchor';
 describe('TagEditor render tests', () => {
   test('without closingFunction', () => {
     const json = create(
-      <TagEditor anchor={htmlId} tag={demoTag} />,
+      <TagEditor width={100} anchor={htmlId} tag={demoTag} />,
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <span
@@ -30,6 +30,7 @@ describe('TagEditor render tests', () => {
   test('with closingFunction', () => {
     const json = create(
       <TagEditor
+        width={100}
         anchor={htmlId}
         tag={demoTag}
         closingFunction={() => { }}

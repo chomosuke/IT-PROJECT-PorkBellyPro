@@ -4,8 +4,8 @@
 import { mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { MouseEvent } from 'react';
-import { ITag } from '../controllers/Tag';
-import { useTheme } from '../theme';
+import { ITag } from '../../controllers/Tag';
+import { useTheme } from '../../theme';
 
 type OnClickHandler =
   React.DOMAttributes<HTMLDivElement>['onClick']

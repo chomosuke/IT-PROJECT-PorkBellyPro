@@ -11,7 +11,7 @@ import { CardExtraField } from './CardExtraField';
 import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
-import { TagPicker } from '../tagSelector/TagPicker';
+import { TagPicker } from '../tag/TagPicker';
 import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
@@ -119,8 +119,9 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          {restFields.map((field) => (
-            <Stack.Item align='stretch'>
+          {restFields.map((field, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Stack.Item key={index} align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
