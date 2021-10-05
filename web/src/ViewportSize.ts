@@ -1,3 +1,8 @@
+/**
+ * this file is copied from the project from INFO30005 Web info tech.
+ * Both Shuang Li and ShangZhe Lee were in that team, and this file was written by ShangZhe in the
+ * first semester of 2021.
+ */
 import React from 'react';
 import { useWindow } from '@fluentui/react-window-provider';
 

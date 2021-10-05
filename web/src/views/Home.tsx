@@ -9,7 +9,7 @@ import { Card } from '../components/Card';
 import { ICard } from '../controllers/Card';
 import { CardDetails } from '../components/cardDetails/CardDetails';
 import { useViewportSize } from '../ViewportSize';
-import { TagButton } from '../components/TagButton';
+import { TagButton } from '../components/tag/TagButton';
 import { Theme, useTheme } from '../theme';
 
 export interface IHomeProps {

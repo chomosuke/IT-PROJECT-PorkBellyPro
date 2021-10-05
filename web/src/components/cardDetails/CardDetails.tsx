@@ -11,7 +11,7 @@ import { CardExtraField } from './CardExtraField';
 import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
-import { TagPicker } from '../tagSelector/TagPicker';
+import { TagPicker } from '../tag/TagPicker';
 import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
@@ -54,7 +54,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
   const { showCardDetail } = useApp();
-  const { unlockCard, unlockCardLater } = useHome();
+  const { unlockCard, unlockCardLater, cardDetailExpanded } = useHome();
 
   const theme = useTheme();
 
@@ -104,7 +104,11 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
         onClick={close}
       />
       <div className={content}>
-        <Stack>
+        <Stack tokens={{
+          childrenGap: '24px',
+          padding: `0px ${cardDetailExpanded ? '152px' : '48px'}`,
+        }}
+        >
           <Stack.Item key='image' align='stretch'>
             <CardImageField
               card={card}
@@ -114,13 +118,14 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           <Stack.Item key='tags' align='stretch'>
             <TagPicker targetCard={card} editing={isEditing} />
           </Stack.Item>
-          {mFields.map((field) => (
+          {mFields.filter((field) => (field.value !== '' || isEditing)).map((field) => (
             <Stack.Item key={field.key} align='stretch'>
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          {restFields.map((field) => (
-            <Stack.Item align='stretch'>
+          {restFields.map((field, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Stack.Item key={index} align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}

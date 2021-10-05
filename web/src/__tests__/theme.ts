@@ -66,6 +66,10 @@ Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
+    "dotsThree": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
     "folderOpen": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],

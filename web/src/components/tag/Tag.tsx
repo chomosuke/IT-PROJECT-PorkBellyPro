@@ -3,11 +3,13 @@
 
 import { mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
-import React from 'react';
-import { ITag } from '../controllers/Tag';
-import { useTheme } from '../theme';
+import React, { MouseEvent } from 'react';
+import { ITag } from '../../controllers/Tag';
+import { useTheme } from '../../theme';
 
-type OnClickHandler = React.DOMAttributes<HTMLSpanElement>['onClick'];
+type OnClickHandler =
+  React.DOMAttributes<HTMLDivElement>['onClick']
+  | React.DOMAttributes<HTMLSpanElement>['onClick'];
 
 export interface ITagProps {
   tag: ITag;
@@ -38,7 +40,7 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       borderRadius: '8px',
       cursor: 'default',
       display: 'flex',
-      height: '16px',
+      height: '24px',
       marginBottom: 'auto',
       marginTop: 'auto',
       whiteSpace: 'pre',
@@ -48,21 +50,19 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       ...roboto,
       ...medium,
       color: justWhite,
-      fontSize: '12px',
+      fontSize: '16px',
       marginBottom: 'auto',
-      marginLeft: '24px',
+      marginLeft: '32px',
       marginTop: 'auto',
       userSelect: 'none',
     },
     rightSpan: {
       display: 'flex',
-      width: '24px',
+      width: '32px',
       ...rightSpanOptionalStyles,
     },
     crossIcon: {
-      height: '12px',
       margin: 'auto',
-      width: '12px',
     },
   });
 };
@@ -80,11 +80,18 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
     crossIcon,
   } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove));
 
+  const onRemoveInternal = onRemove != null
+    ? (ev: MouseEvent<HTMLDivElement>) => {
+      ev.stopPropagation();
+      onRemove(ev);
+    }
+    : undefined;
+
   return (
-    <div className={root}>
-      <span className={labelSpan} onClick={onClick}>{tag.label}</span>
-      <span className={rightSpan} onClick={onRemove}>
-        {onRemove && <Cross className={crossIcon} color={justWhite} />}
+    <div className={root} onClick={onClick}>
+      <span className={labelSpan}>{tag.label}</span>
+      <span className={rightSpan} onClick={onRemoveInternal}>
+        {onRemove && <Cross size={16} className={crossIcon} color={justWhite} />}
       </span>
     </div>
   );
