@@ -126,7 +126,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             id={pickerTargetId}
             tokens={{
               childrenGap: '6px',
-              padding: '4px 0px',
+              padding: '6px 0px',
             }}
           >
             {targetCard?.tags.map((t) => (
