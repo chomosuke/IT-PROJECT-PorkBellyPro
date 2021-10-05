@@ -131,14 +131,11 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
           <Stack horizontal wrap id={pickerTargetId}>
             {targetCard?.tags.map((t) => (
               <Stack.Item key={t.id} className={tagContainer}>
-                {editing
-                  ? (
-                    <Tag
-                      tag={t}
-                      onRemove={() => removeTag(t)}
-                    />
-                  )
-                  : <Tag tag={t} />}
+                <Tag
+                  tag={t}
+                  maxWidth={calloutWidth}
+                  onRemove={editing ? () => removeTag(t) : undefined}
+                />
               </Stack.Item>
             ))}
             {editing
@@ -175,6 +172,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     <Stack.Item key={t.id} className={tagContainer}>
                       <Tag
                         tag={t}
+                        maxWidth={calloutWidth - 16}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
@@ -214,6 +212,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     <TagWrapper
                       key={t.id}
                       tag={t}
+                      maxWidth={calloutWidth - 16}
                       card={targetCard}
                       setTagEdit={(id) => setFocusedTag({ anchor: id, tag: t })}
                     />
