@@ -39,15 +39,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...textStyle,
   },
   addButton: {
-    padding: '6px',
     cursor: 'pointer',
-  },
-  tagContainer: {
-    paddingTop: '6px',
-    paddingRight: '6px',
-  },
-  tagStackItem: {
-    margin: '8px',
   },
   separator: {
     borderColor: theme.palette.justWhite,
@@ -55,7 +47,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     borderWidth: '1px',
   },
   createTag: {
-    padding: '4px',
+    padding: '4px 8px',
     cursor: 'pointer',
   },
 });
@@ -92,7 +84,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
 
   const theme = useTheme();
   const {
-    text, addButton, tagContainer, tagStackItem, separator, createTag,
+    text, addButton, separator, createTag,
   } = getClassNames(theme);
 
   const valueDivRef = createRef<HTMLDivElement>();
@@ -129,18 +121,25 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
       <Text className={text}>Tags</Text>
       <Stack.Item grow>
         <div ref={valueDivRef}>
-          <Stack horizontal wrap id={pickerTargetId}>
+          <Stack
+            horizontal
+            wrap
+            id={pickerTargetId}
+            tokens={{
+              childrenGap: '6px',
+              padding: '4px 0px',
+            }}
+          >
             {targetCard?.tags.map((t) => (
-              <Stack.Item key={t.id} className={tagContainer}>
+              <Stack.Item key={t.id}>
                 <Tag
                   tag={t}
                   maxWidth={
                     /**
-                     * 64 because the padding / margin of Tag, a negative maxWidth will have
-                     * no effect
-                     * 6 because calloutWidth has a tagContainer has a padding / margin of 6
+                     * 64 because the padding / margin of Tag is 32 on each side, a negative
+                     * maxWidth for the inside text will have no effect.
                      */
-                    Math.max(64, calloutWidth - 6)
+                    Math.max(64, calloutWidth)
                   }
                   onRemove={editing ? () => removeTag(t) : undefined}
                 />
@@ -148,12 +147,14 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             ))}
             {editing
               && (
-              <theme.icon.plusCircleTag
-                size={24}
-                className={addButton}
-                onClick={() => setPickerActive((old) => !old)}
-                color={theme.palette.justWhite}
-              />
+                <Stack.Item>
+                  <theme.icon.plusCircleTag
+                    size={24}
+                    className={addButton}
+                    onClick={() => setPickerActive((old) => !old)}
+                    color={theme.palette.justWhite}
+                  />
+                </Stack.Item>
               )}
           </Stack>
         </div>
@@ -173,24 +174,31 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             calloutMaxWidth={calloutWidth}
             styles={getCalloutStyle(theme)}
           >
-            <Stack>
-              <Stack.Item key='tags' align='stretch' className={tagStackItem}>
-                <Stack horizontal wrap id={pickerTargetId}>
+            <Stack tokens={{ childrenGap: '8px', padding: '8px' }}>
+              <Stack.Item key='tags' align='stretch'>
+                <Stack
+                  horizontal
+                  wrap
+                  id={pickerTargetId}
+                  tokens={{
+                    childrenGap: '6px',
+                  }}
+                >
                   {targetCard?.tags.map((t) => (
-                    <Stack.Item key={t.id} className={tagContainer}>
+                    <Stack.Item key={t.id}>
                       <Tag
                         tag={t}
-                        maxWidth={calloutWidth - 2}
+                        maxWidth={calloutWidth}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
                   ))}
                 </Stack>
               </Stack.Item>
-              <Stack.Item key='separator' align='stretch' className={tagStackItem}>
+              <Stack.Item key='separator' align='stretch'>
                 <div className={separator} />
               </Stack.Item>
-              <Stack.Item key='tagFinder' align='stretch' className={tagStackItem}>
+              <Stack.Item key='tagFinder' align='stretch'>
                 <Stack horizontal styles={getTagFinderStackStyle(theme)}>
                   <Stack.Item key='searchBox' grow>
                     <TagSearchField
@@ -216,7 +224,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     ))
                 ))
                 .map((t) => (
-                  <Stack.Item key={t.id} align='stretch' className={tagStackItem}>
+                  <Stack.Item key={t.id} align='stretch'>
                     <TagWrapper
                       key={t.id}
                       tag={t}
