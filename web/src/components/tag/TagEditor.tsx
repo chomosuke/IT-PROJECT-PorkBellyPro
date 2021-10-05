@@ -4,8 +4,10 @@ import {
 } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { useState } from 'react';
+import { useBoolean } from '@fluentui/react-hooks';
 import { ITag, ITagProperties } from '../../controllers/Tag';
 import { Theme, useTheme } from '../../theme';
+import { WarningDialog } from '../warningDialog';
 
 // closing Function is called to dismiss callout
 export interface ITagEditorProps {
@@ -105,6 +107,7 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
   const [unstagedState, setState] = useState<ITagProperties>(tag);
   const updateLabel = (newLabel: string) => setState({ ...unstagedState, label: newLabel });
   const updateColor = (newColor: string) => setState({ ...unstagedState, color: newColor });
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const deleteTag = async () => {
     tag.delete();
@@ -133,6 +136,15 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
       calloutMinWidth={width}
       styles={getCalloutStyle(theme)}
     >
+      <WarningDialog
+        hideDialog={hideDialog}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={deleteTag}
+        okButtonStr='Yes, Delete'
+        title='Warning'
+        subText={'Deleted tags won\'t be recoverable, are you sure you want to do that?'}
+      />
       <Stack.Item key='separator' align='stretch' className={tagStackItem}>
         <TextField
           borderless
@@ -143,7 +155,7 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
         />
       </Stack.Item>
       <Stack.Item key='separator' align='stretch' className={tagStackItem}>
-        <Stack horizontal tokens={{ childrenGap: '8px' }} onClick={deleteTag} className={deleteButton}>
+        <Stack horizontal tokens={{ childrenGap: '8px' }} onClick={toggleHideDialog} className={deleteButton}>
           <theme.icon.trash size={24} color={theme.palette.justWhite} />
           <Stack.Item align='center'>
             <Text className={removeTagText}>remove tag</Text>

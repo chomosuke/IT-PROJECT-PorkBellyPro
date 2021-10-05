@@ -7,10 +7,12 @@ import {
   Requireable, bool, object,
 } from 'prop-types';
 import Loader from 'react-loader-spinner';
+import { useBoolean } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
 import { useHome } from '../../HomeContext';
 import { Theme, useTheme } from '../../theme';
 import type { Message, Result } from './processImage';
+import { WarningDialog } from '../warningDialog';
 
 export interface ICardImageFieldProps {
   card: ICard;
@@ -112,6 +114,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   const { cardDetailExpanded } = useHome();
 
   const theme = useTheme();
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const {
     noImageDiv, root, uploadImg, deleteImg, hide, spinnerDiv,
@@ -143,51 +146,63 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   };
 
   return (
-    <div className={root}>
-      {image
-        ? (
-          <Image
-            styles={imageStyles}
-            src={image}
-            alt='business card'
-            imageFit={ImageFit.cover}
-          />
-        )
-        : (
-          <div className={noImageDiv}>
-            no image
-          </div>
+    <>
+      <WarningDialog
+        hideDialog={hideDialog}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={() => {
+          card.update({ image: null });
+          toggleHideDialog();
+        }}
+        okButtonStr='Yes, Delete'
+        title='Warning'
+        subText={'Deleted image won\'t be recoverable, are you sure you want to do that?'}
+      />
+      <div className={root}>
+        {image
+          ? (
+            <Image
+              styles={imageStyles}
+              src={image}
+              alt='business card'
+              imageFit={ImageFit.cover}
+            />
+          )
+          : (
+            <div className={noImageDiv}>
+              no image
+            </div>
+          )}
+        {editing && (
+        <>
+          <label htmlFor='upload' className={uploadImg}>
+            <input
+              id='upload'
+              className={hide}
+              type='file'
+              name='myImage'
+              accept='image/*'
+              onChange={onChangeImg}
+            />
+            <theme.icon.folderOpen size={28} />
+          </label>
+          <button
+            type='button'
+            className={deleteImg}
+            onClick={toggleHideDialog}
+          >
+            <theme.icon.trash size={28} />
+          </button>
+        </>
         )}
-      {editing && (
-      <>
-        <label htmlFor='upload' className={uploadImg}>
-          <input
-            id='upload'
-            className={hide}
-            type='file'
-            name='myImage'
-            accept='image/*'
-            onChange={onChangeImg}
-          />
-          <theme.icon.folderOpen size={28} />
-        </label>
-        <button
-          type='button'
-          className={deleteImg}
-          onClick={() => {
-            card.update({ image: null });
-          }}
-        >
-          <theme.icon.trash size={28} />
-        </button>
-      </>
-      )}
-      {loading && (
-      <div className={spinnerDiv}>
-        <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
+        {loading && (
+        <div className={spinnerDiv}>
+          <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
+        </div>
+        )}
       </div>
-      )}
-    </div>
+    </>
   );
 };
 

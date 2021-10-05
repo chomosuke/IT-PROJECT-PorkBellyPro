@@ -6,7 +6,9 @@ import {
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useBoolean } from '@fluentui/react-hooks';
 import { useApp } from '../AppContext';
+import { WarningDialog } from '../components/warningDialog';
 import { Theme, useTheme } from '../theme';
 
 export interface ILoginProps {
@@ -38,6 +40,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
   // get context
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const app = useApp();
   const theme = useTheme();
@@ -49,7 +52,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
       (async () => {
         const res = await app.login(username, password, registering);
         if (!res.ok) {
-          // Show error dialog
+          toggleHideDialog();
         }
       })();
     }
@@ -83,54 +86,65 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
   };
 
   return (
-    <div className={root}>
-      <div className={bodyContainer}>
-        <Stack className={contentWrapper}>
-          <TextField
-            placeholder='Username'
-            key={registering ? 'userRegister' : 'userLogin'}
-            value={username}
-            onGetErrorMessage={(value) => emptyField(value, 'Username')}
-            validateOnFocusOut
-            validateOnLoad={false}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-            styles={textFieldStyles}
-          />
-          <TextField
-            placeholder='Password'
-            type='password'
-            key={registering ? 'passRegister' : 'passLogin'}
-            value={password}
-            onGetErrorMessage={(value) => emptyField(value, 'Password')}
-            validateOnFocusOut
-            validateOnLoad={false}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-            styles={textFieldStyles}
-          />
-          <PrimaryButton
-            onClick={onLoginClick}
-            text={registering ? 'Register' : 'Log in'}
-            styles={buttonStyle}
-          />
-          <Stack.Item align='center'>
-            <Label>
-              <Link to={registering ? '/login' : '/register'}>
-                {
-                  registering
-                    ? 'Already with an account? Sign in here.'
-                    : 'Register to get started'
-                }
-              </Link>
-            </Label>
-          </Stack.Item>
-          <Stack.Item align='center'>
-            <Label>
-              Can&apos;t log in?
-            </Label>
-          </Stack.Item>
-        </Stack>
+    <>
+      <WarningDialog
+        hideDialog={hideDialog}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Close'
+        title='Error'
+        subText={registering
+          ? 'Your Username has already been taken'
+          : 'Incorrect username or password'}
+      />
+      <div className={root}>
+        <div className={bodyContainer}>
+          <Stack className={contentWrapper}>
+            <TextField
+              placeholder='Username'
+              key={registering ? 'userRegister' : 'userLogin'}
+              value={username}
+              onGetErrorMessage={(value) => emptyField(value, 'Username')}
+              validateOnFocusOut
+              validateOnLoad={false}
+              onChange={(event) => setUsername(event.currentTarget.value)}
+              styles={textFieldStyles}
+            />
+            <TextField
+              placeholder='Password'
+              type='password'
+              key={registering ? 'passRegister' : 'passLogin'}
+              value={password}
+              onGetErrorMessage={(value) => emptyField(value, 'Password')}
+              validateOnFocusOut
+              validateOnLoad={false}
+              onChange={(event) => setPassword(event.currentTarget.value)}
+              styles={textFieldStyles}
+            />
+            <PrimaryButton
+              onClick={onLoginClick}
+              text={registering ? 'Register' : 'Log in'}
+              styles={buttonStyle}
+            />
+            <Stack.Item align='center'>
+              <Label>
+                <Link to={registering ? '/login' : '/register'}>
+                  {
+                    registering
+                      ? 'Already with an account? Sign in here.'
+                      : 'Register to get started'
+                  }
+                </Link>
+              </Label>
+            </Stack.Item>
+            <Stack.Item align='center'>
+              <Label>
+                Can&apos;t log in?
+              </Label>
+            </Stack.Item>
+          </Stack>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
