@@ -77,8 +77,6 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
         closeButtonStr='Cancel'
         okButtonOnClick={deleteTag}
         okButtonStr='Yes, Delete'
-        width='340px'
-        height='240px'
         title='Warning'
         subText={'Deleted tags won\'t be recoverable, are you sure you want to do that?'}
       />

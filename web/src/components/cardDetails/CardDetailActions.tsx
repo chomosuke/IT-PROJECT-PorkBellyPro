@@ -54,8 +54,6 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
         closeButtonStr='Cancel'
         okButtonOnClick={newCard ? onCancel : onDelete}
         okButtonStr={newCard ? 'Yes, Discard' : 'Yes, Delete'}
-        width='340px'
-        height='240px'
         title='Warning'
         subText={newCard
           ? 'Information discarded won\'t be recoverable, are you sure you want to '

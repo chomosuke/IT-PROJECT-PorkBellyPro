@@ -1,12 +1,15 @@
 import {
   DefaultButton, Dialog, DialogFooter, DialogType, IButtonStyles,
+  IDialogContentProps,
+  IDialogFooterProps,
+  IDialogProps,
   PrimaryButton, Stack,
 } from '@fluentui/react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useTheme } from '../theme';
 
-export interface IDialogProps {
+export interface IWarningDialogProps {
   hideDialog: boolean;
   title: string;
   subText: string;
@@ -14,11 +17,9 @@ export interface IDialogProps {
   closeButtonOnClick: () => void;
   okButtonStr?: string;
   okButtonOnClick?: () => void;
-  width: string | number;
-  height: string | number;
 }
 
-export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
+export const WarningDialog: React.VoidFunctionComponent<IWarningDialogProps> = (
   {
     hideDialog,
     title,
@@ -27,14 +28,14 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     closeButtonOnClick,
     okButtonOnClick,
     okButtonStr,
-    width,
-    height,
   },
 ) => {
   if ((okButtonOnClick == null && okButtonStr != null)
    || (okButtonOnClick != null && okButtonStr == null)) {
     throw new Error(`okButtonOnClick is ${okButtonOnClick} while okButtonStr is ${okButtonStr}.`);
   }
+
+  const [width, height] = ['340px', '240px'];
 
   const theme = useTheme();
 
@@ -50,7 +51,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       borderColor: theme.palette.justWhite,
       whiteSpace: 'nowrap',
       padding: '0 24px',
-      margin: '0 12px',
+      margin: '0 24px',
       height: '40px',
       borderRadius: '4px',
     },
@@ -68,13 +69,12 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       borderColor: theme.palette.justWhite,
       whiteSpace: 'nowrap',
       padding: '0 24px',
-      margin: '0 12px',
       height: '40px',
       borderRadius: '4px',
     },
   };
 
-  const dialogStyles = {
+  const dialogStyles: IDialogProps['styles'] = {
     main: {
       width,
       height,
@@ -83,7 +83,13 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
     },
   };
 
-  const dialogContentStyle = {
+  const dialogContentStyle: IDialogContentProps['styles'] = {
+    content: {
+      width,
+      height,
+      display: 'flex',
+      flexDirection: 'column',
+    },
     title: {
       ...theme.fontFamily.roboto,
       ...theme.fontSize.standard,
@@ -96,16 +102,31 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       ...theme.fontSize.small,
       ...theme.fontWeight.light,
       color: theme.palette.justWhite,
+      margin: '0',
     },
     inner: {
-      display: 'flex',
-      justifyItems: 'space-between',
-      flexDirection: 'column',
-      padding: '0px 24px 24px 24px',
+      flexGrow: 1,
+      padding: '0, 24px',
+    },
+    innerContent: {
+      /**
+       * After failed attempt at styling it properly, this height make sure buttons are 24px
+       * from the bottom.
+       */
+      height: '75px',
     },
   };
 
-  const contentProps = {
+  const footerStyles: IDialogFooterProps['styles'] = {
+    actionsRight: {
+      marginRight: '0',
+    },
+    actions: {
+      margin: '0',
+    },
+  };
+
+  const contentProps: IDialogProps['dialogContentProps'] = {
     type: DialogType.normal,
     title,
     subText,
@@ -119,7 +140,7 @@ export const WarningDialog: React.VoidFunctionComponent<IDialogProps> = (
       dialogContentProps={contentProps}
       styles={dialogStyles}
     >
-      <DialogFooter>
+      <DialogFooter styles={footerStyles}>
         <Stack horizontal horizontalAlign='end'>
           {okButtonStr != null
             && (
@@ -148,12 +169,6 @@ WarningDialog.propTypes = {
   closeButtonOnClick: PropTypes.func.isRequired,
   okButtonStr: PropTypes.string,
   okButtonOnClick: PropTypes.func,
-  width: PropTypes.oneOfType([
-    PropTypes.string, PropTypes.number,
-  ]).isRequired,
-  height: PropTypes.oneOfType([
-    PropTypes.string, PropTypes.number,
-  ]).isRequired,
 };
 
 WarningDialog.defaultProps = {

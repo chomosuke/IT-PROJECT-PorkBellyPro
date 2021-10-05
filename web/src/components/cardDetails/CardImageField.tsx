@@ -156,8 +156,6 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
           toggleHideDialog();
         }}
         okButtonStr='Yes, Delete'
-        width='340px'
-        height='240px'
         title='Warning'
         subText={'Deleted image won\'t be recoverable, are you sure you want to do that?'}
       />

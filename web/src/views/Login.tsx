@@ -91,8 +91,6 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
         hideDialog={hideDialog}
         closeButtonOnClick={toggleHideDialog}
         closeButtonStr='Close'
-        width='340px'
-        height='240px'
         title='Error'
         subText={registering
           ? 'Your Username has already been taken'
