@@ -27,7 +27,7 @@ const getClassNames = () => mergeStyleSets({
 
 const stackTokensRoot: IStackTokens = {
   childrenGap: '48px',
-  padding: '48px',
+  padding: '36px 48px 48px 48px',
 };
 
 const stackTokensRight: IStackTokens = {

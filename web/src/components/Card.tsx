@@ -37,7 +37,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
 
   const fontStandard = {
     ...theme.fontFamily.roboto,
-    ...theme.fontSize.small,
+    ...theme.fontSize.standard,
     color: theme.palette.sootyBee,
   };
 
@@ -53,6 +53,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
         animationDuration: '0.2s',
         animationFillMode: 'forwards',
       },
+      userSelect: 'none',
     },
     cardContent: {
       height,

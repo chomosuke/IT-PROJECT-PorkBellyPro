@@ -39,6 +39,7 @@ export interface Palette {
 }
 
 export interface Shape {
+  shortShadow: IRawStyle;
   default: IRawStyle;
 }
 
@@ -48,7 +49,9 @@ export interface FontFamily {
 }
 
 export interface FontWeight {
+  thin: IRawStyle;
   light: IRawStyle;
+  regular: IRawStyle;
   medium: IRawStyle;
   bold: IRawStyle;
   black: IRawStyle;
@@ -78,6 +81,7 @@ export interface Icon {
   signOut: PhosphorIcon;
   plusCircleTag: PhosphorIcon;
   folderOpen: PhosphorIcon;
+  trashBold: PhosphorIcon;
   dotsThree: PhosphorIcon;
 }
 
@@ -134,8 +138,12 @@ export const defaultTheme = freezeDeep<Theme>({
     sootyBee: '#0f0d0d',
   },
   shape: {
+    shortShadow: {
+      boxShadow: '4px 8px 8px hsl(0deg 0% 0% / 0.25)',
+      borderRadius: '8px',
+    },
     default: {
-      boxShadow: '2px 4px 4px rgb(0,0,0,0.25)',
+      boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
       borderRadius: '8px',
     },
   },
@@ -144,34 +152,37 @@ export const defaultTheme = freezeDeep<Theme>({
     ubuntu: { fontFamily: 'Ubuntu, sans-serif' },
   },
   fontWeight: {
-    light: { fontWeight: '100' },
-    medium: { fontWeight: '400' },
+    thin: { fontWeight: '100' },
+    light: { fontWeight: '300' },
+    regular: { fontWeight: '400' },
+    medium: { fontWeight: '500' },
     bold: { fontWeight: '700' },
     black: { fontWeight: '900' },
   },
   fontSize: {
     small: { fontSize: '16px' },
-    standard: { fontSize: '24px' },
-    title: { fontSize: '36px' },
+    standard: { fontSize: '20px' },
+    title: { fontSize: '28px' },
   },
   icon: {
-    plusCircle: makeIcon(PlusCircle, 'bold'),
-    minusCircle: makeIcon(MinusCircle, 'bold'),
-    userCircle: makeIcon(UserCircle, 'bold'),
+    plusCircle: makeIcon(PlusCircle, 'regular'),
+    minusCircle: makeIcon(MinusCircle, 'regular'),
+    userCircle: makeIcon(UserCircle, 'regular'),
     caretDown: makeIcon(CaretDown, 'bold'),
     caretUp: makeIcon(CaretUp, 'bold'),
     caretLeft: makeIcon(CaretLeft, 'bold'),
     caretRight: makeIcon(CaretRight, 'bold'),
-    caretDoubleLeft: makeIcon(CaretDoubleLeft, 'bold'),
-    caretDoubleRight: makeIcon(CaretDoubleRight, 'bold'),
-    pencilLine: makeIcon(PencilLine, 'bold'),
-    trash: makeIcon(Trash, 'bold'),
-    tick: makeIcon(Check, 'bold'),
-    cross: makeIcon(X, 'bold'),
+    caretDoubleLeft: makeIcon(CaretDoubleLeft, 'regular'),
+    caretDoubleRight: makeIcon(CaretDoubleRight, 'regular'),
+    pencilLine: makeIcon(PencilLine, 'regular'),
+    trash: makeIcon(Trash, 'regular'),
+    tick: makeIcon(Check, 'regular'),
+    cross: makeIcon(X, 'regular'),
     magnifyingGlass: makeIcon(MagnifyingGlass, 'light'),
     signOut: makeIcon(SignOut, 'light'),
-    plusCircleTag: makeIcon(PlusCircle, 'bold'),
+    plusCircleTag: makeIcon(PlusCircle, 'regular'),
     folderOpen: makeIcon(FolderOpen, 'bold'),
+    trashBold: makeIcon(Trash, 'bold'),
     dotsThree: makeIcon(DotsThree, 'bold'),
   },
 });

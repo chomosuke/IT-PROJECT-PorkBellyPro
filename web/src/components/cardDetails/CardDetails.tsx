@@ -36,12 +36,13 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   },
   closeButton: {
     cursor: 'pointer',
-    marginLeft: 'auto',
-    marginRight: '48px',
-    marginBottom: '24px',
+    margin: '12px 48px 24px auto',
+  },
+  addFieldButtonContainer: {
+    cursor: 'pointer',
   },
   iconButton: {
-    cursor: 'pointer',
+    marginRight: '8px',
   },
   addFieldText: {
     ...theme.fontFamily.roboto,
@@ -91,7 +92,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   };
 
   const {
-    root, content, closeButton, iconButton, addFieldText,
+    root, content, closeButton, addFieldButtonContainer, iconButton, addFieldText,
   } = getClassNames(theme);
 
   // no sort, order will be preserved on the server presumably
@@ -129,25 +130,27 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
-          <Stack.Item key='note' align='stretch'>
-            <CardNoteField field={note} editing={isEditing} />
-          </Stack.Item>
           {isEditing
             && (
               <Stack
                 horizontal
-                className={iconButton}
+                className={addFieldButtonContainer}
                 onClick={() => {
                   card.update({ fields: [...fields, { key: '', value: '' }] });
                 }}
               >
                 <theme.icon.plusCircle
+                  className={iconButton}
                   color={theme.palette.justWhite}
-                  size={36}
+                  size={32}
                 />
                 <Text className={addFieldText}>Add field</Text>
               </Stack>
             )}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
+          </Stack.Item>
+
         </Stack>
       </div>
       <CardDetailActions

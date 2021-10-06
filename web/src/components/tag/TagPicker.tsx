@@ -47,7 +47,8 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     borderWidth: '1px',
   },
   createTag: {
-    padding: '4px 8px',
+    padding: '0 12px',
+    margin: 'auto',
     cursor: 'pointer',
   },
 });
@@ -125,8 +126,8 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             wrap
             id={pickerTargetId}
             tokens={{
-              childrenGap: '6px',
-              padding: '6px 0px',
+              childrenGap: '8px',
+              padding: '8px 0px',
             }}
           >
             {targetCard?.tags.map((t) => (
@@ -171,6 +172,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             directionalHint={DirectionalHint.topCenter}
             calloutMinWidth={calloutWidth}
             calloutMaxWidth={calloutWidth}
+            calloutMaxHeight={600}
             styles={getCalloutStyle(theme)}
           >
             <Stack tokens={{ childrenGap: '8px', padding: '8px' }}>
@@ -180,14 +182,14 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   wrap
                   id={pickerTargetId}
                   tokens={{
-                    childrenGap: '6px',
+                    childrenGap: '8px',
                   }}
                 >
                   {targetCard?.tags.map((t) => (
                     <Stack.Item key={t.id}>
                       <Tag
                         tag={t}
-                        maxWidth={calloutWidth - 16}
+                        maxWidth={calloutWidth - 48}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
@@ -207,7 +209,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   </Stack.Item>
                   <theme.icon.plusCircleTag
                     className={createTag}
-                    size={16}
+                    size={24}
                     color={theme.palette.justWhite}
                     onClick={getNewTag}
                   />
@@ -227,7 +229,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     <TagWrapper
                       key={t.id}
                       tag={t}
-                      maxWidth={calloutWidth - 16}
+                      maxWidth={calloutWidth - 48}
                       card={targetCard}
                       setTagEdit={(id) => setFocusedTag({ anchor: id, tag: t })}
                     />

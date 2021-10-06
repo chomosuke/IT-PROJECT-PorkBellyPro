@@ -19,7 +19,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   root: {
     background: theme.palette.quartz,
     height: '100%',
-    padding: '120px 0',
+    padding: '20vh 0',
   },
   bodyContainer: {
     background: theme.palette.justWhite,

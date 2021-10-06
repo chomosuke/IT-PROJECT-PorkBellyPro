@@ -14,13 +14,14 @@ const getClassNames = () => {
   const {
     fontFamily: { ubuntu },
     fontWeight: { light },
+    fontSize: { small },
     palette: { cloudyDay, justWhite, sootyBee },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
 
   const searchTextStyle = {
     ...light,
     ...ubuntu,
-    fontSize: '16px',
+    ...small,
   };
 
   return mergeStyleSets({
@@ -30,7 +31,9 @@ const getClassNames = () => {
       cursor: 'text',
       display: 'flex',
       height: '32px',
+      width: '100%',
       maxWidth: '648px',
+      margin: 'auto',
       overflowX: 'scroll',
       scrollbarWidth: 'none',
       whiteSpace: 'pre',

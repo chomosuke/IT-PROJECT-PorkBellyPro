@@ -49,7 +49,7 @@ const getEditingValueStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
   field: {
     ...theme.fontFamily.roboto,
     ...theme.fontSize.standard,
-    ...theme.fontWeight.light,
+    ...theme.fontWeight.regular,
     color: theme.palette.deepSlate,
     ...textStyle,
     whiteSpace: 'pre-wrap',

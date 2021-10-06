@@ -21,68 +21,67 @@ export interface ICardImageFieldProps {
 
 const [imgWidth, imgHeight] = [600, 300];
 
-const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => mergeStyleSets({
-  root: {
-    position: 'relative',
-    margin: 'auto',
-    width: '100%',
-    height: cardDetailExpanded ? '300px' : '200px',
-    // subject to change.
-    maxWidth: '600px',
-  },
-  noImageDiv: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    backgroundColor: theme.palette.quartz,
-    ...theme.fontFamily.roboto,
-    ...theme.fontWeight.bold,
-    ...theme.fontSize.title,
-    color: theme.palette.cloudyDay,
-    borderRadius: '12px',
-  },
-  hide: {
-    display: 'none',
-  },
-  uploadImg: {
+const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => {
+  const iconButton = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
     width: '48px',
     height: '48px',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    ...theme.shape.default,
-    position: 'absolute',
-    top: '16px',
-    right: '80px',
-  },
-  deleteImg: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    width: '48px',
-    height: '48px',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    ...theme.shape.default,
     border: 'none',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    color: theme.palette.cloudyDay,
+    ...theme.shape.default,
     position: 'absolute',
     top: '16px',
-    right: '16px',
-  },
-  spinnerDiv: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: '100%',
-  },
-});
+  };
+
+  return mergeStyleSets({
+    root: {
+      position: 'relative',
+      margin: 'auto',
+      width: '100%',
+      height: cardDetailExpanded ? '400px' : '300px',
+      // subject to change.
+      maxWidth: '800px',
+    },
+    noImageDiv: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.palette.quartz,
+      ...theme.fontFamily.roboto,
+      ...theme.fontWeight.bold,
+      ...theme.fontSize.title,
+      color: theme.palette.cloudyDay,
+      borderRadius: '12px',
+      userSelect: 'none',
+    },
+    hide: {
+      display: 'none',
+    },
+    uploadImg: {
+      ...iconButton,
+      right: '80px',
+    },
+    deleteImg: {
+      ...iconButton,
+      right: '16px',
+    },
+    spinnerDiv: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      top: 0,
+      width: '100%',
+      height: '100%',
+    },
+  });
+};
 
 const imageStyles: IImageProps['styles'] = {
   root: {
@@ -175,31 +174,31 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
             </div>
           )}
         {editing && (
-        <>
-          <label htmlFor='upload' className={uploadImg}>
-            <input
-              id='upload'
-              className={hide}
-              type='file'
-              name='myImage'
-              accept='image/*'
-              onChange={onChangeImg}
-            />
-            <theme.icon.folderOpen size={28} />
-          </label>
-          <button
-            type='button'
-            className={deleteImg}
-            onClick={toggleHideDialog}
-          >
-            <theme.icon.trash size={28} />
-          </button>
-        </>
+          <>
+            <label htmlFor='upload' className={uploadImg}>
+              <input
+                id='upload'
+                className={hide}
+                type='file'
+                name='myImage'
+                accept='image/*'
+                onChange={onChangeImg}
+              />
+              <theme.icon.folderOpen size={28} />
+            </label>
+            <button
+              type='button'
+              className={deleteImg}
+              onClick={toggleHideDialog}
+            >
+              <theme.icon.trashBold size={28} />
+            </button>
+          </>
         )}
         {loading && (
-        <div className={spinnerDiv}>
-          <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
-        </div>
+          <div className={spinnerDiv}>
+            <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
+          </div>
         )}
       </div>
     </>
