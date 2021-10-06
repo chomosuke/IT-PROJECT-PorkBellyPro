@@ -16,27 +16,26 @@ const getClassNames = () => {
       backgroundColor: everblue,
       display: 'grid',
       gridTemplateAreas: '"left mid right"',
-      gridTemplateColumns: 'minmax(0,calc(50% - 324px)) auto minmax(0,calc(50% - 324px))',
+      // gridTemplateColumns: 'minmax(0,calc(50% - 324px)) auto minmax(0,calc(50% - 324px))',
+      gridTemplateColumns: '1fr 2fr 1fr',
       height: '48px',
       whiteSpace: 'nowrap',
     },
     left: {
       gridArea: 'left',
-      marginLeft: '14px',
+      margin: '0 24px',
     },
     mid: {
       alignContent: 'center',
       display: 'grid',
       gridArea: 'mid',
-      marginLeft: '14px',
-      marginRight: '14px',
     },
     right: {
       display: 'flex',
-      columnGap: '28px',
+      columnGap: '16px',
       gridArea: 'right',
       justifyContent: 'end',
-      marginRight: '14px',
+      margin: '0 24px',
     },
   });
 };
