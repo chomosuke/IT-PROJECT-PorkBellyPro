@@ -21,7 +21,7 @@ const getSearchFieldStyles: (theme: Theme, placeholder: boolean) => ITextFieldPr
     paddingBottom: '4px',
   },
   fieldGroup: {
-    height: '24px',
+    height: '32px',
     borderRadius: theme.shape.default.borderRadius,
     backgroundColor: theme.palette.moldyCheese,
   },

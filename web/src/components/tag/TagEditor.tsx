@@ -72,10 +72,10 @@ const getNewFieldStyles: (theme: Theme) => ITextFieldProps['styles'] = (theme: T
     ...theme.fontWeight.medium,
     color: theme.palette.justWhite,
     whiteSpace: 'pre-wrap',
-    height: '24px',
+    height: '32px',
   },
   fieldGroup: {
-    height: '24px',
+    height: '32px',
     borderRadius: theme.shape.default.borderRadius,
     backgroundColor: theme.palette.moldyCheese,
   },

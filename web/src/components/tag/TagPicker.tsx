@@ -47,7 +47,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     borderWidth: '1px',
   },
   createTag: {
-    padding: '0 16px',
+    padding: '0 12px',
     margin: 'auto',
     cursor: 'pointer',
   },
@@ -209,7 +209,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   </Stack.Item>
                   <theme.icon.plusCircleTag
                     className={createTag}
-                    size={20}
+                    size={24}
                     color={theme.palette.justWhite}
                     onClick={getNewTag}
                   />
