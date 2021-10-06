@@ -16,7 +16,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...theme.shape.default,
     backgroundColor: theme.palette.justWhite,
     minHeight: '80px',
-    padding: '8px',
+    padding: '16px',
   },
   valueViewingText: {
     ...theme.fontFamily.roboto,
@@ -42,6 +42,7 @@ const getValueEditingStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
   },
   fieldGroup: {
     minHeight: '80px',
+    padding: '16px',
     ...theme.shape.default,
   },
 });
