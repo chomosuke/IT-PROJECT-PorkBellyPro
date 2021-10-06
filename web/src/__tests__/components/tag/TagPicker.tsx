@@ -100,16 +100,15 @@ describe('TagPicker render tests', () => {
                 fill="none"
                 r="96"
                 stroke="#ffffff"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="24"
+                strokeMiterlimit="10"
+                strokeWidth="16"
               />
               <line
                 fill="none"
                 stroke="#ffffff"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="24"
+                strokeWidth="16"
                 x1="88"
                 x2="168"
                 y1="128"
@@ -120,7 +119,7 @@ describe('TagPicker render tests', () => {
                 stroke="#ffffff"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="24"
+                strokeWidth="16"
                 x1="128"
                 x2="128"
                 y1="88"
@@ -129,39 +128,6 @@ describe('TagPicker render tests', () => {
             </svg>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
-  });
-
-  test('TagPicker in read-only', () => {
-    const json = create(
-      <AppProvider value={demoApp}>
-        <TagPicker targetCard={demoCard} editing={false} />
-      </AppProvider>,
-    ).toJSON();
-    expect(json).toMatchInlineSnapshot(`
-<div
-  className="ms-Stack css-57"
->
-  <span
-    className="text-58"
-  >
-    Tags
-  </span>
-  <div
-    className="ms-StackItem css-59"
-  >
-    <div>
-      <div
-        className="ms-Stack css-61"
-        id="picker-target1"
-      >
-        <div
-          className="ms-Stack-inner css-60"
-        />
       </div>
     </div>
   </div>
