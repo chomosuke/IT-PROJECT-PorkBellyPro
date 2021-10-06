@@ -17,15 +17,16 @@ import {
   ICardData,
   ICardProperties,
   cardDataDefaults,
-  fromRaw,
+  fromRaw as cardsFromRaw,
   implement,
 } from './controllers/Card';
+import { ITag, ITagData, fromRaw as tagFromRaw } from './controllers/Tag';
 import { ResponseStatus } from './ResponseStatus';
 import { Home } from './views/Home';
 import { Login } from './views/Login';
 
 const getClassNames = () => {
-  const headerHeight = '60px';
+  const headerHeight = '48px';
 
   return mergeStyleSets({
     header: {
@@ -65,6 +66,7 @@ interface IUserStatic {
   readonly username: string;
   readonly settings: ISettings;
   readonly cards: readonly ICardData[];
+  readonly tags: readonly ITagData[];
 }
 
 type GetMeResult = {
@@ -90,7 +92,8 @@ async function getMe(): Promise<GetMeResult> {
     const body = ensureObject(await res.json());
     const username = ensureType(body.username, 'string');
     const settings = ensureObject(body.settings);
-    const cards = ensureArray(body.cards).map(fromRaw);
+    const cards = ensureArray(body.cards).map(cardsFromRaw);
+    const tags = ensureArray(body.tags).map(tagFromRaw);
 
     return {
       status: new ResponseStatus(res),
@@ -98,6 +101,7 @@ async function getMe(): Promise<GetMeResult> {
         username,
         settings,
         cards,
+        tags,
       },
     };
   } catch {
@@ -109,10 +113,15 @@ function notImplemented() {
   return new Error('Not implemented');
 }
 
+type SetUserCallback = (
+  value: SetStateAction<IUserStatic | null | undefined>,
+  clearOverrides?: boolean,
+) => void;
+
 function implementDelete(
   card: ICardData,
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard['delete'] {
   return (async () => {
     if (card.id == null) throw new Error('card.id is nullish');
@@ -138,8 +147,9 @@ function implementDelete(
 
 function implementCard(
   card: ICardData,
+  tags: readonly ITag[],
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard {
   const cardMethods: CardMethods = {
     update() { throw notImplemented(); },
@@ -150,16 +160,17 @@ function implementCard(
     update() { throw notImplemented(); },
     remove() { throw notImplemented(); },
   });
-  return implement(card, cardMethods, fieldMethodsFactory);
+  return implement(card, cardMethods, tags, fieldMethodsFactory);
 }
 
 function implementCardOverride(
   data: ICardOverrideData,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  tags: readonly ITag[],
   userState: IUserStatic,
-  setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>>,
+  setUser: SetUserCallback,
 ): ICard {
-  const { base, overrides: { image, ...overrides } } = data;
+  const { base, overrides: { image, tags: tagsOverride, ...overrides } } = data;
   const cardData: ICardData = {
     ...cardDataDefaults,
     ...base,
@@ -168,12 +179,18 @@ function implementCardOverride(
   if (image !== undefined) {
     cardData.image = image === null ? undefined : image;
   }
+  if (tagsOverride != null) {
+    cardData.tags = tagsOverride.map((tag) => tag.id);
+  }
   const cardMethods: CardMethods = {
-    update(updates) {
+    update({ tags: updateTags, ...rest }) {
       const newOverrides: Partial<ICardProperties> = {
         ...data.overrides,
-        ...updates,
+        ...rest,
       };
+      if (updateTags != null) {
+        newOverrides.tags = updateTags.map((tag) => ({ id: tag.id }));
+      }
       setDetail({
         ...data,
         overrides: newOverrides,
@@ -195,13 +212,21 @@ function implementCardOverride(
         bodyObj = Object.fromEntries(
           Object
             .entries(cardDataDefaults)
-            .concat(Object.entries(overrides), [['tags', []]]),
+            .concat(
+              Object.entries(overrides).filter(([k]) => k !== 'tags'),
+              [['tags', cardData.tags]],
+            ),
         );
       } else {
         if (base?.id == null) throw new Error('Unreachable');
-        bodyObj = Object.fromEntries(Object
+        let entries = Object
           .entries(overrides)
-          .concat([['id', base.id]]));
+          .filter(([k]) => k !== 'tags')
+          .concat([['id', base.id]]);
+        if (tagsOverride != null) {
+          entries = entries.concat([['tags', cardData.tags]]);
+        }
+        bodyObj = Object.fromEntries(entries);
       }
       if (image !== undefined) {
         bodyObj.image = image;
@@ -216,7 +241,7 @@ function implementCardOverride(
       });
       if (res.ok) {
         const raw = await res.json();
-        const updated = fromRaw(raw);
+        const updated = cardsFromRaw(raw);
         if (put) {
           setUser({
             ...userState,
@@ -254,30 +279,149 @@ function implementCardOverride(
       });
     },
   });
-  return implement(cardData, cardMethods, fieldMethodsFactory);
+  return implement(cardData, cardMethods, tags, fieldMethodsFactory);
+}
+
+function implementTag(
+  tag: ITagData,
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  user: IUserStatic,
+  setUser: SetUserCallback,
+): ITag {
+  return {
+    ...tag,
+    async commit({ label, color }) {
+      const res = await fetch('/api/tag', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(await res.json());
+
+        setUser({
+          ...user,
+          tags: user.tags.map((existing) => (existing.id === newTag.id
+            ? newTag
+            : existing)),
+        },
+        false);
+      }
+
+      return new ResponseStatus(res);
+    },
+    async delete() {
+      const res = await fetch('/api/tag', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: tag.id,
+        }),
+      });
+
+      if (res.ok) {
+        setDetail((detail) => (detail == null
+          ? null
+          : {
+            ...detail,
+            overrides: {
+              ...detail.overrides,
+              tags: detail.overrides.tags
+                ?.filter((overrideTag) => overrideTag.id !== tag.id),
+            },
+          }));
+        setUser({
+          ...user,
+          cards: user.cards.map((existing) => ({
+            ...existing,
+            tags: existing.tags.filter((existingTag) => existingTag !== tag.id),
+          })),
+          tags: user.tags.filter((existing) => (existing.id !== tag.id)),
+        },
+        false);
+      }
+
+      return new ResponseStatus(res);
+    },
+  };
+}
+
+function implementUser(
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  userState: IUserStatic | null | undefined,
+  setUser: SetUserCallback,
+): [user: IUser, tags: readonly ITag[]] | null {
+  if (userState == null) return null;
+
+  const {
+    username, settings, cards, tags,
+  } = userState;
+
+  const tagsImpl = tags.map((tag) => implementTag(tag, setDetail, userState, setUser));
+
+  const user: IUser = {
+    username,
+    settings,
+    cards: cards.map((card) => implementCard(card, tagsImpl, userState, setUser)),
+    tags: tagsImpl,
+  };
+
+  return [user, tagsImpl];
+}
+
+function ensureNotNull<T>(value: T | null | undefined): T {
+  if (value == null) throw new Error('value is nullish');
+  return value;
 }
 
 const AppComponent: React.VoidFunctionComponent = () => {
   const [userState, setUserState] = useState<IUserStatic | null>();
   const [detail, setDetail] = useState<ICardOverrideData | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [tagQuery, setTagQuery] = useState<Pick<ITag, 'id'>[]>([]);
   const history = useHistory();
 
-  const setUser: Dispatch<SetStateAction<IUserStatic | null | undefined>> = (value) => {
+  const setUser: SetUserCallback = (value, clearOverrides) => {
     let newState: IUserStatic | null | undefined;
     if (typeof value === 'function') newState = value(userState);
     else newState = value;
-    setUserState(newState);
+
     let newBase: ICardData | undefined;
     if (detail?.base?.id != null && newState != null) {
       newBase = newState.cards.find((card) => card.id === detail?.base?.id);
     }
-    setDetail(newBase == null
-      ? null
-      : {
+
+    const shouldClearOverrides = clearOverrides ?? true;
+
+    if (newBase == null) {
+      setDetail(null);
+    } else {
+      const overrides: ICardOverrideData['overrides'] = {};
+      if (!shouldClearOverrides) {
+        Object.assign(overrides, detail?.overrides);
+        if (detail?.overrides?.tags != null) {
+          overrides.tags = detail.overrides.tags.filter(
+            (tag) => newState?.tags.find((newTag) => newTag.id === tag.id) != null,
+          );
+        }
+      }
+
+      setDetail({
         base: newBase,
-        overrides: {},
+        overrides,
       });
+    }
+
+    setUserState(newState);
   };
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
@@ -297,21 +441,23 @@ const AppComponent: React.VoidFunctionComponent = () => {
     updateMe();
   }
 
-  const user: IUser | null = userState == null
-    ? null
-    : {
-      username: userState.username,
-      settings: userState.settings,
-      cards: userState.cards.map((card) => implementCard(card, userState, setUser)),
-    };
+  const userImpl = implementUser(setDetail, userState, setUser);
+
+  const user = userImpl == null ? null : userImpl[0];
 
   const context: IAppContext = {
     searchQuery,
+    tagQuery: user == null
+      ? []
+      : tagQuery.map(
+        (tag) => ensureNotNull(user.tags.find((userTag) => userTag.id === tag.id)),
+      ),
     user,
-    update({ searchQuery: query }) {
-      if (query != null) setSearchQuery(query);
+    update({ searchQuery: searchQueryUpdate, tagQuery: tagQueryUpdate }) {
+      if (searchQueryUpdate != null) setSearchQuery(searchQueryUpdate);
+      if (tagQueryUpdate != null) setTagQuery(tagQueryUpdate.map((tag) => ({ id: tag.id })));
     },
-    showCardDetail(card) {
+    showCardDetail(card: ICard | null) {
       if (userState == null) throw new Error('userState is nullish');
       if (card == null) {
         setDetail(null);
@@ -328,6 +474,39 @@ const AppComponent: React.VoidFunctionComponent = () => {
       setDetail({
         overrides: {},
       });
+    },
+    async newTag(tagProps) {
+      if (userState == null) {
+        throw new Error('userState is nullish');
+      }
+
+      let label = tagProps?.label;
+      let color = tagProps?.color;
+      if (label == null) label = '';
+      if (color == null) color = 'white';
+
+      const res = await fetch('/api/tag', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          label,
+          color,
+        }),
+      });
+
+      if (res.ok) {
+        const newTag = tagFromRaw(await res.json());
+
+        setUser({
+          ...userState,
+          tags: [...userState.tags, newTag],
+        },
+        false);
+      }
+
+      return new ResponseStatus(res);
     },
     login(username, password, register) {
       return (async function loginAsync() {
@@ -371,10 +550,12 @@ const AppComponent: React.VoidFunctionComponent = () => {
 
   let override: ICard | undefined;
   if (userState != null) {
+    if (userImpl == null) throw new Error('Unexpected null');
     override = detail != null
       ? implementCardOverride(
         detail,
         setDetail,
+        userImpl[1],
         userState,
         setUser,
       )

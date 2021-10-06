@@ -4,6 +4,7 @@ import {
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
 import { Types } from 'mongoose';
+import { createHash } from 'crypto';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 import { ICardField } from '../../models/card';
@@ -79,10 +80,12 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
 
     // image validation
     let imageBuffer: Buffer | undefined | null;
+    let imageHash: string | undefined | null;
     if (image !== undefined) {
       if (image === null) {
         // null image means remove the image from card
         imageBuffer = null;
+        imageHash = null;
       } else if (typeof image !== 'string'
         || image.substr(0, dataURIPrefix.length) !== dataURIPrefix
         || image === '') {
@@ -95,6 +98,9 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           throw new HttpStatusError(400);
         }
         imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
+
+        // now hash
+        imageHash = createHash('sha256').update(imageBuffer).digest('hex');
       }
     }
     /*
@@ -111,6 +117,7 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         jobTitle,
         company,
         image: imageBuffer,
+        imageHash,
         tags,
         fields,
       }).filter(([, val]) => val !== undefined),
@@ -161,7 +168,8 @@ export const cardPatch: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: updatedCard.email,
           jobTitle: updatedCard.jobTitle,
           company: updatedCard.company,
-          hasImage: updatedCard.image != null,
+          // in test imageHash would be null
+          imageHash: updatedCard.imageHash ?? undefined,
           fields: updatedCard.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: updatedCard.tags.map((t) => t.toString()),
         };

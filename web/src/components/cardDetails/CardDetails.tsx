@@ -1,32 +1,63 @@
-import { DefaultButton, Stack, mergeStyleSets } from '@fluentui/react';
+import {
+  Stack, Text, mergeStyleSets,
+} from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
 import React from 'react';
 import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
+import { useHome } from '../../HomeContext';
 import { CardDetailActions } from './CardDetailActions';
 import { CardExtraField } from './CardExtraField';
-import { CardImageField } from './CardImageField';
+import { CardImageField, cancelLoading } from './CardImageField';
 import { CardMandatoryField } from './CardMandatoryField';
 import { CardNoteField } from './CardNoteField';
+import { TagPicker } from '../tag/TagPicker';
+import { Theme, useTheme } from '../../theme';
 
 export interface ICardDetailsProps {
   card: ICard;
   editing: boolean;
 }
 
-const getClassNames = () => mergeStyleSets({
+const textStyle = {
+  lineHeight: '36px',
+  verticalAlign: 'middle',
+};
+
+const getClassNames = (theme: Theme) => mergeStyleSets({
   root: {
     display: 'grid',
     height: '100%',
     gridTemplateRows: 'auto 1fr auto',
+    backgroundColor: theme.palette.stoneBlue,
   },
   content: {
     overflow: 'auto',
   },
+  closeButton: {
+    cursor: 'pointer',
+    margin: '12px 48px 24px auto',
+  },
+  addFieldButtonContainer: {
+    cursor: 'pointer',
+  },
+  iconButton: {
+    marginRight: '8px',
+  },
+  addFieldText: {
+    ...theme.fontFamily.roboto,
+    ...theme.fontSize.standard,
+    ...theme.fontWeight.medium,
+    color: theme.palette.justWhite,
+    ...textStyle,
+  },
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
-  const app = useApp();
+  const { showCardDetail } = useApp();
+  const { unlockCard, unlockCardLater, cardDetailExpanded } = useHome();
+
+  const theme = useTheme();
 
   const [isEditing, setIsEditing] = React.useState(editing);
 
@@ -55,63 +86,97 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   restFields.splice(noteIndex, 1);
 
   const close = () => {
-    app.showCardDetail(null);
+    unlockCardLater();
+    showCardDetail(null);
+    cancelLoading(true);
   };
 
-  const { root, content } = getClassNames();
+  const {
+    root, content, closeButton, addFieldButtonContainer, iconButton, addFieldText,
+  } = getClassNames(theme);
 
   // no sort, order will be preserved on the server presumably
   return (
     <div className={root}>
-      <DefaultButton text='close' onClick={close} />
+      <theme.icon.cross
+        className={closeButton}
+        color={theme.palette.justWhite}
+        size={32}
+        onClick={close}
+      />
       <div className={content}>
-        <Stack>
+        <Stack tokens={{
+          childrenGap: '24px',
+          padding: `0px ${cardDetailExpanded ? '152px' : '48px'}`,
+        }}
+        >
           <Stack.Item key='image' align='stretch'>
-            <CardImageField card={card} editing={isEditing} />
+            <CardImageField
+              card={card}
+              editing={isEditing}
+            />
           </Stack.Item>
-          {mFields.map((field) => (
+          <Stack.Item key='tags' align='stretch'>
+            <TagPicker targetCard={card} editing={isEditing} />
+          </Stack.Item>
+          {mFields.filter((field) => (field.value !== '' || isEditing)).map((field) => (
             <Stack.Item key={field.key} align='stretch'>
               <CardMandatoryField field={field} editing={isEditing} onEdit={field.onEdit} />
             </Stack.Item>
           ))}
-          <Stack.Item key='note' align='stretch'>
-            <CardNoteField field={note} editing={isEditing} />
-          </Stack.Item>
-          {restFields.map((field) => (
-            <Stack.Item align='stretch'>
+          {restFields.map((field, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Stack.Item key={index} align='stretch'>
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
           {isEditing
             && (
-              <Stack.Item key='add field'>
-                <DefaultButton
-                  text='add field'
-                  onClick={() => {
-                    card.update({ fields: [...fields, { key: '', value: '' }] });
-                  }}
+              <Stack
+                horizontal
+                className={addFieldButtonContainer}
+                onClick={() => {
+                  card.update({ fields: [...fields, { key: '', value: '' }] });
+                }}
+              >
+                <theme.icon.plusCircle
+                  className={iconButton}
+                  color={theme.palette.justWhite}
+                  size={32}
                 />
-              </Stack.Item>
+                <Text className={addFieldText}>Add field</Text>
+              </Stack>
             )}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
+          </Stack.Item>
+
         </Stack>
       </div>
       <CardDetailActions
-        card={card}
         editing={isEditing}
+        newCard={card.id == null}
         onBeginEdit={() => {
           setIsEditing(true);
         }}
         onSave={() => {
           card.commit();
           setIsEditing(false);
+          cancelLoading(false);
         }}
         onCancel={() => {
           if (card.id === undefined) {
             close();
           } else {
-            app.showCardDetail(card);
+            showCardDetail(card);
             setIsEditing(false);
+            cancelLoading(false);
           }
+        }}
+        onDelete={() => {
+          unlockCard();
+          card.delete();
+          cancelLoading(false);
         }}
       />
     </div>

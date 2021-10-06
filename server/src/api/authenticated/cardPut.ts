@@ -3,6 +3,7 @@ import {
 } from '@porkbellypro/crm-shared';
 import Jimp from 'jimp';
 import { Types } from 'mongoose';
+import { createHash } from 'crypto';
 import { AuthenticatedApiRequestHandlerAsync, asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from '../HttpStatusError';
 
@@ -54,6 +55,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
     });
 
     let imageBuffer: Buffer | undefined;
+    let imageHash: string | undefined;
     if (image !== undefined) {
       // sanatize image
       if (typeof image !== 'string'
@@ -67,6 +69,9 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
         throw new HttpStatusError(400);
       }
       imageBuffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
+
+      // now hash the image and store it
+      imageHash = createHash('sha256').update(imageBuffer).digest('hex');
     }
 
     // now do the actual thing.
@@ -96,6 +101,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           fields,
           tags,
           image: imageBuffer,
+          imageHash,
         });
 
         const response: CardPutResponse = {
@@ -106,7 +112,7 @@ export const cardPut: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler(
           email: cardDoc.email,
           jobTitle: cardDoc.jobTitle,
           company: cardDoc.company,
-          hasImage: cardDoc.image != null,
+          imageHash,
           fields: cardDoc.fields.map((f) => ({ key: f.key, value: f.value })),
           tags: cardDoc.tags.map((t) => t.toString()),
         };

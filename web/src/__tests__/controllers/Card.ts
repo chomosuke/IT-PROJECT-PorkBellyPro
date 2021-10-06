@@ -14,7 +14,6 @@ describe('Card tests', () => {
     email: 'email',
     jobTitle: 'jobTitle',
     company: 'company',
-    hasImage: false,
     fields: [
       {
         key: 'Key 1',
@@ -50,6 +49,7 @@ Object {
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
+  "tags": Array [],
 }
 `);
     });
@@ -57,7 +57,7 @@ Object {
     test('Success test: with image', () => {
       const obj = fromRaw({
         ...template,
-        hasImage: true,
+        imageHash: 'aHash',
       });
       expect(obj).toMatchInlineSnapshot(`
 Object {
@@ -75,10 +75,11 @@ Object {
     },
   ],
   "id": "000000000000000000000000",
-  "image": "/api/image/000000000000000000000000",
+  "image": "/api/image/aHash",
   "jobTitle": "jobTitle",
   "name": "name",
   "phone": "phone",
+  "tags": Array [],
 }
 `);
     });
