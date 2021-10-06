@@ -17,6 +17,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     backgroundColor: theme.palette.justWhite,
     minHeight: '80px',
     padding: '16px',
+    marginBottom: '40px',
   },
   valueViewingText: {
     ...theme.fontFamily.roboto,

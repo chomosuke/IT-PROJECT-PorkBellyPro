@@ -58,6 +58,7 @@ const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => {
       ...theme.fontSize.title,
       color: theme.palette.cloudyDay,
       borderRadius: '12px',
+      userSelect: 'none',
     },
     hide: {
       display: 'none',
