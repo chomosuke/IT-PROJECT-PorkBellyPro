@@ -13,7 +13,7 @@ export interface ICardNoteFieldProps {
 
 const getClassNames = (theme: Theme) => mergeStyleSets({
   valueViewing: {
-    ...theme.shape.default,
+    ...theme.shape.shortShadow,
     backgroundColor: theme.palette.justWhite,
     minHeight: '80px',
     padding: '16px',
@@ -44,7 +44,7 @@ const getValueEditingStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
   fieldGroup: {
     minHeight: '80px',
     padding: '16px',
-    ...theme.shape.default,
+    ...theme.shape.shortShadow,
     marginBottom: '40px',
   },
 });
