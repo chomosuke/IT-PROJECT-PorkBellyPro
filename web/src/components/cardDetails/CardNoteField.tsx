@@ -45,6 +45,7 @@ const getValueEditingStyles: (theme: Theme) => ITextFieldProps['styles'] = (them
     minHeight: '80px',
     padding: '16px',
     ...theme.shape.default,
+    marginBottom: '40px',
   },
 });
 
