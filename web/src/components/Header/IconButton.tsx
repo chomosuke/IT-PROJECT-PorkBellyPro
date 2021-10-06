@@ -6,7 +6,9 @@ import React, {
   KeyboardEvent, MouseEvent, VoidFunctionComponent, WeakValidationMap, useRef, useState,
 } from 'react';
 import { Icon as PhosphorIcon } from 'phosphor-react';
-import { ContextualMenu, IContextualMenuItem, mergeStyleSets } from '@fluentui/react';
+import {
+  ContextualMenu, IContextualMenuItem, keyframes, mergeStyleSets,
+} from '@fluentui/react';
 import { useTheme } from '../../theme';
 
 export interface IIconButtonDropdownOption {
@@ -26,7 +28,9 @@ const getClassNames = () => {
   const {
     fontFamily: { roboto },
     fontWeight: { medium },
-    palette: { justWhite, sootyBee },
+    palette: {
+      everblue, stoneBlue, justWhite, quartz, sootyBee,
+    },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
 
   const rootCommonStyles = {
@@ -36,35 +40,57 @@ const getClassNames = () => {
     cursor: 'pointer',
     display: 'inline-flex',
     fontSize: '16px',
-    height: '100%',
     userSelect: 'none',
+    padding: '0 16px',
   };
+
+  const buttonHover = keyframes({
+    from: {
+      background: everblue,
+      borderRadius: '4px',
+    },
+    to: {
+      background: stoneBlue,
+      borderRadius: '12px',
+      color: quartz,
+    },
+  });
 
   return mergeStyleSets({
     root: {
       ...rootCommonStyles,
       color: justWhite,
+      margin: '4px',
+      ':hover': {
+        animationName: buttonHover,
+        animationDuration: '0.6s',
+        animationFillMode: 'forwards',
+      },
     },
     icon: {
       height: '32px',
       width: '32px',
+      marginLeft: '-4px',
+      marginRight: '4px',
     },
     separator: {
       backgroundColor: justWhite,
       display: 'inline',
-      height: '32px',
-      marginLeft: '4px',
+      height: '28px',
+      marginLeft: '8px',
       marginRight: '4px',
-      width: '1px',
+      width: '2px',
+      borderRadius: '8px',
     },
     caret: {
       height: '20px',
       width: '32px',
+      margin: '0 -8px 0 -4px',
     },
     optionRoot: {
       ...rootCommonStyles,
       color: sootyBee,
-      margin: '4px',
+      margin: '16px',
       width: '100%',
     },
   });
