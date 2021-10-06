@@ -41,6 +41,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
+  const [hideNoSubmitDialog, { toggle: toggleHideNoSubmitDialog }] = useBoolean(true);
 
   const app = useApp();
   const theme = useTheme();
@@ -55,6 +56,8 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
           toggleHideDialog();
         }
       })();
+    } else {
+      toggleHideNoSubmitDialog();
     }
   };
 
@@ -95,6 +98,13 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
         subText={registering
           ? 'Your Username has already been taken'
           : 'Incorrect username or password'}
+      />
+      <WarningDialog
+        hideDialog={hideNoSubmitDialog}
+        closeButtonOnClick={toggleHideNoSubmitDialog}
+        closeButtonStr='Close'
+        title='Error'
+        subText='Username or password can not be empty'
       />
       <div className={root}>
         <div className={bodyContainer}>
