@@ -13,11 +13,14 @@ type OnClickHandler =
 
 export interface ITagProps {
   tag: ITag;
+  maxWidth?: number;
   onClick?: OnClickHandler;
   onRemove?: OnClickHandler;
 }
 
-const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) => {
+const getClassNames = (
+  tagColor: string, hasClick: boolean, hasRemove: boolean, maxWidth?: number,
+) => {
   const {
     fontFamily: { roboto },
     fontWeight: { medium },
@@ -55,6 +58,9 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       marginLeft: '32px',
       marginTop: 'auto',
       userSelect: 'none',
+      maxWidth,
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
     },
     rightSpan: {
       display: 'flex',
@@ -67,18 +73,27 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
   });
 };
 
-export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRemove }) => {
+export const Tag: React.VoidFunctionComponent<ITagProps> = ({
+  tag, onClick, onRemove, maxWidth,
+}) => {
   const {
     icon: { cross: Cross },
     palette: { justWhite },
   } = useTheme();
+
+  let innerMaxWidth: number | undefined;
+  if (maxWidth == null) {
+    innerMaxWidth = undefined;
+  } else {
+    innerMaxWidth = Math.max(0, maxWidth - 64);
+  }
 
   const {
     root,
     labelSpan,
     rightSpan,
     crossIcon,
-  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove));
+  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove), innerMaxWidth);
 
   const onRemoveInternal = onRemove != null
     ? (ev: MouseEvent<HTMLDivElement>) => {
@@ -98,12 +113,14 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
 };
 
 Tag.defaultProps = {
+  maxWidth: undefined,
   onClick: undefined,
   onRemove: undefined,
 };
 
 Tag.propTypes = {
   tag: (PropTypes.object as Requireable<ITag>).isRequired,
+  maxWidth: PropTypes.number,
   onClick: PropTypes.func,
   onRemove: PropTypes.func,
 };

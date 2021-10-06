@@ -39,15 +39,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     ...textStyle,
   },
   addButton: {
-    padding: '6px',
     cursor: 'pointer',
-  },
-  tagContainer: {
-    paddingTop: '6px',
-    paddingRight: '6px',
-  },
-  tagStackItem: {
-    margin: '8px',
   },
   separator: {
     borderColor: theme.palette.justWhite,
@@ -55,7 +47,7 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     borderWidth: '1px',
   },
   createTag: {
-    padding: '4px',
+    padding: '4px 8px',
     cursor: 'pointer',
   },
 });
@@ -92,7 +84,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
 
   const theme = useTheme();
   const {
-    text, addButton, tagContainer, tagStackItem, separator, createTag,
+    text, addButton, separator, createTag,
   } = getClassNames(theme);
 
   const valueDivRef = createRef<HTMLDivElement>();
@@ -128,27 +120,40 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
       <Text className={text}>Tags</Text>
       <Stack.Item grow>
         <div ref={valueDivRef}>
-          <Stack horizontal wrap id={pickerTargetId}>
+          <Stack
+            horizontal
+            wrap
+            id={pickerTargetId}
+            tokens={{
+              childrenGap: '6px',
+              padding: '6px 0px',
+            }}
+          >
             {targetCard?.tags.map((t) => (
-              <Stack.Item key={t.id} className={tagContainer}>
-                {editing
-                  ? (
-                    <Tag
-                      tag={t}
-                      onRemove={() => removeTag(t)}
-                    />
-                  )
-                  : <Tag tag={t} />}
+              <Stack.Item key={t.id}>
+                <Tag
+                  tag={t}
+                  maxWidth={
+                    /**
+                     * - 2 because otherwise resize will not update tag max width as it'll be
+                     * blocked by itself.
+                     */
+                    calloutWidth - 2
+                  }
+                  onRemove={editing ? () => removeTag(t) : undefined}
+                />
               </Stack.Item>
             ))}
             {editing
               && (
-              <theme.icon.plusCircleTag
-                size={24}
-                className={addButton}
-                onClick={() => setPickerActive((old) => !old)}
-                color={theme.palette.justWhite}
-              />
+                <Stack.Item>
+                  <theme.icon.plusCircleTag
+                    size={24}
+                    className={addButton}
+                    onClick={() => setPickerActive((old) => !old)}
+                    color={theme.palette.justWhite}
+                  />
+                </Stack.Item>
               )}
           </Stack>
         </div>
@@ -168,23 +173,31 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
             calloutMaxWidth={calloutWidth}
             styles={getCalloutStyle(theme)}
           >
-            <Stack>
-              <Stack.Item key='tags' align='stretch' className={tagStackItem}>
-                <Stack horizontal wrap id={pickerTargetId}>
+            <Stack tokens={{ childrenGap: '8px', padding: '8px' }}>
+              <Stack.Item key='tags' align='stretch'>
+                <Stack
+                  horizontal
+                  wrap
+                  id={pickerTargetId}
+                  tokens={{
+                    childrenGap: '6px',
+                  }}
+                >
                   {targetCard?.tags.map((t) => (
-                    <Stack.Item key={t.id} className={tagContainer}>
+                    <Stack.Item key={t.id}>
                       <Tag
                         tag={t}
+                        maxWidth={calloutWidth - 16}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
                   ))}
                 </Stack>
               </Stack.Item>
-              <Stack.Item key='separator' align='stretch' className={tagStackItem}>
+              <Stack.Item key='separator' align='stretch'>
                 <div className={separator} />
               </Stack.Item>
-              <Stack.Item key='tagFinder' align='stretch' className={tagStackItem}>
+              <Stack.Item key='tagFinder' align='stretch'>
                 <Stack horizontal styles={getTagFinderStackStyle(theme)}>
                   <Stack.Item key='searchBox' grow>
                     <TagSearchField
@@ -210,10 +223,11 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     ))
                 ))
                 .map((t) => (
-                  <Stack.Item key={t.id} align='stretch' className={tagStackItem}>
+                  <Stack.Item key={t.id} align='stretch'>
                     <TagWrapper
                       key={t.id}
                       tag={t}
+                      maxWidth={calloutWidth - 16}
                       card={targetCard}
                       setTagEdit={(id) => setFocusedTag({ anchor: id, tag: t })}
                     />
