@@ -189,7 +189,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                     <Stack.Item key={t.id}>
                       <Tag
                         tag={t}
-                        maxWidth={calloutWidth}
+                        maxWidth={calloutWidth - 16}
                         onRemove={() => removeTag(t)}
                       />
                     </Stack.Item>
