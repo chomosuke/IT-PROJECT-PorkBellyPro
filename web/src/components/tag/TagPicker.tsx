@@ -135,12 +135,10 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   tag={t}
                   maxWidth={
                     /**
-                     * 64 because the padding / margin of Tag is 32 on each side, a negative
-                     * maxWidth for the inside text will have no effect.
                      * - 2 because otherwise resize will not update tag max width as it'll be
                      * blocked by itself.
                      */
-                    Math.max(64, calloutWidth - 2)
+                    calloutWidth - 2
                   }
                   onRemove={editing ? () => removeTag(t) : undefined}
                 />

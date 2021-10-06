@@ -58,7 +58,7 @@ const getClassNames = (
       marginLeft: '32px',
       marginTop: 'auto',
       userSelect: 'none',
-      ...(maxWidth == null ? {} : { maxWidth: maxWidth - 64 }),
+      maxWidth,
       textOverflow: 'ellipsis',
       overflow: 'hidden',
     },
@@ -81,12 +81,19 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({
     palette: { justWhite },
   } = useTheme();
 
+  let innerMaxWidth: number | undefined;
+  if (maxWidth == null) {
+    innerMaxWidth = undefined;
+  } else {
+    innerMaxWidth = Math.max(0, maxWidth - 64);
+  }
+
   const {
     root,
     labelSpan,
     rightSpan,
     crossIcon,
-  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove), maxWidth);
+  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove), innerMaxWidth);
 
   const onRemoveInternal = onRemove != null
     ? (ev: MouseEvent<HTMLDivElement>) => {
