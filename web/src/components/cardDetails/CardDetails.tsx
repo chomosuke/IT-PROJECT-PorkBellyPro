@@ -130,9 +130,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               <CardExtraField field={field} editing={isEditing} />
             </Stack.Item>
           ))}
-          <Stack.Item key='note' align='stretch'>
-            <CardNoteField field={note} editing={isEditing} />
-          </Stack.Item>
           {isEditing
             && (
               <Stack
@@ -150,6 +147,10 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
                 <Text className={addFieldText}>Add field</Text>
               </Stack>
             )}
+          <Stack.Item key='note' align='stretch'>
+            <CardNoteField field={note} editing={isEditing} />
+          </Stack.Item>
+
         </Stack>
       </div>
       <CardDetailActions
