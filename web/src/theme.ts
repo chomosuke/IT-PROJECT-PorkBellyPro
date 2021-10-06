@@ -39,6 +39,7 @@ export interface Palette {
 }
 
 export interface Shape {
+  shortShadow: IRawStyle;
   default: IRawStyle;
 }
 
@@ -137,8 +138,12 @@ export const defaultTheme = freezeDeep<Theme>({
     sootyBee: '#0f0d0d',
   },
   shape: {
+    shortShadow: {
+      boxShadow: '4px 8px 8px hsl(0deg 0% 0% / 0.25)',
+      borderRadius: '8px',
+    },
     default: {
-      boxShadow: '2px 4px 4px rgb(0,0,0,0.25)',
+      boxShadow: '8px 16px 16px hsl(0deg 0% 0% / 0.25)',
       borderRadius: '8px',
     },
   },
