@@ -17,10 +17,10 @@ Object {
       "fontSize": "16px",
     },
     "standard": Object {
-      "fontSize": "24px",
+      "fontSize": "20px",
     },
     "title": Object {
-      "fontSize": "36px",
+      "fontSize": "28px",
     },
   },
   "fontWeight": Object {
@@ -31,10 +31,16 @@ Object {
       "fontWeight": "700",
     },
     "light": Object {
-      "fontWeight": "100",
+      "fontWeight": "300",
     },
     "medium": Object {
+      "fontWeight": "500",
+    },
+    "regular": Object {
       "fontWeight": "400",
+    },
+    "thin": Object {
+      "fontWeight": "100",
     },
   },
   "icon": Object {
@@ -106,6 +112,10 @@ Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
     },
+    "trashBold": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
     "userCircle": Object {
       "$$typeof": Symbol(react.forward_ref),
       "render": [Function],
@@ -125,7 +135,11 @@ Object {
   "shape": Object {
     "default": Object {
       "borderRadius": "8px",
-      "boxShadow": "2px 4px 4px rgb(0,0,0,0.25)",
+      "boxShadow": "8px 16px 16px hsl(0deg 0% 0% / 0.25)",
+    },
+    "shortShadow": Object {
+      "borderRadius": "8px",
+      "boxShadow": "4px 8px 8px hsl(0deg 0% 0% / 0.25)",
     },
   },
 }
