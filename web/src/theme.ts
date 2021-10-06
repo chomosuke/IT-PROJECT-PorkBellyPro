@@ -162,7 +162,7 @@ export const defaultTheme = freezeDeep<Theme>({
   fontSize: {
     small: { fontSize: '16px' },
     standard: { fontSize: '20px' },
-    title: { fontSize: '36px' },
+    title: { fontSize: '28px' },
   },
   icon: {
     plusCircle: makeIcon(PlusCircle, 'regular'),

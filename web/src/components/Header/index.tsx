@@ -16,7 +16,6 @@ const getClassNames = () => {
       backgroundColor: everblue,
       display: 'grid',
       gridTemplateAreas: '"left mid right"',
-      // gridTemplateColumns: 'minmax(0,calc(50% - 324px)) auto minmax(0,calc(50% - 324px))',
       gridTemplateColumns: '1fr 2fr 1fr',
       height: '48px',
       whiteSpace: 'nowrap',

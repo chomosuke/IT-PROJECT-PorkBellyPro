@@ -28,6 +28,7 @@ const getClassNames = () => {
   const {
     fontFamily: { roboto },
     fontWeight: { medium },
+    fontSize: { small },
     palette: {
       everblue, stoneBlue, justWhite, quartz, sootyBee,
     },
@@ -36,10 +37,10 @@ const getClassNames = () => {
   const rootCommonStyles = {
     ...roboto,
     ...medium,
+    ...small,
     alignItems: 'center',
     cursor: 'pointer',
     display: 'inline-flex',
-    fontSize: '16px',
     userSelect: 'none',
     padding: '0 16px',
   };
