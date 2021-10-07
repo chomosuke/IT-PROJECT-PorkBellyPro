@@ -106,8 +106,8 @@ export const TagEditor: React.VoidFunctionComponent<ITagEditorProps> = ({
   tag, anchor, width, closingFunction,
 }) => {
   const [unstagedState, setState] = useState<ITagProperties>(tag);
-  const updateLabel = (newLabel: string) => setState({ ...unstagedState, label: newLabel });
-  const updateColor = (newColor: string) => setState({ ...unstagedState, color: newColor });
+  const updateLabel = (newLabel: string) => setState((state) => ({ ...state, label: newLabel }));
+  const updateColor = (newColor: string) => setState((state) => ({ ...state, color: newColor }));
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const deleteTag = async () => {

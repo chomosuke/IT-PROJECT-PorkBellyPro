@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
 import { ITextFieldProps, TextField } from '@fluentui/react';
-import { func, string } from 'prop-types';
 import { useId } from '@fluentui/react-hooks';
+import { ensureNotNull } from '@porkbellypro/crm-shared';
+import { func, string } from 'prop-types';
+import React, { useState } from 'react';
 import { Theme, useTheme } from '../../theme';
 
 export interface ITagSearchFieldProps {
@@ -59,7 +60,7 @@ export const TagSearchField: React.VoidFunctionComponent<ITagSearchFieldProps> =
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           styles={getSearchFieldStyles(theme, false)}
-          onChange={(event) => setTagSearchString(event.currentTarget.value)}
+          onChange={(ev, newValue) => setTagSearchString(ensureNotNull(newValue))}
         />
       )
   );
