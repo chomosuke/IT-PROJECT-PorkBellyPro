@@ -31,6 +31,8 @@ jobs:
         run: |
           hash=$(node -p "crypto.randomBytes(32).toString('base64')")
           npm start -- -s $hash -c $DB_TESTING_PATH -p $SERVER_PORT &
+          # time for process to start server
+          sleep 1
           node ./.github/scripts/ping-backend.js
         shell: bash
         
