@@ -512,9 +512,12 @@ const AppComponent: React.VoidFunctionComponent = () => {
       if (res.ok) {
         const newTag = tagFromRaw(await res.json());
 
-        setUser({
-          ...userState,
-          tags: [...userState.tags, newTag],
+        setUser((state) => {
+          if (state == null) return null;
+          return {
+            ...state,
+            tags: [...state.tags, newTag],
+          };
         },
         false);
       }
