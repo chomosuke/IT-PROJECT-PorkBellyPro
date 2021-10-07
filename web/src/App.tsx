@@ -404,37 +404,44 @@ const AppComponent: React.VoidFunctionComponent = () => {
   const history = useHistory();
 
   const setUser: SetUserCallback = (value, clearOverrides) => {
-    let newState: IUserStatic | null | undefined;
-    if (typeof value === 'function') newState = value(userState);
-    else newState = value;
+    setUserState((state) => {
+      let newState: IUserStatic | null | undefined;
+      if (typeof value === 'function') newState = value(state);
+      else newState = value;
 
-    let newBase: ICardData | undefined;
-    if (detail?.base?.id != null && newState != null) {
-      newBase = newState.cards.find((card) => card.id === detail?.base?.id);
-    }
+      setDetail((oldDetail) => {
+        let newDetail: ICardOverrideData | null;
 
-    const shouldClearOverrides = clearOverrides ?? true;
-
-    if (newBase == null) {
-      setDetail(null);
-    } else {
-      const overrides: ICardOverrideData['overrides'] = {};
-      if (!shouldClearOverrides) {
-        Object.assign(overrides, detail?.overrides);
-        if (detail?.overrides?.tags != null) {
-          overrides.tags = detail.overrides.tags.filter(
-            (tag) => newState?.tags.find((newTag) => newTag.id === tag.id) != null,
-          );
+        let newBase: ICardData | undefined;
+        if (oldDetail?.base?.id != null && newState != null) {
+          newBase = newState.cards.find((card) => card.id === oldDetail?.base?.id);
         }
-      }
 
-      setDetail({
-        base: newBase,
-        overrides,
+        if (newBase == null) {
+          newDetail = null;
+        } else {
+          const shouldClearOverrides = clearOverrides ?? true;
+          const overrides: ICardOverrideData['overrides'] = {};
+          if (!shouldClearOverrides) {
+            Object.assign(overrides, oldDetail?.overrides);
+            if (oldDetail?.overrides?.tags != null) {
+              overrides.tags = oldDetail.overrides.tags.filter(
+                (tag) => newState?.tags.find((newTag) => newTag.id === tag.id) != null,
+              );
+            }
+          }
+
+          newDetail = {
+            base: newBase,
+            overrides,
+          };
+        }
+
+        return newDetail;
       });
-    }
 
-    setUserState(newState);
+      return newState;
+    });
   };
 
   const updateMe: () => Promise<ResponseStatus> = async () => {
