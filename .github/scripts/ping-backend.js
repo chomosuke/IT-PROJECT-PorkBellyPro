@@ -18,9 +18,10 @@ connsock.on('error', () => {
 })
 // gives ttl for connection
 
-setInterval(() => {
+const interval = setInterval(() => {
     connsock.connect(port, () => {
         console.log("Connected to server");
+        clearInterval(interval);
         exit(0);
     });
 }, PING_TTL);
