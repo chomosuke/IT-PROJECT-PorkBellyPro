@@ -2,7 +2,7 @@ import {
   Stack, Text, mergeStyleSets,
 } from '@fluentui/react';
 import PropTypes, { Requireable, bool } from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useApp } from '../../AppContext';
 import { ICard } from '../../controllers/Card';
 import { useHome } from '../../HomeContext';
@@ -75,10 +75,18 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const noteIndex = fields.findIndex((field) => field.key === 'note');
   const note = noteIndex === -1 ? undefined : fields[noteIndex];
 
-  // enfore the existence of note
+  /*
+   * Enfore the existence of note.
+   * useEffect() because update cannot be called in render as it'll change the state of another
+   * component.
+   */
+  useEffect(() => {
+    if (note === undefined) {
+      card.update({ fields: [{ key: 'note', value: '' }, ...fields] });
+      // no need to commit as CardDetail will always make sure note exist.
+    }
+  });
   if (note === undefined) {
-    card.update({ fields: [{ key: 'note', value: '' }, ...fields] });
-    // no need to commit as CardDetail will always make sure note exist.
     return <></>;
   }
 
