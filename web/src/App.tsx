@@ -123,6 +123,7 @@ type SetUserCallback = (
 function implementDelete(
   card: ICardData,
   setUser: SetUserCallback,
+  setDetail?: Dispatch<SetStateAction<ICardOverrideData | null>>,
 ): ICard['delete'] {
   return (async () => {
     if (card.id == null) throw new Error('card.id is nullish');
@@ -137,6 +138,7 @@ function implementDelete(
       },
     });
     if (res.ok) {
+      if (setDetail != null) setDetail(null);
       setUser((userStateNullable) => {
         const userState = ensureNotNull(userStateNullable);
         return {
@@ -250,6 +252,7 @@ function implementCardOverride(
         const raw = await res.json();
         const updated = cardsFromRaw(raw);
         if (put) {
+          setDetail(null);
           setUser((userStateNullable) => {
             const userState = ensureNotNull(userStateNullable);
             return {
@@ -274,7 +277,7 @@ function implementCardOverride(
     },
     delete: base == null
       ? () => Promise.reject(notImplemented())
-      : implementDelete(base, setUser),
+      : implementDelete(base, setUser, setDetail),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = (field) => ({
     update({ key, value }) {
@@ -412,15 +415,16 @@ const AppComponent: React.VoidFunctionComponent = () => {
       setDetail((oldDetail) => {
         let newDetail: ICardOverrideData | null;
 
-        let newBase: ICardData | undefined;
-        if (oldDetail?.base?.id != null && newState != null) {
-          newBase = newState.cards.find((card) => card.id === oldDetail?.base?.id);
-        }
-
-        if (newBase == null) {
+        if (oldDetail == null) {
           newDetail = null;
         } else {
           const shouldClearOverrides = clearOverrides ?? true;
+
+          let newBase: ICardData | undefined;
+          if (oldDetail?.base?.id != null && newState != null) {
+            newBase = newState.cards.find((card) => card.id === oldDetail?.base?.id);
+          }
+
           const overrides: ICardOverrideData['overrides'] = {};
           if (!shouldClearOverrides) {
             Object.assign(overrides, oldDetail?.overrides);
