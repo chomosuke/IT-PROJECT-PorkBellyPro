@@ -440,6 +440,12 @@ const AppComponent: React.VoidFunctionComponent = () => {
         return newDetail;
       });
 
+      setTagQuery((tags) => {
+        if (newState == null) return [];
+        return tags.filter((tag) => ensureNotNull(newState).tags
+          .find((toFind) => toFind.id === tag.id) != null);
+      });
+
       return newState;
     });
   };
