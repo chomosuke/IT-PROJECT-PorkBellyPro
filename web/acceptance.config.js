@@ -5,8 +5,5 @@ module.exports = {
   ],
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testPathIgnorePatterns: [
-    'src/__tests__/(.*\.)?helpers.[jt]sx?$',
-    '/__tests__/__acceptance__/.*',
-  ],
+  testRegex: "(/__tests__/__acceptance__/.*)",
 };

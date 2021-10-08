@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts,.tsx --fix",
     "lint:nofix": "eslint src --ext .ts,.tsx",
-    "test": "jest"
+    "test": "jest",
+    "test:acceptance": "jest -c=acceptance.config.js"
   },
   "dependencies": {
     "@fluentui/react": "^8.28.2",
@@ -50,6 +51,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^27.0.6",
+    "taiko": "^1.2.7",
     "ts-jest": "^27.0.5"
   }
 }
