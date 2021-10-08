@@ -2,14 +2,21 @@ import { readFile } from 'fs/promises';
 import { getType } from 'mime';
 import { normalize, resolve } from 'path';
 import {
-  InterceptMockData, closeBrowser, goto, intercept, openBrowser,
+  InterceptMockData, InterceptRequest, closeBrowser, goto, intercept, openBrowser,
 } from 'taiko';
 
 type RespondFunction = (response: InterceptMockData) => Promise<void>;
+type MockApiHandler = (
+  respond: RespondFunction,
+  request: InterceptRequest['request'],
+) => Promise<boolean>;
+
+// Set 2 minutes timeout because browser testing is slow.
+jest.setTimeout(120000);
 
 beforeEach(async () => {
-  function interceptRequests() {
-    const re = /^https:\/\/localhost\/(.*)$/i;
+  function interceptRequests(mockApiHandler: MockApiHandler) {
+    const re = /^https:\/\/localhost(\/.*)$/i;
     const dist = resolve(__dirname, '../../../../dist');
 
     async function tryRespondWithFile(respond: RespondFunction, path: string) {
@@ -38,7 +45,7 @@ beforeEach(async () => {
       const match = re.exec(url);
       if (match == null) return Promise.resolve(false);
       const path = match[1];
-      const normalized = normalize(`/${path}`).substr(1);
+      const normalized = normalize(path).substr(1);
       const resolved = resolve(dist, normalized);
       return tryRespondWithFile(respond, resolved);
     }
@@ -50,6 +57,8 @@ beforeEach(async () => {
     return intercept('https://localhost/', async ({ request, respond }) => {
       try {
         switch (true) {
+          case mockApiHandler != null && await mockApiHandler(respond, request):
+            break;
           case await staticAsset(respond, request.url):
             break;
           case await index(respond):
@@ -68,8 +77,32 @@ beforeEach(async () => {
     });
   }
 
+  const reApi = /^https:\/\/localhost\/api(\/.*)$/i;
+  const reApiRegister = /\/register/i;
+  const mockApiHandler: MockApiHandler = async (respond, request) => {
+    const { url } = request;
+    const match = reApi.exec(url);
+    if (match == null) return false;
+    const path = match[1];
+    switch (true) {
+      case Boolean(reApiRegister.exec(path)):
+        if (!request.hasPostData) await respond({ status: 400 });
+        else {
+          await respond({
+            status: 201,
+          });
+        }
+        break;
+      default:
+        await respond({
+          status: 404,
+        });
+    }
+    return true;
+  };
+
   await openBrowser();
-  await interceptRequests();
+  await interceptRequests(mockApiHandler);
   await goto('https://localhost/');
 });
 
