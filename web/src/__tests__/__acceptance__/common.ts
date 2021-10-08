@@ -6,10 +6,6 @@ import {
 } from 'taiko';
 
 type RespondFunction = (response: InterceptMockData) => Promise<void>;
-export type MockApiHandler = (
-  respond: RespondFunction,
-  request: InterceptRequest['request'],
-) => Promise<boolean>;
 
 // Set 2 minutes timeout because browser testing is slow.
 jest.setTimeout(120000);
@@ -22,13 +18,21 @@ afterEach(async () => {
   await closeBrowser();
 });
 
+export type MockApiHandler = (
+  match: RegExpExecArray,
+  respond: RespondFunction,
+  request: InterceptRequest['request'],
+) => Promise<boolean | void>;
+
 /**
  * Requests that network requests to https://localhost/ be intercepted. This allows tests to run
- * without actually starting server and database instances.
- * @param mockApiHandler Optional /api route handler to mock API calls.
+ * without actually starting server and database instances by mocking server responses.
+ * @param mockHandlers Zero or more API route handlers given as pairs of [pattern, handler]s.
  * @returns A promise that resolves when the browser automation tool confirms the request.
  */
-export function interceptRequests(mockApiHandler?: MockApiHandler): Promise<void> {
+export function interceptRequests(
+  ...mockHandlers: [pattern: RegExp, handler: MockApiHandler][]
+): Promise<void> {
   const reRoot = /^https:\/\/localhost(\/.*)$/i;
   const dist = resolve(__dirname, '../../../../dist');
 
@@ -55,21 +59,36 @@ export function interceptRequests(mockApiHandler?: MockApiHandler): Promise<void
   }
 
   const reApi = /^\/api(\/.*)$/i;
-  const wrappedMockApiHandler: MockApiHandler = mockApiHandler == null
-    ? () => Promise.resolve(false)
-    : async (respond, request) => {
-      const match = reApi.exec(request.url);
-      if (match == null) return false;
+  async function wrappedMockApiHandler(
+    respond: RespondFunction,
+    request: InterceptRequest['request'],
+  ) {
+    const match = reApi.exec(request.url);
+    if (match == null) return false;
 
-      const path = match[1];
-      if (!await mockApiHandler(respond, { ...request, url: path })) {
-        await respond({
-          status: 404,
-        });
+    const path = match[1];
+    for (let i = 0; i < mockHandlers.length; i += 1) {
+      const [pattern, handler] = mockHandlers[i];
+      const pathMatch = pattern.exec(path);
+      if (pathMatch != null) {
+        /*
+         * Using await inside this loop is intended because later handlers should not run if the
+         * current one decides that the request had been handled.
+         */
+        // eslint-disable-next-line no-await-in-loop
+        const handled = await handler(pathMatch, respond, request);
+        if (handled ?? true) {
+          return true;
+        }
       }
+    }
 
-      return true;
-    };
+    await respond({
+      status: 404,
+    });
+
+    return true;
+  }
 
   function staticAsset(respond: RespondFunction, url: string) {
     const match = reRoot.exec(url);

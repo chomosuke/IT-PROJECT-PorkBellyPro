@@ -13,30 +13,29 @@ test('AC01: Successful registration', async () => {
    * Skip the call to interceptRequests if your test is intended to run against a real server
    * instance.
    */
-  const reRegister = /^\/register$/i;
-  await interceptRequests(async (respond, request) => {
-    const match = reRegister.exec(request.url);
-    // No route match, return false to indicate route is not handled.
-    if (match == null) return false;
-
-    if (request.hasPostData && request.postData != null) {
-      let body;
-      try {
-        body = JSON.parse(request.postData);
-      } catch { } // eslint-disable-line no-empty
-      if (body != null) {
-        const { username, password } = body;
-        if (typeof username === 'string'
-          && typeof password === 'string') {
-          await respond({ status: 201 });
-          return true;
+  await interceptRequests(
+    [
+      /^\/register$/i,
+      async (_match, respond, request) => {
+        if (request.hasPostData && request.postData != null) {
+          let body;
+          try {
+            body = JSON.parse(request.postData);
+          } catch { } // eslint-disable-line no-empty
+          if (body != null) {
+            const { username, password } = body;
+            if (typeof username === 'string'
+            && typeof password === 'string') {
+              await respond({ status: 201 });
+              return;
+            }
+          }
         }
-      }
-    }
 
-    await respond({ status: 400 });
-    return true;
-  });
+        await respond({ status: 400 });
+      },
+    ],
+  );
 
   // Precondition: User is on the registration page
   await gotoHome();
