@@ -43,6 +43,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
 
   return mergeStyleSets({
     root: {
+      position: 'relative',
       height,
       width,
       background: theme.palette.justWhite,
@@ -93,6 +94,13 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       ...theme.fontWeight.medium,
       ...overflowCutOff,
     },
+    favoriteButton: {
+      position: 'absolute',
+      top: '8px',
+      left: '8px',
+      zIndex: '2',
+      cursor: 'pointer',
+    },
   });
 };
 
@@ -110,13 +118,14 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
     phone,
     jobTitle,
     image,
+    favorite,
   } = card;
   const { showCardDetail } = useApp();
   const { lockCard } = useHome();
   const theme = useTheme();
 
   const {
-    root, cardContent, target, imageContainer, mainLabel, subLabel, labelContainer,
+    root, cardContent, target, imageContainer, mainLabel, subLabel, labelContainer, favoriteButton,
   } = getClassNames(selected, theme);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -127,6 +136,10 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
     // incase image was still loading when user clicked on another card
     cancelLoading(true);
     lockCard(ref);
+  };
+
+  const favoriteOnClick = () => {
+    card.commit({ favorite: !favorite });
   };
 
   return (
@@ -151,6 +164,23 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
         className={target}
         onClick={doShowCardDetail}
       />
+      {favorite
+        ? (
+          <theme.icon.isFavorite
+            size={20}
+            className={favoriteButton}
+            onClick={favoriteOnClick}
+            color={theme.palette.favorite}
+          />
+        )
+        : (
+          <theme.icon.notFavorite
+            size={20}
+            className={favoriteButton}
+            onClick={favoriteOnClick}
+            color={theme.palette.favorite}
+          />
+        )}
     </div>
   );
 };

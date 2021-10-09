@@ -37,6 +37,7 @@ export interface Palette {
   cloudyDay: string;
   deepSlate: string;
   sootyBee: string;
+  favorite: string;
 }
 
 export interface Shape {
@@ -139,6 +140,7 @@ export const defaultTheme = freezeDeep<Theme>({
     cloudyDay: '#c7c7c7',
     deepSlate: '#5e5e5e',
     sootyBee: '#0f0d0d',
+    favorite: '#EC567A',
   },
   shape: {
     shortShadow: {
