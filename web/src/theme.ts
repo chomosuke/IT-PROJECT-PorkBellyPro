@@ -10,6 +10,7 @@ import {
   Check,
   DotsThree,
   FolderOpen,
+  HeartStraight,
   IconProps,
   MagnifyingGlass,
   MinusCircle,
@@ -83,6 +84,8 @@ export interface Icon {
   folderOpen: PhosphorIcon;
   trashBold: PhosphorIcon;
   dotsThree: PhosphorIcon;
+  isFavorite: PhosphorIcon;
+  notFavorite: PhosphorIcon;
 }
 
 export interface Theme {
@@ -184,6 +187,8 @@ export const defaultTheme = freezeDeep<Theme>({
     folderOpen: makeIcon(FolderOpen, 'bold'),
     trashBold: makeIcon(Trash, 'bold'),
     dotsThree: makeIcon(DotsThree, 'bold'),
+    isFavorite: makeIcon(HeartStraight, 'fill'),
+    notFavorite: makeIcon(HeartStraight, 'duotone'),
   },
 });
 
