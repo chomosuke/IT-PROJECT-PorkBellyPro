@@ -159,15 +159,14 @@ function implementDelete(
 
 function implementCommit(
   base: ICardData | undefined,
-  overrides: Partial<ICardProperties> | undefined,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   setUser: SetUserCallback,
 ): ICard['commit'] {
-  return async (props) => {
-    const merged = { ...overrides, ...props };
+  return async (optionalProps) => {
+    const props = optionalProps ?? {};
     const put = base?.id == null;
 
-    if (!put && !Object.entries(merged).some(([, v]) => v !== undefined)) {
+    if (!put && !Object.entries(props).some(([, v]) => v !== undefined)) {
       return new ResponseStatus({
         ok: true,
         status: 200,
@@ -179,15 +178,15 @@ function implementCommit(
     if (put) {
       const putRequest: ReadonlyDeep<CardPutRequest> = {
         ...cardDataDefaults,
-        ...merged,
-        image: merged.image ?? undefined,
-        tags: merged.tags ? merged.tags.map((o) => o.id) : [...cardDataDefaults.tags],
+        ...props,
+        image: props.image ?? undefined,
+        tags: props.tags ? props.tags.map((o) => o.id) : [...cardDataDefaults.tags],
       };
       bodyObj = putRequest;
     } else {
       const patchRequest: ReadonlyDeep<CardPatchRequest> = {
-        ...merged,
-        tags: merged.tags ? merged.tags.map((o) => o.id) : undefined,
+        ...props,
+        tags: props.tags ? props.tags.map((o) => o.id) : undefined,
         id: ensureType(base?.id, 'string'),
       };
       bodyObj = patchRequest;
@@ -223,7 +222,7 @@ function implementCommit(
               return that;
             }),
           };
-        }, props == null);
+        }, optionalProps == null);
       }
     }
     return new ResponseStatus(res);
@@ -238,7 +237,7 @@ function implementCard(
 ): ICard {
   const cardMethods: CardMethods = {
     update() { throw notImplemented(); },
-    commit: implementCommit(card, undefined, setDetail, setUser),
+    commit: implementCommit(card, setDetail, setUser),
     delete: implementDelete(card, setUser),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
@@ -286,7 +285,7 @@ function implementCardOverride(
         };
       });
     },
-    commit: implementCommit(base, overrides, setDetail, setUser),
+    commit: implementCommit(base, setDetail, setUser),
     delete: base == null
       ? () => Promise.reject(notImplemented())
       : implementDelete(base, setUser, setDetail),
