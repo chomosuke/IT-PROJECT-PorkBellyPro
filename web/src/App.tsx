@@ -223,7 +223,7 @@ function implementCommit(
               return that;
             }),
           };
-        });
+        }, props == null);
       }
     }
     return new ResponseStatus(res);
