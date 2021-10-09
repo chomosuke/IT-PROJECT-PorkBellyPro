@@ -157,23 +157,6 @@ function implementDelete(
   });
 }
 
-function implementCard(
-  card: ICardData,
-  tags: readonly ITag[],
-  setUser: SetUserCallback,
-): ICard {
-  const cardMethods: CardMethods = {
-    update() { throw notImplemented(); },
-    commit() { return Promise.reject(notImplemented()); },
-    delete: implementDelete(card, setUser),
-  };
-  const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
-    update() { throw notImplemented(); },
-    remove() { throw notImplemented(); },
-  });
-  return implement(card, cardMethods, tags, fieldMethodsFactory);
-}
-
 function implementCommit(
   base: ICardData | undefined,
   overrides: Partial<ICardProperties> | undefined,
@@ -245,6 +228,24 @@ function implementCommit(
     }
     return new ResponseStatus(res);
   };
+}
+
+function implementCard(
+  card: ICardData,
+  tags: readonly ITag[],
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  setUser: SetUserCallback,
+): ICard {
+  const cardMethods: CardMethods = {
+    update() { throw notImplemented(); },
+    commit: implementCommit(card, undefined, setDetail, setUser),
+    delete: implementDelete(card, setUser),
+  };
+  const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
+    update() { throw notImplemented(); },
+    remove() { throw notImplemented(); },
+  });
+  return implement(card, cardMethods, tags, fieldMethodsFactory);
 }
 
 function implementCardOverride(
@@ -403,7 +404,7 @@ function implementUser(
   const user: IUser = {
     username,
     settings,
-    cards: cards.map((card) => implementCard(card, tagsImpl, setUser)),
+    cards: cards.map((card) => implementCard(card, tagsImpl, setDetail, setUser)),
     tags: tagsImpl,
   };
 
