@@ -1,6 +1,11 @@
 import { mergeStyleSets } from '@fluentui/react';
 import {
-  ensureArray, ensureNotNull, ensureObject, ensureType,
+  CardPatchRequest,
+  CardPutRequest,
+  ensureArray,
+  ensureNotNull,
+  ensureObject,
+  ensureType,
 } from '@porkbellypro/crm-shared';
 import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
@@ -8,6 +13,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import {
   BrowserRouter, MemoryRouter, Redirect, Route, Switch, useHistory,
 } from 'react-router-dom';
+import { ReadonlyDeep } from 'type-fest';
 import {
   AppProvider, IAppContext, ISettings, IUser,
 } from './AppContext';
@@ -168,17 +174,91 @@ function implementCard(
   return implement(card, cardMethods, tags, fieldMethodsFactory);
 }
 
+function implementCommit(
+  base: ICardData | undefined,
+  overrides: Partial<ICardProperties> | undefined,
+  setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
+  setUser: SetUserCallback,
+): ICard['commit'] {
+  return async (props) => {
+    const merged = { ...overrides, ...props };
+    const put = base?.id == null;
+
+    if (!put && !Object.entries(merged).some(([, v]) => v !== undefined)) {
+      return new ResponseStatus({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      });
+    }
+
+    let bodyObj;
+    if (put) {
+      const putRequest: ReadonlyDeep<CardPutRequest> = {
+        ...cardDataDefaults,
+        ...merged,
+        image: merged.image ?? undefined,
+        tags: merged.tags ? merged.tags.map((o) => o.id) : [...cardDataDefaults.tags],
+      };
+      bodyObj = putRequest;
+    } else {
+      const patchRequest: ReadonlyDeep<CardPatchRequest> = {
+        ...merged,
+        tags: merged.tags ? merged.tags.map((o) => o.id) : undefined,
+        id: ensureType(base?.id, 'string'),
+      };
+      bodyObj = patchRequest;
+    }
+
+    const body = JSON.stringify(bodyObj);
+    const res = await fetch('/api/card', {
+      method: put ? 'PUT' : 'PATCH',
+      body,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.ok) {
+      const raw = await res.json();
+      const updated = cardsFromRaw(raw);
+      if (put) {
+        setDetail(null);
+        setUser((userStateNullable) => {
+          const userState = ensureNotNull(userStateNullable);
+          return {
+            ...userState,
+            cards: userState.cards.concat(updated),
+          };
+        });
+      } else {
+        setUser((userStateNullable) => {
+          const userState = ensureNotNull(userStateNullable);
+          return {
+            ...userState,
+            cards: userState.cards.map((that) => {
+              if (that === base) return updated;
+              return that;
+            }),
+          };
+        });
+      }
+    }
+    return new ResponseStatus(res);
+  };
+}
+
 function implementCardOverride(
   data: ICardOverrideData,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   tags: readonly ITag[],
   setUser: SetUserCallback,
 ): ICard {
-  const { base, overrides: { image, tags: tagsOverride, ...overrides } } = data;
+  const { base, overrides } = data;
+  const { image, tags: tagsOverride, ...overridesPartial } = overrides;
   const cardData: ICardData = {
     ...cardDataDefaults,
     ...base,
-    ...overrides,
+    ...overridesPartial,
   };
   if (image !== undefined) {
     cardData.image = image === null ? undefined : image;
@@ -205,76 +285,7 @@ function implementCardOverride(
         };
       });
     },
-    async commit() {
-      const put = base?.id == null;
-
-      if (!put && !Object.entries(data.overrides).some(([, v]) => v !== undefined)) {
-        return new ResponseStatus({
-          ok: true,
-          status: 200,
-          statusText: 'OK',
-        });
-      }
-
-      let bodyObj;
-      if (put) {
-        bodyObj = Object.fromEntries(
-          Object
-            .entries(cardDataDefaults)
-            .concat(
-              Object.entries(overrides).filter(([k]) => k !== 'tags'),
-              [['tags', cardData.tags]],
-            ),
-        );
-      } else {
-        if (base?.id == null) throw new Error('Unreachable');
-        let entries = Object
-          .entries(overrides)
-          .filter(([k]) => k !== 'tags')
-          .concat([['id', base.id]]);
-        if (tagsOverride != null) {
-          entries = entries.concat([['tags', cardData.tags]]);
-        }
-        bodyObj = Object.fromEntries(entries);
-      }
-      if (image !== undefined) {
-        bodyObj.image = image;
-      }
-      const body = JSON.stringify(bodyObj);
-      const res = await fetch('/api/card', {
-        method: put ? 'PUT' : 'PATCH',
-        body,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (res.ok) {
-        const raw = await res.json();
-        const updated = cardsFromRaw(raw);
-        if (put) {
-          setDetail(null);
-          setUser((userStateNullable) => {
-            const userState = ensureNotNull(userStateNullable);
-            return {
-              ...userState,
-              cards: userState.cards.concat(updated),
-            };
-          });
-        } else {
-          setUser((userStateNullable) => {
-            const userState = ensureNotNull(userStateNullable);
-            return {
-              ...userState,
-              cards: userState.cards.map((that) => {
-                if (that === base) return updated;
-                return that;
-              }),
-            };
-          });
-        }
-      }
-      return new ResponseStatus(res);
-    },
+    commit: implementCommit(base, overrides, setDetail, setUser),
     delete: base == null
       ? () => Promise.reject(notImplemented())
       : implementDelete(base, setUser, setDetail),
