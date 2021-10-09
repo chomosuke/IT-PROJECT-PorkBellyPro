@@ -166,7 +166,7 @@ function implementCommit(
     const props = optionalProps ?? {};
     const put = base?.id == null;
 
-    if (!put && !Object.entries(props).some(([, v]) => v !== undefined)) {
+    if (!put && !Object.values(props).some((v) => v !== undefined)) {
       return new ResponseStatus({
         ok: true,
         status: 200,
