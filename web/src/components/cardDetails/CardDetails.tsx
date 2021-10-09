@@ -51,6 +51,16 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     color: theme.palette.justWhite,
     ...textStyle,
   },
+  imageContainer: {
+    position: 'relative',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: '8px',
+    left: '8px',
+    zIndex: '2',
+    cursor: 'pointer',
+  },
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
@@ -62,7 +72,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const [isEditing, setIsEditing] = React.useState(editing);
 
   const {
-    name, phone, email, jobTitle, company, fields,
+    name, phone, email, jobTitle, company, fields, favorite,
   } = card;
   const mFields = [
     { key: 'name', value: name, onEdit: (value: string) => card.update({ name: value }) },
@@ -100,8 +110,19 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   };
 
   const {
-    root, content, closeButton, addFieldButtonContainer, iconButton, addFieldText,
+    root,
+    content,
+    closeButton,
+    addFieldButtonContainer,
+    iconButton,
+    addFieldText,
+    imageContainer,
+    favoriteButton,
   } = getClassNames(theme);
+
+  const favoriteOnClick = () => {
+    card.commit({ favorite: !favorite });
+  };
 
   // no sort, order will be preserved on the server presumably
   return (
@@ -118,11 +139,28 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           padding: `0px ${cardDetailExpanded ? '152px' : '48px'}`,
         }}
         >
-          <Stack.Item key='image' align='stretch'>
+          <Stack.Item className={imageContainer} key='image' align='stretch'>
             <CardImageField
               card={card}
               editing={isEditing}
             />
+            {favorite
+              ? (
+                <theme.icon.isFavorite
+                  size={20}
+                  className={favoriteButton}
+                  onClick={favoriteOnClick}
+                  color={theme.palette.favorite}
+                />
+              )
+              : (
+                <theme.icon.notFavorite
+                  size={20}
+                  className={favoriteButton}
+                  onClick={favoriteOnClick}
+                  color={theme.palette.favorite}
+                />
+              )}
           </Stack.Item>
           <Stack.Item key='tags' align='stretch'>
             <TagPicker targetCard={card} editing={isEditing} />
