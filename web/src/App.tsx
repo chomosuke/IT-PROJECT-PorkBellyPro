@@ -159,11 +159,12 @@ function implementDelete(
 
 function implementCommit(
   base: ICardData | undefined,
+  overrides: Partial<ICardProperties> | undefined,
   setDetail: Dispatch<SetStateAction<ICardOverrideData | null>>,
   setUser: SetUserCallback,
 ): ICard['commit'] {
   return async (optionalProps) => {
-    const props = optionalProps ?? {};
+    const props = optionalProps ?? overrides ?? {};
     const put = base?.id == null;
 
     if (!put && !Object.values(props).some((v) => v !== undefined)) {
@@ -237,7 +238,7 @@ function implementCard(
 ): ICard {
   const cardMethods: CardMethods = {
     update() { throw notImplemented(); },
-    commit: implementCommit(card, setDetail, setUser),
+    commit: implementCommit(card, undefined, setDetail, setUser),
     delete: implementDelete(card, setUser),
   };
   const fieldMethodsFactory: CardFieldMethodsFactory = () => ({
@@ -285,7 +286,7 @@ function implementCardOverride(
         };
       });
     },
-    commit: implementCommit(base, setDetail, setUser),
+    commit: implementCommit(base, overrides, setDetail, setUser),
     delete: base == null
       ? () => Promise.reject(notImplemented())
       : implementDelete(base, setUser, setDetail),
