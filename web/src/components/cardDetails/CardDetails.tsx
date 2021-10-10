@@ -96,7 +96,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const close = () => {
     unlockCardLater();
     showCardDetail(null);
-    cancelLoading(true);
   };
 
   const {
@@ -178,7 +177,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           } else {
             showCardDetail(card);
             setIsEditing(false);
-            cancelLoading(false);
           }
         }}
         onDelete={() => {

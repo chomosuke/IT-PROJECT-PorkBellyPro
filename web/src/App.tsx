@@ -11,6 +11,7 @@ import {
 import {
   AppProvider, IAppContext, ISettings, IUser,
 } from './AppContext';
+import { cancelLoading } from './components/cardDetails/CardImageField';
 import { Header } from './components/Header';
 import {
   CardFieldMethodsFactory,
@@ -490,10 +491,14 @@ const AppComponent: React.VoidFunctionComponent = () => {
     showCardDetail(card: ICard | null) {
       if (userState == null) throw new Error('userState is nullish');
       if (card == null) {
+        cancelLoading(true);
         setDetail(null);
       } else {
         const base = userState.cards.find((existing) => existing.id === card.id);
         if (base == null) throw new Error('Not found');
+        if (detail != null) {
+          cancelLoading(detail.base?.id !== card.id);
+        }
         setDetail({
           base,
           overrides: {},
@@ -501,6 +506,7 @@ const AppComponent: React.VoidFunctionComponent = () => {
       }
     },
     newCard() {
+      cancelLoading(true);
       setDetail({
         overrides: {},
       });
