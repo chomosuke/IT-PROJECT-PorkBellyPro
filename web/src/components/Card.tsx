@@ -100,6 +100,9 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       left: '8px',
       zIndex: '2',
       cursor: 'pointer',
+      background: 'rgba(0, 0, 0, 0.4)',
+      padding: '4px',
+      ...theme.shape.shortShadow,
     },
   });
 };
@@ -167,7 +170,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
       {favorite
         ? (
           <theme.icon.isFavorite
-            size={20}
+            size={32}
             className={favoriteButton}
             onClick={favoriteOnClick}
             color={theme.palette.favorite}
@@ -175,10 +178,10 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
         )
         : (
           <theme.icon.notFavorite
-            size={20}
+            size={32}
             className={favoriteButton}
             onClick={favoriteOnClick}
-            color={theme.palette.favorite}
+            color={theme.palette.cloudyDay}
           />
         )}
     </div>

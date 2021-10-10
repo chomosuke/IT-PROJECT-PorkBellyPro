@@ -56,10 +56,13 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
   },
   favoriteButton: {
     position: 'absolute',
-    top: '8px',
-    left: '8px',
+    top: '16px',
+    left: '16px',
     zIndex: '2',
     cursor: 'pointer',
+    background: 'rgba(0, 0, 0, 0.4)',
+    padding: '8px',
+    ...theme.shape.default,
   },
 });
 
@@ -151,7 +154,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
             {favorite
               ? (
                 <theme.icon.isFavorite
-                  size={20}
+                  size={32}
                   className={favoriteButton}
                   onClick={favoriteOnClick}
                   color={theme.palette.favorite}
@@ -159,10 +162,10 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
               )
               : (
                 <theme.icon.notFavorite
-                  size={20}
+                  size={32}
                   className={favoriteButton}
                   onClick={favoriteOnClick}
-                  color={theme.palette.favorite}
+                  color={theme.palette.cloudyDay}
                 />
               )}
           </Stack.Item>
