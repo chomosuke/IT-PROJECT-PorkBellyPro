@@ -121,7 +121,11 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   } = getClassNames(theme);
 
   const favoriteOnClick = () => {
-    card.commit({ favorite: !favorite });
+    if (card.id == null) {
+      card.update({ favorite: !favorite });
+    } else {
+      card.commit({ favorite: !favorite });
+    }
   };
 
   // no sort, order will be preserved on the server presumably
