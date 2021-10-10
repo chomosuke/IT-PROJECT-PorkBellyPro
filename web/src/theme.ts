@@ -10,7 +10,6 @@ import {
   Check,
   DotsThree,
   FolderOpen,
-  HeartStraight,
   IconProps,
   MagnifyingGlass,
   MinusCircle,
@@ -18,6 +17,7 @@ import {
   Icon as PhosphorIcon,
   PlusCircle,
   SignOut,
+  Star,
   Trash,
   UserCircle,
   X,
@@ -140,7 +140,7 @@ export const defaultTheme = freezeDeep<Theme>({
     cloudyDay: '#c7c7c7',
     deepSlate: '#5e5e5e',
     sootyBee: '#0f0d0d',
-    favorite: '#EC567A',
+    favorite: '#FFD84E',
   },
   shape: {
     shortShadow: {
@@ -189,8 +189,8 @@ export const defaultTheme = freezeDeep<Theme>({
     folderOpen: makeIcon(FolderOpen, 'bold'),
     trashBold: makeIcon(Trash, 'bold'),
     dotsThree: makeIcon(DotsThree, 'bold'),
-    isFavorite: makeIcon(HeartStraight, 'fill'),
-    notFavorite: makeIcon(HeartStraight, 'duotone'),
+    isFavorite: makeIcon(Star, 'fill'),
+    notFavorite: makeIcon(Star, 'regular'),
   },
 });
 
