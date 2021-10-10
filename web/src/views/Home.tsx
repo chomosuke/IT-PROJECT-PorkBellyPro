@@ -259,7 +259,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
   } = getClassNames(expand, Boolean(detail), theme);
   const rotate180 = { transform: 'rotate(180deg)' };
 
-  function filterCard(card: ICard): boolean {
+  const searchedCard = cards.filter((card: ICard): boolean => {
     const searchTokens = searchQuery.split(/\W/).filter((x) => x.length > 0);
 
     const cardTokens = [
@@ -275,7 +275,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
     return searchTokens.every((searchToken) => cardTokens.some(
       (cardToken) => cardToken.toLowerCase().includes(searchToken.toLowerCase()),
     )) && tagQuery.every((qTag) => card.tags.includes(qTag));
-  }
+  });
 
   const tagScrollRef = React.createRef<HTMLDivElement>();
   const scroll = (offset: number) => {
@@ -329,13 +329,15 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
             </button>
           </div>
           <div className={cardSection}>
-            {cards.filter(filterCard).map((card) => (
-              <Card
-                key={card.id}
-                selected={card.id === detail?.id}
-                card={card}
-              />
-            ))}
+            {searchedCard.filter((card) => card.favorite)
+              .concat(searchedCard.filter((card) => !card.favorite))
+              .map((card) => (
+                <Card
+                  key={card.id}
+                  selected={card.id === detail?.id}
+                  card={card}
+                />
+              ))}
           </div>
         </div>
         {detail != null
