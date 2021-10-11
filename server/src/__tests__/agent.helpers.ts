@@ -9,7 +9,7 @@ import { Db } from 'mongodb';
  * describe blocks are defined here
  * although these functions could alternatively house the logic of each test
  * that will be hooked onto the main test.
- * 
+ *
  * registerAndLogin is a helper function to automatically set an instance
  * for the tester. We can use this to create an agent agnostic tester
  * but its test still needs to be synchronous with the main tester file.
@@ -55,7 +55,7 @@ export class StaticAgentTest {
     this.database = targetDb;
   }
 
-  static test (): void {
+  static test(): void {
     return describe('Agent Class test', () => {
       beforeAll(() => {
         expect(this.classAgent).not.toBeUndefined();
