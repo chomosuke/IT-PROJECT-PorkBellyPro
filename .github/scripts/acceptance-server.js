@@ -6,7 +6,9 @@
 
 const { spawn } = require('child_process');
 const { randomBytes } = require('crypto');
+const { request } = require('http');
 const { resolve } = require('path');
+const { exit } = require('process');
 
 (async () => {
   const { DB_PORT, SERVER_PORT } = process.env;
@@ -26,20 +28,31 @@ const { resolve } = require('path');
 
   await new Promise((resolve, reject) => {
     let tries = 0;
-    const callback = async () => {
-      const res = await fetch(`http://localhost:${SERVER_PORT}`);
-      if (res.ok) {
-        resolve();
-        return;
-      }
-      if (tries > 10) {
-        reject(new Error('Server did not start in time'));
-      } else {
-        tries += 1;
-        setTimeout(callback, 1000);
-      }
+    let callback;
+    const getCallback = () => callback;
+
+    callback = () => {
+      const retry = () => {
+        console.log('Retrying');
+        if (tries >= 10) {
+          reject(new Error('Server did not start in time'));
+        } else {
+          tries += 1;
+          setTimeout(getCallback(), 5000);
+        }
+      };
+
+      const req = request(`http://localhost:${SERVER_PORT}`, { timeout: 5000 });
+      req.addListener('response', () => resolve());
+      req.addListener('timeout', retry);
+      req.addListener('error', retry);
+      req.end();
     };
+
+    callback();
   });
+
+  exit(0);
 })().catch((err) => {
   console.error(err);
   process.exitCode = 1;
