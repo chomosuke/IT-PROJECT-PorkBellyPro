@@ -7,7 +7,6 @@ import {
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
 import { useHome } from '../HomeContext';
-import { cancelLoading } from './cardDetails/CardImageField';
 import { useApp } from '../AppContext';
 import { Theme, useTheme } from '../theme';
 
@@ -123,9 +122,6 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
 
   const doShowCardDetail = () => {
     showCardDetail(card);
-
-    // incase image was still loading when user clicked on another card
-    cancelLoading(true);
     lockCard(ref);
   };
 
