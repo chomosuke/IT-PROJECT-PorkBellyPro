@@ -329,8 +329,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
             </button>
           </div>
           <div className={cardSection}>
-            {searchedCard.filter((card) => card.favorite)
-              .concat(searchedCard.filter((card) => !card.favorite))
+            {searchedCard.sort((a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0))
               .map((card) => (
                 <Card
                   key={card.id}
