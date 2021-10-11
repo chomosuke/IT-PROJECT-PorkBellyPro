@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { readFile } from 'fs/promises';
 import { getType } from 'mime';
 import { normalize, resolve } from 'path';
@@ -24,8 +25,10 @@ export type MockApiHandler = (
   request: InterceptRequest['request'],
 ) => Promise<boolean | void>;
 
+const { SERVER_PORT } = process.env;
+
 /**
- * Requests that network requests to https://localhost/ be intercepted. This allows tests to run
+ * Requests that network requests to http://localhost/ be intercepted. This allows tests to run
  * without actually starting server and database instances by mocking server responses.
  * @param mockHandlers Zero or more API route handlers given as pairs of [pattern, handler]s.
  * @returns A promise that resolves when the browser automation tool confirms the request.
@@ -33,7 +36,7 @@ export type MockApiHandler = (
 export function interceptRequests(
   ...mockHandlers: [pattern: RegExp, handler: MockApiHandler][]
 ): Promise<void> {
-  const reRoot = /^https:\/\/localhost(\/.*)$/i;
+  const reRoot = new RegExp(`^http://localhost:${SERVER_PORT}(/.*)$`, 'i');
   const dist = resolve(__dirname, '../../../../dist');
 
   async function tryRespondWithFile(respond: RespondFunction, path: string) {
@@ -103,7 +106,7 @@ export function interceptRequests(
     return tryRespondWithFile(respond, resolve(dist, 'index.html'));
   }
 
-  return intercept('https://localhost/', async ({ request, respond }) => {
+  return intercept(`http://localhost:${SERVER_PORT}/`, async ({ request, respond }) => {
     try {
       switch (true) {
         case await wrappedMockApiHandler(respond, request):
@@ -127,10 +130,14 @@ export function interceptRequests(
 }
 
 /**
- * Requests the automated browser to navigate to https://localhost/. Use {@link goto} if you wish to
+ * Requests the automated browser to navigate to http://localhost/. Use {@link goto} if you wish to
  * navigate to some other URL.
  * @returns A promise that resolves when the browser automation tool confirms the request.
  */
 export function gotoHome(): Promise<Response> {
-  return goto('https://localhost/');
+  return goto(`http://localhost:${process.env.SERVER_PORT}/`);
+}
+
+export function randomString(size?: number): string {
+  return randomBytes(size ?? 16).toString('hex');
 }
