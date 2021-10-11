@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_PORT: 27018
-      SERVER_PORT: 80
+      SERVER_PORT: 8080
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/build
