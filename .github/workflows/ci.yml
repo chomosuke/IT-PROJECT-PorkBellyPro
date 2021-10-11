@@ -25,14 +25,11 @@ jobs:
       - uses: ./.github/actions/build
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.6.0
-        with:
-          mongodb-version: '4.2'
       - name: Start backend
         run: |
           hash=$(node -p "crypto.randomBytes(32).toString('base64')")
           npm start -- -s $hash -c $DB_TESTING_PATH -p $SERVER_PORT &
           # time for process to start server
-          sleep 1
           node ./.github/scripts/ping-backend.js
         shell: bash
         
