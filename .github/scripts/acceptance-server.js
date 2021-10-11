@@ -22,7 +22,7 @@ const { resolve } = require('path');
     secret,
     '-p',
     SERVER_PORT,
-  ]);
+  ], { detached: true });
 
   await new Promise((resolve, reject) => {
     let tries = 0;
