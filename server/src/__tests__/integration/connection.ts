@@ -4,7 +4,7 @@ import { RegisterRequest } from '@porkbellypro/crm-shared';
 import { randomBytes } from 'crypto';
 import {
   LocalAgentTest, StaticAgentTest, agentTests, registerAndLogin, setAgent,
-} from '../agent.helpers';
+} from './agent.helpers';
 
 const dbpath = process.env.DB_TESTING_PATH || 'mongodb://localhost:27017/integrationTests';
 const port = process.env.SERVER_PORT || 8080;
