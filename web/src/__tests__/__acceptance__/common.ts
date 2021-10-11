@@ -135,7 +135,7 @@ export function interceptRequests(
  * @returns A promise that resolves when the browser automation tool confirms the request.
  */
 export function gotoHome(): Promise<Response> {
-  return goto(`http://localhost:${process.env.SERVER_PORT}/`);
+  return goto(`http://localhost:${SERVER_PORT}/`, { waitForNavigation: false });
 }
 
 export function randomString(size?: number): string {

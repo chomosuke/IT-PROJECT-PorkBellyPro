@@ -21,7 +21,7 @@ test('AC01: Successful registration', async () => {
   await write(randomString());
 
   // Step: Click Register button
-  await click(button('Register'));
+  await click(button('Register'), { waitForNavigation: false });
 
   // Pass criteria: User is redirected to the login page
   expect(await button('Log in').exists()).toBe(true);
