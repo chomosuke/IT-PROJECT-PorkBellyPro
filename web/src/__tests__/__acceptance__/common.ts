@@ -141,3 +141,7 @@ export function gotoHome(): Promise<Response> {
 export function randomString(size?: number): string {
   return randomBytes(size ?? 16).toString('hex');
 }
+
+export function delay(ms?: number): Promise<void> {
+  return new Promise((promiseResolve) => setTimeout(promiseResolve, ms ?? 1000));
+}
