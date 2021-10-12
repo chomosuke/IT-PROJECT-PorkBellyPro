@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import request from 'supertest';
 import {
-  CardPutRequest, CardPutResponse, LoginRequest, RegisterRequest,
+  CardPutRequest, CardPutResponse, LoginRequest, RegisterRequest, Tag,
 } from '@porkbellypro/crm-shared';
 import cookie from 'cookie';
 import { MongoClient } from 'mongodb';
@@ -65,6 +65,20 @@ export async function putCard(
 ): Promise<CardPutResponse> {
   // using agent, push a new card into the database and return card
   const res = await agent.put('/api/card').send(data);
+  expect(res.statusCode).toBe(201);
+  return JSON.parse(res.text);
+}
+
+/*
+ * helper just pushes the tag to the backend
+ * tag will be associated with the user as a result
+ * assumes that agent is logged in
+ * assumes that data is well-formed
+ */
+export async function putTag(
+  agent: request.SuperAgentTest, data: Omit<Tag, 'id'>,
+): Promise<Tag> {
+  const res = await agent.put('/api/tag').send(data);
   expect(res.statusCode).toBe(201);
   return JSON.parse(res.text);
 }

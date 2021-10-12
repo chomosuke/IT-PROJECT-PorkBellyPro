@@ -6,6 +6,7 @@ import { Tag } from '@porkbellypro/crm-shared';
 import { IUser } from '../../models/user';
 import {
   domain,
+  putTag,
   registerAndLogin, useAgentDriver,
 } from './agent.helpers';
 import { ITag } from '../../models/tag';
@@ -20,7 +21,7 @@ const nonOwnerData: IUser = {
   password: randomBytes(8).toString('base64'),
 };
 
-const tagData: Partial<ITag> = {
+const tagData: Omit<Tag, 'id'> = {
   color: 'red',
   label: 'Big Boss',
 };
@@ -39,10 +40,9 @@ describe('Card Deletion Tests', () => {
   });
 
   test('IN18 - Successful creation of tag', async () => {
-    const res = await agent.put('/api/tag').send(tagData);
-    expect(res.statusCode).toBe(201);
+    const res = await putTag(agent, tagData);
 
-    const tagId = (JSON.parse(res.text) as Tag).id;
+    const tagId = res.id;
 
     // check in DB
     const tagDoc = await dbClient.db().collection('tags').findOne<ITag>({ _id: new ObjectId(tagId) });
