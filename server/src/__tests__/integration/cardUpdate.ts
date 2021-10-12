@@ -38,7 +38,6 @@ const putData: CardPutRequest = {
 describe('Card Put Tests', () => {
   let agent: request.SuperAgentTest;
   let dbClient: MongoClient;
-  let userId: ObjectId;
   let cardId: string;
 
   beforeAll(async () => {
@@ -47,7 +46,7 @@ describe('Card Put Tests', () => {
 
     // associate tag to user
     const user = await dbClient.db().collection('users').findOne({ username: userData.username });
-    userId = user?._id;
+    const userId = user?._id;
     const tagId = (await dbClient.db().collection<ITag>('tags').insertOne({ ...tagData, user: userId })).insertedId;
     putData.tags.push(tagId.toString());
 
