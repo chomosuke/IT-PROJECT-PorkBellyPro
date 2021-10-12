@@ -43,7 +43,7 @@ const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => {
       margin: 'auto',
       width: '100%',
       height: cardDetailExpanded ? '400px' : '300px',
-      // subject to change.
+      userSelect: 'none',
       maxWidth: '800px',
     },
     noImageDiv: {
