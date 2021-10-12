@@ -24,7 +24,12 @@ const { exit } = require('process');
     secret,
     '-p',
     SERVER_PORT,
-  ], { detached: true });
+  ], {
+    detached: true,
+    env: {
+      NODE_ENV: 'test',
+    }
+  });
 
   await new Promise((resolve, reject) => {
     let tries = 0;

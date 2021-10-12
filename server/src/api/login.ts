@@ -4,9 +4,12 @@ import { asyncRouteHandler } from './asyncRouteHandler';
 import { HttpStatusError } from './HttpStatusError';
 import { Session, encryptSession, sessionMaxAge } from './Session';
 
+const { NODE_ENV } = process.env;
+const isTest = NODE_ENV === 'test';
+
 export const tokenCookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: true,
+  secure: !isTest || undefined,
 };
 
 export const login = asyncRouteHandler(async function login({ body }, res) {
