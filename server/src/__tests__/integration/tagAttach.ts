@@ -3,12 +3,12 @@ import request from 'supertest';
 import { randomBytes } from 'crypto';
 import { MongoClient, ObjectId } from 'mongodb';
 import {
-  CardPatchRequest, CardPatchResponse, CardPutRequest, CardPutResponse,
+  CardPatchRequest, CardPatchResponse, CardPutRequest,
 } from '@porkbellypro/crm-shared';
 import { IUser } from '../../models/user';
 import { ITag } from '../../models/tag';
 import {
-  domain, registerAndLogin, useAgentDriver,
+  domain, putCard, registerAndLogin, useAgentDriver,
 } from './agent.helpers';
 import { ICard } from '../../models/card';
 
@@ -52,13 +52,6 @@ describe('Tag attachment / detachment tests', () => {
   let tagId: string;
   let tagId2: string;
 
-  async function putCard(data: CardPutRequest) : Promise<CardPutResponse> {
-    // using agent, push a new card into the database and return card
-    const res = await agent.put('/api/card').send(data);
-    expect(res.statusCode).toBe(201);
-    return JSON.parse(res.text);
-  }
-
   beforeAll(async () => {
     [agent, dbClient] = await useAgentDriver();
     await registerAndLogin(agent, ownerData);
@@ -85,7 +78,7 @@ describe('Tag attachment / detachment tests', () => {
 
   test('IN11 - Successful attachment of tags to cards', async () => {
     // clone and put card
-    const cardBase = await putCard(cardData);
+    const cardBase = await putCard(agent, cardData);
 
     // attach tag 1 and tag 2 to card 2
     const tags = [tagId, tagId2];
@@ -110,8 +103,8 @@ describe('Tag attachment / detachment tests', () => {
   });
 
   test('IN12 - Unauthorised attachment to non-owned tag to owned card', async () => {
-    const cardBase = await putCard(cardData);
-    const changes : CardPatchRequest = {
+    const cardBase = await putCard(agent, cardData);
+    const changes: CardPatchRequest = {
       id: cardBase.id,
       tags: [tagId2],
     };
@@ -124,8 +117,8 @@ describe('Tag attachment / detachment tests', () => {
   });
 
   test('IN11A - Removal of Tags from Card', async () => {
-    const cardBase = await putCard(cardData);
-    const changes : CardPatchRequest = {
+    const cardBase = await putCard(agent, cardData);
+    const changes: CardPatchRequest = {
       id: cardBase.id,
       tags: [],
     };
@@ -136,6 +129,4 @@ describe('Tag attachment / detachment tests', () => {
     const cardDoc = await dbClient.db().collection('cards').findOne<ICard>({ _id: new ObjectId(cardBase.id) });
     expect(cardDoc?.tags.length).toBe(0);
   });
-
-
 });
