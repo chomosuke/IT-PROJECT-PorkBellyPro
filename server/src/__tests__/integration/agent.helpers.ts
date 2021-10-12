@@ -6,12 +6,13 @@ import { MongoClient } from 'mongodb';
 
 const dbpath = process.env.DB_TESTING_PATH || 'mongodb://localhost:27017/integrationTests';
 const port = process.env.SERVER_PORT || 8080;
+export const domain = `http://localhost:${port.toString()}`;
 
 // return agent and client with connection
 export async function useAgentDriver(): Promise<[request.SuperAgentTest, MongoClient]> {
   const dbClient = new MongoClient(dbpath);
   await dbClient.connect();
-  const agent = request.agent(`http://localhost:${port}`);
+  const agent = request.agent(domain);
   return [agent, dbClient];
 }
 
@@ -32,7 +33,7 @@ export async function loginAgent(
   if (res.ok && res.get('Set-Cookie')[0]) {
     const cookieObject = cookie.parse(res.get('Set-Cookie')[0]);
     expect(cookieObject).toHaveProperty('token');
-    agent.set('Cookie', `token=${cookieObject.token}`);
+    agent.jar.setCookie(`token=${cookieObject.token}`);
   }
 
   return res;
