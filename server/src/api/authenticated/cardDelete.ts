@@ -34,7 +34,7 @@ export const cardDelete: AuthenticatedApiRequestHandlerAsync = asyncRouteHandler
         if (!cardToDelete) {
           throw new HttpStatusError(410);
         } else if (!user._id.equals(cardToDelete.user)) {
-          throw new HttpStatusError(401);
+          throw new HttpStatusError(410);
         } else {
           await cardToDelete.remove();
           res.sendStatus(204);

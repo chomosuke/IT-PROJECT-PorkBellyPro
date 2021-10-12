@@ -161,7 +161,7 @@ describe('DELETE /api/card unit tests', () => {
     });
 
     await expect(cardDelete.implementation.call(router, req, res, next))
-      .rejects.toStrictEqual(new HttpStatusError(401));
+      .rejects.toStrictEqual(new HttpStatusError(410));
 
     expect(mockCardFind).toBeCalledTimes(1);
     expect(mockCardFind).toBeCalledWith(existingCards[1]._id);
