@@ -59,6 +59,7 @@ export async function registerAndLogin(
  * card will be associated with the user as a result
  * assumes that agent is logged in
  * assumes that data is well-formed
+ * Primarily tested with IN07
  */
 export async function putCard(
   agent: request.SuperAgentTest, data: CardPutRequest,
@@ -74,6 +75,7 @@ export async function putCard(
  * tag will be associated with the user as a result
  * assumes that agent is logged in
  * assumes that data is well-formed
+ * Primarily tested with IN18
  */
 export async function putTag(
   agent: request.SuperAgentTest, data: Omit<Tag, 'id'>,

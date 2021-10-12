@@ -26,7 +26,7 @@ const tagData: Omit<Tag, 'id'> = {
   label: 'Big Boss',
 };
 
-describe('Card Deletion Tests', () => {
+describe('Tag Update Tests', () => {
   let agent: request.SuperAgentTest;
   let dbClient: MongoClient;
 
