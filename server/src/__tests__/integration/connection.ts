@@ -3,28 +3,17 @@ import request from 'supertest';
 import { RegisterRequest } from '@porkbellypro/crm-shared';
 import { randomBytes } from 'crypto';
 import {
-  LocalAgentTest, StaticAgentTest, agentTests, registerAndLogin, setAgent,
+  registerAndLogin, useAgentDriver,
 } from './agent.helpers';
 
-const dbpath = process.env.DB_TESTING_PATH || 'mongodb://localhost:27017/integrationTests';
-const port = process.env.SERVER_PORT || 8080;
 let dbClient: MongoClient;
-
 let agent: request.SuperAgentTest;
-let localAgentTest : LocalAgentTest;
 
 describe('Test to test workflow setup', () => {
   beforeAll(async () => {
-    dbClient = new MongoClient(dbpath);
-    await dbClient.connect();
-    // console.log(dbClient.db());
-    agent = request.agent(`http://localhost:${port}`);
-
+    [agent, dbClient] = await useAgentDriver();
     const collection = dbClient.db().collection('foobar');
     await collection.insertOne({ something: 'versus' });
-    setAgent(agent, dbClient.db());
-    StaticAgentTest.set(agent, dbClient.db());
-    localAgentTest = new LocalAgentTest(agent, dbClient.db());
   });
 
   test('register and cookie mod', async () => {
@@ -43,15 +32,7 @@ describe('Test to test workflow setup', () => {
     expect(doc).toBeTruthy();
   });
 
-  agentTests();
-  StaticAgentTest.test();
-
-  test('Local test', async () => {
-    await localAgentTest.test();
-  });
-
   afterAll(async () => {
-    // await dbClient.db().dropDatabase();
     await dbClient.close();
   });
 });
