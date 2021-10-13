@@ -17,6 +17,7 @@ import {
   Icon as PhosphorIcon,
   PlusCircle,
   SignOut,
+  Star,
   Trash,
   UserCircle,
   X,
@@ -36,6 +37,7 @@ export interface Palette {
   cloudyDay: string;
   deepSlate: string;
   sootyBee: string;
+  favorite: string;
 }
 
 export interface Shape {
@@ -83,6 +85,8 @@ export interface Icon {
   folderOpen: PhosphorIcon;
   trashBold: PhosphorIcon;
   dotsThree: PhosphorIcon;
+  isFavorite: PhosphorIcon;
+  notFavorite: PhosphorIcon;
 }
 
 export interface Theme {
@@ -136,6 +140,7 @@ export const defaultTheme = freezeDeep<Theme>({
     cloudyDay: '#c7c7c7',
     deepSlate: '#5e5e5e',
     sootyBee: '#0f0d0d',
+    favorite: '#FFD84E',
   },
   shape: {
     shortShadow: {
@@ -184,6 +189,8 @@ export const defaultTheme = freezeDeep<Theme>({
     folderOpen: makeIcon(FolderOpen, 'bold'),
     trashBold: makeIcon(Trash, 'bold'),
     dotsThree: makeIcon(DotsThree, 'bold'),
+    isFavorite: makeIcon(Star, 'fill'),
+    notFavorite: makeIcon(Star, 'regular'),
   },
 });
 

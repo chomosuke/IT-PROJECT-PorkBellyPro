@@ -3,10 +3,11 @@ import {
   PrimaryButton, Stack, TextField,
   mergeStyleSets,
 } from '@fluentui/react';
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { useBoolean } from '@fluentui/react-hooks';
+import { ensureNotNull } from '@porkbellypro/crm-shared';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useApp } from '../AppContext';
 import { WarningDialog } from '../components/warningDialog';
 import { Theme, useTheme } from '../theme';
@@ -116,7 +117,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
               onGetErrorMessage={(value) => emptyField(value, 'Username')}
               validateOnFocusOut
               validateOnLoad={false}
-              onChange={(event) => setUsername(event.currentTarget.value)}
+              onChange={(ev, newValue) => setUsername(ensureNotNull(newValue))}
               styles={textFieldStyles}
             />
             <TextField
@@ -127,7 +128,7 @@ export const Login: React.VoidFunctionComponent<ILoginProps> = ({ registering })
               onGetErrorMessage={(value) => emptyField(value, 'Password')}
               validateOnFocusOut
               validateOnLoad={false}
-              onChange={(event) => setPassword(event.currentTarget.value)}
+              onChange={(ev, newValue) => setPassword(ensureNotNull(newValue))}
               styles={textFieldStyles}
             />
             <PrimaryButton

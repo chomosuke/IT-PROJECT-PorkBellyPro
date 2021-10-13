@@ -33,7 +33,7 @@ export interface ICard extends Readonly<ICardPropertiesCommon> {
   readonly fields: readonly ICardField[];
   readonly tags: readonly ITag[];
   update(props: Partial<ICardProperties>): void;
-  commit(): Promise<ResponseStatus>;
+  commit(props?: Partial<ICardProperties>): Promise<ResponseStatus>;
   delete(): Promise<ResponseStatus>;
 }
 
