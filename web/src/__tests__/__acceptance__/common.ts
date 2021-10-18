@@ -25,7 +25,7 @@ export type MockApiHandler = (
   request: InterceptRequest['request'],
 ) => Promise<boolean | void>;
 
-const { SERVER_PORT } = process.env;
+const SERVER_PORT = process.env.SERVER_PORT ?? 80;
 
 /**
  * Requests that network requests to http://localhost/ be intercepted. This allows tests to run
