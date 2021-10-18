@@ -51,6 +51,19 @@ const getClassNames = (theme: Theme) => mergeStyleSets({
     color: theme.palette.justWhite,
     ...textStyle,
   },
+  imageContainer: {
+    position: 'relative',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: '16px',
+    left: '16px',
+    zIndex: '2',
+    cursor: 'pointer',
+    background: 'rgba(0, 0, 0, 0.4)',
+    padding: '8px',
+    ...theme.shape.default,
+  },
 });
 
 export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ editing, card }) => {
@@ -62,7 +75,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const [isEditing, setIsEditing] = React.useState(editing);
 
   const {
-    name, phone, email, jobTitle, company, fields,
+    name, phone, email, jobTitle, company, fields, favorite,
   } = card;
   const mFields = [
     { key: 'name', value: name, onEdit: (value: string) => card.update({ name: value }) },
@@ -96,12 +109,26 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   const close = () => {
     unlockCardLater();
     showCardDetail(null);
-    cancelLoading(true);
   };
 
   const {
-    root, content, closeButton, addFieldButtonContainer, iconButton, addFieldText,
+    root,
+    content,
+    closeButton,
+    addFieldButtonContainer,
+    iconButton,
+    addFieldText,
+    imageContainer,
+    favoriteButton,
   } = getClassNames(theme);
+
+  const favoriteOnClick = () => {
+    if (card.id == null) {
+      card.update({ favorite: !favorite });
+    } else {
+      card.commit({ favorite: !favorite });
+    }
+  };
 
   // no sort, order will be preserved on the server presumably
   return (
@@ -118,11 +145,28 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           padding: `0px ${cardDetailExpanded ? '152px' : '48px'}`,
         }}
         >
-          <Stack.Item key='image' align='stretch'>
+          <Stack.Item className={imageContainer} key='image' align='stretch'>
             <CardImageField
               card={card}
               editing={isEditing}
             />
+            {favorite
+              ? (
+                <theme.icon.isFavorite
+                  size={32}
+                  className={favoriteButton}
+                  onClick={favoriteOnClick}
+                  color={theme.palette.favorite}
+                />
+              )
+              : (
+                <theme.icon.notFavorite
+                  size={32}
+                  className={favoriteButton}
+                  onClick={favoriteOnClick}
+                  color={theme.palette.cloudyDay}
+                />
+              )}
           </Stack.Item>
           <Stack.Item key='tags' align='stretch'>
             <TagPicker targetCard={card} editing={isEditing} />
@@ -178,7 +222,6 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
           } else {
             showCardDetail(card);
             setIsEditing(false);
-            cancelLoading(false);
           }
         }}
         onDelete={() => {
