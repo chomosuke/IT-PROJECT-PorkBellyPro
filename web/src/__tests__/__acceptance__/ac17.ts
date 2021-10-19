@@ -3,7 +3,8 @@ import {
 } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  attachTag,
+  createCard, createTag, deleteTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC17: Successful tag deletion with attached tag', async () => {
@@ -18,10 +19,11 @@ test('AC17: Successful tag deletion with attached tag', async () => {
 
   await openDetail(cardName);
 
+  await openTagPicker();
+
   await createTag(tagName);
 
-  // Step: User clicks on tag to attach to card
-  await click((await text(tagName).elements())[1], { force: true });
+  await attachTag(tagName);
 
   // Step: User clicks on the save button
   await click($('#saveButton'));
@@ -31,12 +33,7 @@ test('AC17: Successful tag deletion with attached tag', async () => {
   // Step: User clicks on attach tags button.
   await click($('#attachTagsButton'));
 
-  // Step: User clicks on edit tag for a tag. (there's only one tag)
-  await click($('#editTagButton'));
-
-  // Step: User clicks on delete tag button.
-  await click('remove tag', { waitForNavigation: false });
-  await click('Yes, Delete', { waitForNavigation: false });
+  await deleteTag(tagName);
 
   // selected tag is removed from all cards (in this case only one)
   await openDetail(cardName);

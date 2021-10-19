@@ -3,7 +3,8 @@ import {
 } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  attachTag,
+  createCard, createTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC12: Successful attachment of tag to card', async () => {
@@ -18,10 +19,11 @@ test('AC12: Successful attachment of tag to card', async () => {
 
   await openDetail(cardName);
 
+  await openTagPicker();
+
   await createTag(tagName);
 
-  // Step: User clicks on tag to attach to card
-  await click((await text(tagName).elements())[1], { force: true });
+  await attachTag(tagName);
 
   // Clicking on tags display them on the details panel.
   expect((await text(tagName).elements()).length).toBe(4);

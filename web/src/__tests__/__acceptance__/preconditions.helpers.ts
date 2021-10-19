@@ -1,5 +1,5 @@
 import {
-  $, attach, button, click, fileField, focus, textBox, toRightOf, write,
+  $, attach, button, clear, click, fileField, focus, text, textBox, toRightOf, write,
 } from 'taiko';
 import { join } from 'path';
 import { delay, gotoHome, randomString } from './common.helpers';
@@ -72,16 +72,67 @@ export async function createCard(cardDetails: ICardDetails): Promise<void> {
   await click($('#saveButton'));
 }
 
-export async function createTag(tagName: string): Promise<void> {
+// have to have cardDetail already open in non edit mode.
+export async function openTagPicker(): Promise<void> {
   // Step: User clicks edit card button
   await click($('#editButton'));
 
   // Step: User clicks on edit card button
   await click($('#attachTagsButton'));
+}
 
+/**
+ * have to already have tagPicker open
+ * will leave with tagPicker open
+ */
+export async function createTag(tagName: string): Promise<void> {
   // Step: User enters a new label name in search bar
-  await write(tagName, $('[value=\'create new tag\''));
+  await write(tagName, $('[value=\'create new tag\']'));
 
   // Step: User clicks on new tag button
   await click($('#createTagButton'));
+}
+
+/**
+ * have to already have tagPicker open
+ * will leave with tagPicker open
+ */
+export async function editTag(tagName: string, newTagName: string): Promise<void> {
+  // Step: User clicks on edit tag for a tag. (there's only one tag)
+  await click($('#editTagButton', toRightOf(tagName)));
+
+  // Step: User changes the tag's label
+  await focus($(`[value='${tagName}']`));
+  await clear();
+  await write(newTagName);
+
+  // Step: User closes the editing window
+  await click('PORKBELLY');
+}
+
+/**
+ * have to already have tagPicker open
+ * will leave with tagPicker open
+ */
+export async function deleteTag(tagName: string): Promise<void> {
+  // Step: User clicks on edit tag for a tag. (there's only one tag)
+  await click($('#editTagButton', toRightOf(tagName)));
+
+  // Step: User clicks on delete tag button.
+  await click('remove tag', { waitForNavigation: false });
+  await click('Yes, Delete', { waitForNavigation: false });
+}
+
+/**
+ * have to already have tagPicker open
+ * will leave with tagPicker open
+ */
+export async function attachTag(tagName: string): Promise<void> {
+  // Step: User clicks on tag to attach to card
+  await click(text(tagName, toRightOf('Tags')), { force: true });
+}
+
+export async function detachTag(tagName: string): Promise<void> {
+  // Step: User clicks on the removal button on tag
+  await click($('#removeTagButton', toRightOf(tagName)));
 }

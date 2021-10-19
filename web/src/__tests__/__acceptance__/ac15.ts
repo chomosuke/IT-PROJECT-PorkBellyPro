@@ -1,9 +1,9 @@
 import {
-  $, clear, click, focus, reload, text, write,
+  reload, text,
 } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  createCard, createTag, editTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC15: Successful tag editing with standalone tag', async () => {
@@ -19,18 +19,11 @@ test('AC15: Successful tag editing with standalone tag', async () => {
 
   await openDetail(cardName);
 
+  await openTagPicker();
+
   await createTag(tagName);
 
-  // Step: User clicks on edit tag for a tag. (there's only one tag)
-  await click($('#editTagButton'));
-
-  // Step: User changes the tag's label
-  await focus($(`[value='${tagName}']`));
-  await clear();
-  await write(newTagName);
-
-  // Step: User closes the editing window
-  await click('PORKBELLY');
+  await editTag(tagName, newTagName);
 
   // selected tag is updated
   expect(await text(newTagName).exists()).toBe(true);

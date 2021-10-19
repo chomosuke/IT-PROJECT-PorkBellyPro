@@ -1,9 +1,10 @@
 import {
-  $, click, reload, text, toRightOf,
+  $, click, reload, text,
 } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  attachTag,
+  createCard, createTag, detachTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC13: Successful detachment of tag from card', async () => {
@@ -18,10 +19,11 @@ test('AC13: Successful detachment of tag from card', async () => {
 
   await openDetail(cardName);
 
+  await openTagPicker();
+
   await createTag(tagName);
 
-  // Step: User clicks on tag to attach to card
-  await click(text(tagName, toRightOf('Tags')), { force: true });
+  await attachTag(tagName);
 
   // Step: User clicks on the save button
   await click($('#saveButton'));
@@ -29,8 +31,7 @@ test('AC13: Successful detachment of tag from card', async () => {
   // Step: User clicks on edit card button
   await click($('#editButton'));
 
-  // Step: User clicks on the removal button on tag
-  await click($('#removeTagButton'));
+  await detachTag(tagName);
 
   // Tag is removed from cardDetail
   expect((await text(tagName).elements()).length).toBe(1);

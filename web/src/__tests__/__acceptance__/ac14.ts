@@ -1,7 +1,7 @@
 import { reload, text } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  createCard, createTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC14: Successful tag creation', async () => {
@@ -15,6 +15,8 @@ test('AC14: Successful tag creation', async () => {
   await createCard({ name: cardName });
 
   await openDetail(cardName);
+
+  await openTagPicker();
 
   await createTag(tagName);
 

@@ -1,9 +1,9 @@
 import {
-  $, click, reload, text,
+  reload, text,
 } from 'taiko';
 import { randomString } from './common.helpers';
 import {
-  createCard, createTag, loginNew, openDetail,
+  createCard, createTag, deleteTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
 test('AC16: Successful tag deletion with standalone tag', async () => {
@@ -18,14 +18,11 @@ test('AC16: Successful tag deletion with standalone tag', async () => {
 
   await openDetail(cardName);
 
+  await openTagPicker();
+
   await createTag(tagName);
 
-  // Step: User clicks on edit tag for a tag. (there's only one tag)
-  await click($('#editTagButton'));
-
-  // Step: User clicks on delete tag button.
-  await click('remove tag', { waitForNavigation: false });
-  await click('Yes, Delete', { waitForNavigation: false });
+  await deleteTag(tagName);
 
   // selected tag is updated
   expect(await text(tagName).exists()).toBe(false);
