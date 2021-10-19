@@ -65,6 +65,7 @@ export const TagWrapper: React.VoidFunctionComponent<ITagWrapperProps> = ({
       {setTagEdit
         && (
           <theme.icon.dotsThree
+            id='editTagButton'
             className={iconButton}
             size={24}
             color={theme.palette.justWhite}
