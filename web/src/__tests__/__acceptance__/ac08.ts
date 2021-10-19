@@ -13,7 +13,9 @@ test('AC08: Cancel new card details', async () => {
   const phone = randomString();
   const jobTitle = randomString();
 
-  await createCard({ name, image: 'test.jpg' });
+  await createCard({
+    name, phone, jobTitle, image: 'test.jpg',
+  });
 
   await openDetail(name);
 
@@ -21,8 +23,8 @@ test('AC08: Cancel new card details', async () => {
   await click($('#editButton'));
 
   // Step: User changes some of the field values of the card
-  await write(phone, textBox(toRightOf('phone')));
-  await write(jobTitle, textBox(toRightOf('job title')));
+  await write(randomString(), textBox(toRightOf('phone')));
+  await write(randomString(), textBox(toRightOf('job title')));
 
   // Step: User removes the image of the card
   await click($('[class^=\'deleteImg\']'));
@@ -37,12 +39,12 @@ test('AC08: Cancel new card details', async () => {
   // image still exist
   expect(await $('[class^=\'noImageDiv\']').exists()).toBe(false);
   // fields are not updated
-  expect(await text(phone).exists()).toBe(false);
-  expect(await text(jobTitle).exists()).toBe(false);
+  expect(await text(phone).exists()).toBe(true);
+  expect(await text(jobTitle).exists()).toBe(true);
   // database is not called
   await reload();
   await openDetail(name);
   expect(await $('[class^=\'noImageDiv\']').exists()).toBe(false);
-  expect(await text(phone).exists()).toBe(false);
-  expect(await text(jobTitle).exists()).toBe(false);
+  expect(await text(phone).exists()).toBe(true);
+  expect(await text(jobTitle).exists()).toBe(true);
 });
