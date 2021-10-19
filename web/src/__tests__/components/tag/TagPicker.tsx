@@ -84,6 +84,7 @@ describe('TagPicker render tests', () => {
               className="addButton-54"
               fill="#ffffff"
               height={24}
+              id="attachTagsButton"
               onClick={[Function]}
               viewBox="0 0 256 256"
               width={24}

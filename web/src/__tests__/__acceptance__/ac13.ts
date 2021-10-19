@@ -6,7 +6,7 @@ import {
   createCard, createTag, loginNew, openDetail,
 } from './preconditions.helpers';
 
-test('AC13: Successful detachment of tag to card', async () => {
+test('AC13: Successful detachment of tag from card', async () => {
   expect.assertions(3);
 
   await loginNew();
