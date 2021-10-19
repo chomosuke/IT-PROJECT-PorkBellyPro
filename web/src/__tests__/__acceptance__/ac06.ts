@@ -16,7 +16,7 @@ test('AC06: Successful creation of card', async () => {
   });
 
   // cardDetail section does not exist.
-  expect(await $('[class^=\'detailSection\']').exists()).toBe(false);
+  expect(await $('#detailSection').exists()).toBe(false);
   // card exist in home page
   expect(await text(name).exists()).toBe(true);
   // card exist in database

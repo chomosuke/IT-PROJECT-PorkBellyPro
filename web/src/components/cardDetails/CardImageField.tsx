@@ -187,6 +187,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
               <theme.icon.folderOpen size={28} />
             </label>
             <button
+              id='deleteImg'
               type='button'
               className={deleteImg}
               onClick={toggleHideDialog}

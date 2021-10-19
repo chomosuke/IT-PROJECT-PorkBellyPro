@@ -18,13 +18,13 @@ test('AC05: View card detail', async () => {
   await openDetail(names[0]);
 
   // card section exist
-  expect(await $('[class^=\'detailSection\']').exists()).toBe(true);
+  expect(await $('#detailSection').exists()).toBe(true);
   expect(await text(names[0], toRightOf('name')).exists()).toBe(true);
 
   // Step: Select any other card in the list
   await openDetail(names[1]);
 
   // replace the panel shown
-  expect(await $('[class^=\'detailSection\']').exists()).toBe(true);
+  expect(await $('#detailSection').exists()).toBe(true);
   expect(await text(names[1], toRightOf('name')).exists()).toBe(true);
 });

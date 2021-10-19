@@ -27,7 +27,7 @@ test('AC08: Cancel new card details', async () => {
   await write(randomString(), textBox(toRightOf('job title')));
 
   // Step: User removes the image of the card
-  await click($('[class^=\'deleteImg\']'));
+  await click($('#deleteImg'));
   await click('Yes, Delete');
 
   // Step: User clicks the save button
@@ -37,14 +37,14 @@ test('AC08: Cancel new card details', async () => {
   expect(await $('#saveButton').exists()).toBe(false);
   expect(await $('#editButton').exists()).toBe(true);
   // image still exist
-  expect(await $('[class^=\'noImageDiv\']').exists()).toBe(false);
+  expect(await text('no image').exists()).toBe(false);
   // fields are not updated
   expect(await text(phone).exists()).toBe(true);
   expect(await text(jobTitle).exists()).toBe(true);
   // database is not called
   await reload();
   await openDetail(name);
-  expect(await $('[class^=\'noImageDiv\']').exists()).toBe(false);
+  expect(await text('no image').exists()).toBe(false);
   expect(await text(phone).exists()).toBe(true);
   expect(await text(jobTitle).exists()).toBe(true);
 });

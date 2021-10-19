@@ -341,7 +341,7 @@ export const Home: React.VoidFunctionComponent<IHomeProps> = ({ detail }) => {
         </div>
         {detail != null
           && (
-            <div className={detailSection}>
+            <div className={detailSection} id='detailSection'>
               <CardDetails key={detail.id} card={detail} editing={detail.id === undefined} />
             </div>
           )}

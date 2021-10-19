@@ -143,7 +143,7 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
 
   return (
     <div className={root} ref={ref}>
-      <Stack className={cardContent}>
+      <Stack className={cardContent} id='cardContent'>
         <div className={imageContainer}>
           {image != null && (
             <Image

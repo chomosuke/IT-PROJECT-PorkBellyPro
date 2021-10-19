@@ -22,7 +22,7 @@ test('AC09: Successful deletion of card', async () => {
   await click('Yes, Delete');
 
   // cardDetail section does not exist.
-  expect(await $('[class^=\'detailSection\']').exists()).toBe(false);
+  expect(await $('detailSection').exists()).toBe(false);
   // card does not exist in home page
   expect(await text(name).exists()).toBe(false);
   // card does not exist in database
