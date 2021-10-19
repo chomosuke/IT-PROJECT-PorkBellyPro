@@ -1,15 +1,16 @@
 import {
   button, click, focus, text, textBox, write,
 } from 'taiko';
+import { toRegister } from './ac01';
 import { delay, gotoHome, randomString } from './common';
 
 describe('AC04: Failed login with incorrect credentials', () => {
   test('password different from that associated with the user', async () => {
     expect.assertions(1);
 
-    // Preconditions: User is on the login page
-    await gotoHome();
-    await click('Register to get started');
+    await toRegister();
+
+    // Step: Register an account with a random password.
     const username = randomString();
     await focus(textBox('Username'));
     await write(username);

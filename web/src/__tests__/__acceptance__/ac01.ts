@@ -4,13 +4,17 @@ import {
 
 import { gotoHome, randomString } from './common';
 
+// Precondition: User is on the registration page
+export async function toRegister(): Promise<void> {
+  await gotoHome();
+  await click('Register to get started');
+}
+
 test('AC01: Successful registration', async () => {
   // There is one assertion at the end.
   expect.assertions(1);
 
-  // Precondition: User is on the registration page
-  await gotoHome();
-  await click('Register to get started');
+  await toRegister();
 
   // Step: Enter a unique username into the username field
   await focus(textBox('Username'));

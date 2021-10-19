@@ -1,14 +1,15 @@
 import {
   button, click, focus, text, textBox, write,
 } from 'taiko';
-import { gotoHome, randomString } from './common';
+import { toRegister } from './ac01';
+import { randomString } from './common';
 
 test('AC02: Failed registration using non-unique username', async () => {
   expect.assertions(1);
 
-  // Precondition: User is on the registration page
-  await gotoHome();
-  await click('Register to get started');
+  await toRegister();
+
+  // Step: Make a account with a username
   const username = randomString();
   await focus(textBox('Username'));
   await write(username);
