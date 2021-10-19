@@ -1,7 +1,9 @@
 import {
   $,
   clear,
-  textBox, toRightOf, write,
+  textBox,
+  within,
+  write,
 } from 'taiko';
 import { randomString } from './common.helpers';
 import { createCard, loginNew } from './preconditions.helpers';
@@ -27,13 +29,13 @@ test('AC10, 11: Keyword search with and without matches', async () => {
   }
 
   // Step: User enters keywords from a card into the search bar.
-  await write(keyword.substring(8, 24), textBox(toRightOf('PORKBELLY')));
+  await write(keyword.substring(8, 24), textBox(within($('#searchContainer'))));
 
   // card list shown is filtered to show only cards that contain those words entered.
   expect((await $('#cardContent').elements()).length).toBe(len);
 
   // User enters keywords not present on any card in the card list into the search bar
-  await write(randomString(), textBox(toRightOf('PORKBELLY')));
+  await write(randomString(), textBox(within($('#searchContainer'))));
 
   // The card list is filtered, no cards are shown.
   expect((await $('#cardContent').elements()).length).toBe(0);

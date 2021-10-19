@@ -6,4 +6,4 @@ Fire up a running server instance
 
 Go to another powershell and run your test.
 
-If you're confused as why your test isn't passing, take a screenshot with screenshot() from taiko.
+If you're confused as why your test isn't passing, take a screenshot with `await screenshot()` from taiko.

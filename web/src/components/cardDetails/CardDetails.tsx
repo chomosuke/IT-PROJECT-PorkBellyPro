@@ -134,6 +134,7 @@ export const CardDetails: React.VoidFunctionComponent<ICardDetailsProps> = ({ ed
   return (
     <div className={root}>
       <theme.icon.cross
+        id='closeButton'
         className={closeButton}
         color={theme.palette.justWhite}
         size={32}
