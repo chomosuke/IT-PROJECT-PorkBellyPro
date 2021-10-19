@@ -1,8 +1,8 @@
 import {
   $, click, reload, text, textBox, toRightOf, write,
 } from 'taiko';
-import { randomString } from './common';
-import { createCard, loginNew, openDetail } from './preconditions';
+import { randomString } from './common.helpers';
+import { createCard, loginNew, openDetail } from './preconditions.helpers';
 
 test('AC07: Successful editing of card details', async () => {
   expect.assertions(8);

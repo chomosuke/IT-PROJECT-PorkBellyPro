@@ -1,8 +1,8 @@
 import {
   button, click, focus, text, textBox, write,
 } from 'taiko';
-import { randomString } from './common';
-import { toRegister } from './preconditions';
+import { randomString } from './common.helpers';
+import { toRegister } from './preconditions.helpers';
 
 test('AC02: Failed registration using non-unique username', async () => {
   expect.assertions(1);

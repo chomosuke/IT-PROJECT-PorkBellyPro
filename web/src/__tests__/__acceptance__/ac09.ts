@@ -1,8 +1,8 @@
 import {
   $, click, reload, text,
 } from 'taiko';
-import { randomString } from './common';
-import { createCard, loginNew, openDetail } from './preconditions';
+import { randomString } from './common.helpers';
+import { createCard, loginNew, openDetail } from './preconditions.helpers';
 
 test('AC09: Successful deletion of card', async () => {
   expect.assertions(3);

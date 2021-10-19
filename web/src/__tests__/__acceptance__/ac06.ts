@@ -1,8 +1,8 @@
 import {
   $, reload, text,
 } from 'taiko';
-import { randomString } from './common';
-import { createCard, loginNew } from './preconditions';
+import { randomString } from './common.helpers';
+import { createCard, loginNew } from './preconditions.helpers';
 
 test('AC06: Successful creation of card', async () => {
   expect.assertions(3);

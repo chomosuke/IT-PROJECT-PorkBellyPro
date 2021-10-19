@@ -1,7 +1,7 @@
 import {
   text,
 } from 'taiko';
-import { loginNew } from './preconditions';
+import { loginNew } from './preconditions.helpers';
 
 test('AC03: Successful login', async () => {
   expect.assertions(2);

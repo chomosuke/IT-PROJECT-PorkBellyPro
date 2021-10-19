@@ -1,8 +1,8 @@
 import {
   button, click, focus, textBox, write,
 } from 'taiko';
-import { randomString } from './common';
-import { toRegister } from './preconditions';
+import { randomString } from './common.helpers';
+import { toRegister } from './preconditions.helpers';
 
 test('AC01: Successful registration', async () => {
   // There is one assertion at the end.

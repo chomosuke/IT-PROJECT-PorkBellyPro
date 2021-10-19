@@ -2,7 +2,7 @@ import {
   $, attach, button, click, fileField, focus, textBox, toRightOf, write,
 } from 'taiko';
 import { join } from 'path';
-import { delay, gotoHome, randomString } from './common';
+import { delay, gotoHome, randomString } from './common.helpers';
 
 export async function toRegister(): Promise<void> {
   await gotoHome();

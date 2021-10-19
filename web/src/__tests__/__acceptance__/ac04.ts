@@ -1,8 +1,8 @@
 import {
   button, click, focus, text, textBox, write,
 } from 'taiko';
-import { toRegister } from './preconditions';
-import { delay, gotoHome, randomString } from './common';
+import { toRegister } from './preconditions.helpers';
+import { delay, gotoHome, randomString } from './common.helpers';
 
 describe('AC04: Failed login with incorrect credentials', () => {
   test('password different from that associated with the user', async () => {
