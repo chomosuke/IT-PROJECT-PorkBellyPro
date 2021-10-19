@@ -71,3 +71,18 @@ export async function createCard(cardDetails: ICardDetails): Promise<void> {
   // Step: User clicks button to confirms the details
   await click($('#saveButton'));
 }
+
+export async function createTag(tagName: string): Promise<void> {
+  // Step: User clicks edit card button
+  await click($('#editButton'));
+
+  // Step: User clicks on edit card button
+  await click($('#attachTagsButton'));
+  // below('no image') because right of Tags is image delete button for whatever reason
+
+  // Step: User enters a new label name in search bar
+  await write(tagName, $('[value=\'create new tag\''));
+
+  // Step: User clicks on new tag button
+  await click($('#createTagButton'));
+}

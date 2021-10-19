@@ -150,6 +150,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                 <Stack.Item>
                   <theme.icon.plusCircleTag
                     size={24}
+                    id='attachTagsButton'
                     className={addButton}
                     onClick={() => setPickerActive((old) => !old)}
                     color={theme.palette.justWhite}
@@ -209,6 +210,7 @@ export const TagPicker: React.VoidFunctionComponent<ITagPickerProps> = ({
                   </Stack.Item>
                   <theme.icon.plusCircleTag
                     className={createTag}
+                    id='createTagButton'
                     size={24}
                     color={theme.palette.justWhite}
                     onClick={getNewTag}
