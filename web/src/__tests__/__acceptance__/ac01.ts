@@ -1,14 +1,8 @@
 import {
   button, click, focus, textBox, write,
 } from 'taiko';
-
-import { gotoHome, randomString } from './common';
-
-// Precondition: User is on the registration page
-export async function toRegister(): Promise<void> {
-  await gotoHome();
-  await click('Register to get started');
-}
+import { randomString } from './common';
+import { toRegister } from './preconditions';
 
 test('AC01: Successful registration', async () => {
   // There is one assertion at the end.

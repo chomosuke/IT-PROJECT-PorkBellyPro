@@ -1,13 +1,8 @@
 import {
-  $, click, text, toRightOf,
+  $, text, toRightOf,
 } from 'taiko';
-import { loginNew } from './ac03';
-import { createCard } from './ac06';
 import { randomString } from './common';
-
-export async function openDetail(name: string): Promise<void> {
-  await click(name, { force: true });
-}
+import { createCard, loginNew, openDetail } from './preconditions';
 
 test('AC05: View card detail', async () => {
   expect.assertions(4);

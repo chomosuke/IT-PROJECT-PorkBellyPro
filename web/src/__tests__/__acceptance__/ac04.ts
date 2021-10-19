@@ -1,7 +1,7 @@
 import {
   button, click, focus, text, textBox, write,
 } from 'taiko';
-import { toRegister } from './ac01';
+import { toRegister } from './preconditions';
 import { delay, gotoHome, randomString } from './common';
 
 describe('AC04: Failed login with incorrect credentials', () => {

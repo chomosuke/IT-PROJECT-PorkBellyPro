@@ -1,35 +1,7 @@
 import {
-  button, click, focus, text, textBox, write,
+  text,
 } from 'taiko';
-import { toRegister } from './ac01';
-import { delay, randomString } from './common';
-
-// precondition: register a new account and login
-export async function loginNew(): Promise<string> {
-  await toRegister();
-  const username = randomString();
-  const password = randomString();
-  await focus(textBox('Username'));
-  await write(username);
-  await focus(textBox('Password'));
-  await write(password);
-  await click(button('Register'), { waitForNavigation: false });
-  await delay();
-
-  // Step: Enter a username that is already present in the database into the username field
-  await focus(textBox('Username'));
-  await write(username);
-
-  // Step: Enter the password associated with that username
-  await focus(textBox('Password'));
-  await write(password);
-
-  // Step: Click login button
-  await click(button('Log in'), { waitForNavigation: false });
-  await delay();
-
-  return username;
-}
+import { loginNew } from './preconditions';
 
 test('AC03: Successful login', async () => {
   expect.assertions(2);
