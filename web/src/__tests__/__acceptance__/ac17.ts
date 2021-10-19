@@ -1,7 +1,7 @@
 import {
   $, click, reload, text,
 } from 'taiko';
-import { randomString } from './common.helpers';
+import { delay, randomString } from './common.helpers';
 import {
   attachTag,
   createCard, createTag, deleteTag, loginNew, openDetail, openTagPicker,
@@ -34,6 +34,7 @@ test('AC17: Successful tag deletion with attached tag', async () => {
   await click($('#attachTagsButton'));
 
   await deleteTag(tagName);
+  await delay();
 
   // selected tag is removed from all cards (in this case only one)
   await openDetail(cardName);

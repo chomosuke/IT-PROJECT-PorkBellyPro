@@ -1,7 +1,7 @@
 import {
   reload, text,
 } from 'taiko';
-import { randomString } from './common.helpers';
+import { delay, randomString } from './common.helpers';
 import {
   createCard, createTag, deleteTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
@@ -23,6 +23,7 @@ test('AC16: Successful tag deletion with standalone tag', async () => {
   await createTag(tagName);
 
   await deleteTag(tagName);
+  await delay();
 
   // selected tag is updated
   expect(await text(tagName).exists()).toBe(false);
