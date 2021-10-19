@@ -6,8 +6,8 @@ import {
   attachTag, createCard, createTag, loginNew, openDetail, openTagPicker,
 } from './preconditions.helpers';
 
-test('AC20: Tag filter with no matches', async () => {
-  expect.assertions(2);
+test('AC20, 21: Tag filter with no matches and removal', async () => {
+  expect.assertions(4);
 
   await loginNew();
 
@@ -57,4 +57,14 @@ test('AC20: Tag filter with no matches', async () => {
   expect((await $('#cardContent').elements()).length).toBe(0);
   // there'll be one tag in the search bar
   expect(await text(tagName, within($('#searchContainer'))).exists()).toBe(true);
+
+  // AC21
+
+  // Step: User clicks on removal button on the tags in the search bar
+  await click($('#removeTagButton', within($('#searchContainer'))));
+
+  // Removed tag disappear from the search bar.
+  expect(await text(tagName, within($('#searchContainer'))).exists()).toBe(false);
+  // cards will return
+  expect((await $('#cardContent').elements()).length).toBe(len);
 });
