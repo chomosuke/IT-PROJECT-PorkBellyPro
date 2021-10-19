@@ -65,6 +65,7 @@ export async function createCard(cardDetails: ICardDetails): Promise<void> {
   }
   if (image != null) {
     await attach(join(__dirname, image), fileField({ id: 'upload' }), { force: true });
+    await delay();
   }
 
   // Step: User clicks button to confirms the details

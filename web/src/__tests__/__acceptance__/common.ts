@@ -8,8 +8,8 @@ import {
 
 type RespondFunction = (response: InterceptMockData) => Promise<void>;
 
-// Set 2 minutes timeout because browser testing is slow.
-jest.setTimeout(120000);
+// Set 3 minutes timeout because browser testing is slow.
+jest.setTimeout(180000);
 
 beforeEach(async () => {
   await openBrowser();
