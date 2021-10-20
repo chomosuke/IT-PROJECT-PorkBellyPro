@@ -106,7 +106,14 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({
     <div className={root} onClick={onClick}>
       <span className={labelSpan}>{tag.label}</span>
       <span className={rightSpan} onClick={onRemoveInternal}>
-        {onRemove && <Cross size={16} className={crossIcon} color={justWhite} />}
+        {onRemove && (
+        <Cross
+          id='removeTagButton'
+          size={16}
+          className={crossIcon}
+          color={justWhite}
+        />
+        )}
       </span>
     </div>
   );

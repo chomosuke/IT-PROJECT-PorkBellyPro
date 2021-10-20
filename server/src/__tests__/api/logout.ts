@@ -15,7 +15,7 @@ describe('/api/logout unit tests', () => {
 
     expect(logout(req, res, next)).toBeUndefined();
 
-    expect(clearCookie).toBeCalledWith('token', { httpOnly: true, secure: true });
+    expect(clearCookie).toBeCalledWith('token', { httpOnly: true });
     expect(clearCookie).toBeCalledTimes(1);
     expect(sendStatus).toBeCalledWith(200);
     expect(sendStatus).toBeCalledTimes(1);

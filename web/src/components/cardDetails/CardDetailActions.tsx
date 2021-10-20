@@ -46,6 +46,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
 
   const { iconButton } = getClassNames();
 
+  // id for acceptance test
   return (
     <>
       <WarningDialog
@@ -64,6 +65,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
         {cardDetailExpanded
           ? (
             <theme.icon.caretDoubleRight
+              id='collapseButton'
               className={iconButton}
               color={theme.palette.justWhite}
               size={32}
@@ -72,6 +74,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
           )
           : (
             <theme.icon.caretDoubleLeft
+              id='expandButton'
               className={iconButton}
               color={theme.palette.justWhite}
               size={32}
@@ -83,6 +86,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
             ? (
               <>
                 <theme.icon.tick
+                  id='saveButton'
                   className={iconButton}
                   color={theme.palette.justWhite}
                   size={32}
@@ -91,6 +95,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
                 {!newCard
               && (
               <theme.icon.cross
+                id='cancelButton'
                 className={iconButton}
                 color={theme.palette.justWhite}
                 size={32}
@@ -101,6 +106,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
             )
             : (
               <theme.icon.pencilLine
+                id='editButton'
                 className={iconButton}
                 color={theme.palette.justWhite}
                 size={32}
@@ -108,6 +114,7 @@ export const CardDetailActions: React.VoidFunctionComponent<ICardDetailActionsPr
               />
             )}
           <theme.icon.trash
+            id='deleteButton'
             className={iconButton}
             color={theme.palette.justWhite}
             size={32}

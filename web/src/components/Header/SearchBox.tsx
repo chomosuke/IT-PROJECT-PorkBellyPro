@@ -224,7 +224,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
    * This is actually intentional, and I guarantee that none of the children nodes are modified.
    */
   return (
-    <div ref={rootRef} className={root} onClick={rootOnClick}>
+    <div id='searchContainer' ref={rootRef} className={root} onClick={rootOnClick}>
       <div className={content}>
         {tagQuery.map((tag) => <Tag key={tag.id} tag={tag} onRemove={tagOnRemove(tag)} />)}
         <span className={queryContainer}>
