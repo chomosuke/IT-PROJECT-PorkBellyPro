@@ -1,0 +1,153 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>541</x><y>159</y><w>400</w><h>270</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IAppContext
+--
++ &lt;&lt;readonly&gt;&gt; tagQuery: &lt;&lt;readonly&gt;&gt; ITag[ ]
++ &lt;&lt;readonly&gt;&gt; user: IUser | null
++ update(props: Partial&lt;IAppContextProperties&gt;): void
++ showCardDetail(card: ICard | null): void
++ newCard(): void
++ newTag(props?: Partial&lt;ITagProperties&gt;): Promise&lt;RepsonseStatus&gt;
++ login(username: string, password: string, register?: boolean):
+   Promise&lt;ResponseStatus&gt;
++ logout(): Promise&lt;ResponseStatus&gt;
+
+--
+Responsibilities:
+- Used in AppContext to pass as Context
+- Implemented in AppComponent
+
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>145</x><y>71</y><w>340</w><h>80</h></coordinates><panel_attributes>**Static Design Diagram**
+Diagram shows 'Application layer' interfaces / data types used
+for front-end.
+style=autoresize
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>751</x><y>519</y><w>250</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IUser
+--
++ &lt;&lt;readonly&gt;&gt; username: string
++ &lt;&lt;readonly&gt;&gt; settings: ISettings
++ &lt;&lt;readonly&gt;&gt; cards:  &lt;&lt;readonly&gt;&gt; ICard[ ]
++ &lt;&lt;readonly&gt;&gt; tags: &lt;&lt;readonly&gt;&gt; ITags[ ]
+
+--
+Responsibilities:
+- Stores User Data
+- Implemented in AppComponent
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>51</x><y>389</y><w>120</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ITagData
+--
++ id: ObjectId
+
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>145</x><y>451</y><w>280</w><h>200</h></coordinates><panel_attributes>lt=&lt;&lt;-
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>10;10;260;180</additional_attributes></element><element><id>UMLClass</id><coordinates><x>331</x><y>289</y><w>120</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ITagProperties
+--
++ label: string
++ color: string
+
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>105</x><y>331</y><w>240</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>220;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>345</x><y>351</y><w>130</w><h>270</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;110;250</additional_attributes></element><element><id>Relation</id><coordinates><x>405</x><y>741</y><w>80</w><h>140</h></coordinates><panel_attributes>lt=&lt;-&gt;&gt;&gt;&gt;&gt;
+tagQuery</panel_attributes><additional_attributes>10;18;10;120</additional_attributes></element><element><id>UMLClass</id><coordinates><x>401</x><y>599</y><w>250</w><h>160</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ITag
+--
++ commit(props: Partial&lt;ITagProperties&gt;): Promise&lt;ResponseStatus&gt;
++ delete(): Promise&lt;ResponseStatus&gt;
+--
+Responsibilities:
+- Stores required application layer interface
+- Controller interface to abstract tags.
+- Implemented in AppComponent
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>855</x><y>421</y><w>50</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+user</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>981</x><y>139</y><w>220</w><h>80</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IAppContextPropertiesCommon
+--
++ searchQuery: string
+--
+
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>931</x><y>201</y><w>70</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>50;10;10;30</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1001</x><y>309</y><w>140</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IAppContextProperties
+--
++ tagQuery: ObjectId[ ]
+
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>931</x><y>231</y><w>90</w><h>120</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>70;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1061</x><y>211</y><w>40</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>20;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>441</x><y>211</y><w>120</w><h>100</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;80;100;10</additional_attributes></element><element><id>Relation</id><coordinates><x>645</x><y>591</y><w>130</w><h>40</h></coordinates><panel_attributes>lt=&lt;-&gt;&gt;&gt;&gt;&gt;
+tags</panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>Relation</id><coordinates><x>995</x><y>541</y><w>160</w><h>40</h></coordinates><panel_attributes>lt=&lt;-&gt;&gt;&gt;&gt;&gt;
+cards</panel_attributes><additional_attributes>136;18;10;18</additional_attributes></element><element><id>Relation</id><coordinates><x>931</x><y>331</y><w>270</w><h>240</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>250;220;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>645</x><y>721</y><w>510</w><h>40</h></coordinates><panel_attributes>lt=&lt;-&gt;&gt;&gt;&gt;&gt;
+tags</panel_attributes><additional_attributes>10;20;490;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1421</x><y>961</y><w>170</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ICardPropertiesCommon
+--
++ favorite: boolean
++ name: string
++ phone: string
++ email: string
++ jobTitle: string
++ company: string
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1401</x><y>771</y><w>110</w><h>210</h></coordinates><panel_attributes>lt=&lt;&lt;-
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>60;190;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1061</x><y>821</y><w>250</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ICardProperties
+--
++ image: string
++ fields: &lt;&lt;readonly&gt;&gt; ICardFieldProperties[ ]
++ tags: &lt;&lt;readonly&gt;&gt; ObjectId[ ]
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1301</x><y>951</y><w>140</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>120;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1261</x><y>771</y><w>50</w><h>70</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>30;50;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1681</x><y>1021</y><w>220</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ICardData
+--
++ id: ObjectId
++ image: string
++ &lt;&lt;readonly&gt;&gt; fields: ICardFieldData[ ]
++ &lt;&lt;readonly&gt;&gt; tags: ObjectId[ ]
+style=wordwrap
+
+--
+Responsibilities:
+- Used in Card Implementation
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1581</x><y>1031</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1671</x><y>281</y><w>310</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ICardOverrideData
+--
++ &lt;&lt;readonly&gt;&gt; base: ICardData
++ &lt;&lt;readonly&gt;&gt; overrides: Partial&lt;ICardProperties&gt;
+--
+Responsibilities:
+- Used in Application to abstract a card and its unstaged overrides
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1811</x><y>441</y><w>130</w><h>600</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+&lt;&lt;partial, readonly&gt;&gt;</panel_attributes><additional_attributes>10;580;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1411</x><y>381</y><w>280</w><h>190</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>10;170;260;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>281</x><y>861</y><w>260</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IUserStatic
+--
++ &lt;&lt;readonly&gt;&gt; username: string
++ &lt;&lt;readonly&gt;&gt; settings: ISettings
++ &lt;&lt;readonly&gt;&gt; cards:  &lt;&lt;readonly&gt;&gt; ICardData[ ]
++ &lt;&lt;readonly&gt;&gt; tags: &lt;&lt;readonly&gt;&gt; ITagData[ ]
+--
+Responsibilities:
+- Used to store React State values for User
+- Used to implement User
+
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1131</x><y>549</y><w>300</w><h>230</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+ICard
+--
++ &lt;&lt;readonly&gt;&gt; id: ObjectId
++ &lt;&lt;readonly&gt;&gt; image: string
++ &lt;&lt;readonly&gt;&gt; fields: &lt;&lt;readonly&gt;&gt; ICardField[ ]
++ &lt;&lt;readonly&gt;&gt; tags: &lt;&lt;readonly&gt;&gt; ITag[ ]
++ update(props: Partial&lt;ICardProperties&gt;): void
++ commit(props: Partial&lt;ICardProperties&gt;): Promise&lt;ResponseStatus&gt;
++ delete() : Promise&lt;ResponseStatus&gt;
+--
+Responsibilities:
+- Controller interface to abstract cards.
+- Implemented in AppComponent
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>531</x><y>991</y><w>1170</w><h>200</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>1150;180;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>61</x><y>451</y><w>240</w><h>450</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;readonly&gt;&gt;</panel_attributes><additional_attributes>10;10;220;430</additional_attributes></element></diagram>
