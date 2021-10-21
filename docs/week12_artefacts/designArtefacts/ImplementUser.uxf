@@ -1,0 +1,59 @@
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLSequenceAllInOne</id><coordinates><x>0</x><y>0</y><w>2925</w><h>1330</h></coordinates><panel_attributes>group=1
+title=ImplementUser
+desc=Implementation of Application Layer logic\nfor user's cards &amp; tags
+obj=App::AppComponent~app ACTIVE
+obj=Tag: ITag~tag CREATED_LATER
+obj=implementedCard: ICard~card CREATED_LATER
+obj=implementedField: ICardField~field CREATED_LATER
+found-&gt;app:ImplementUser(setDetail,userState,setUser);on=app
+
+  // define users
+  app :user={userState.username,\nuserState.settings}
+
+  // implementing tags
+  app:tagImpl: ITag[ ]
+  combinedFragment=loop~loop1 app tag; app:[ for tag in userState.tags]
+  app-&gt;tag :implementTag(tag,\nsetDetail,\nsetUser)
+  tag.&gt;app :append to tagImpl
+  --
+
+  //implementing cards
+  tick=
+  app: user.cards: ICard[ ]
+  combinedFragment=loop~loop2 app field; app:[ for card in userState.cards]
+  app-&gt;app + :implementCard(card, tagsImpl, setDetail, setUser)
+  on=app
+    //implement cardMethods
+    app-&gt;app+ :cardMethods.update = function(...)
+    tick=
+    app-&gt;app+ :cardMethods.commit=implementCommit(card.base ,card.overrides, setDetail, setUser)
+    tick=
+    app-&gt;app+ :cardMethods.delete=implementDelete(card.base, setUser, setDetail)
+    tick=
+    
+    //implement fieldMethods Factory
+    app-&gt;app+ :fieldMethodsFactory = function(...)
+    tick=
+    
+    app-&gt;card: implement(card, cardMethods, tags, fieldMethodsFactory);off=app;
+     // implementation logic
+    on=card
+    combinedFragment=loop~loop3 card field; card:[for field in card.fields]
+      card-&gt;field:implementField(field, fieldMethodsFactory(field))
+      field.&gt;card :append result to implementedCard.fields;
+    --
+    combinedFragment=loop~loop4 card card; card:[for tag in card.tags]
+    card-&gt;card+ :foundTag = tags.find(tag)\nappend foundTag to implementedCard.tags
+    --
+    off=card
+
+  card.&gt;app :append to user.cards
+  --
+
+  app :user.tags=tagsImpl
+  app :user.cards=cards
+
+off=app</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>0</x><y>1280</y><w>400</w><h>50</h></coordinates><panel_attributes>lt=&lt;.
+m1=[user, tagsImpl]
+group=0
+</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element></diagram>
