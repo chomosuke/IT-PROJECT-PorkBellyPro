@@ -4,8 +4,8 @@
 import { mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React, { MouseEvent } from 'react';
-import { ITag } from '../controllers/Tag';
-import { useTheme } from '../theme';
+import { ITag } from '../../controllers/Tag';
+import { useTheme } from '../../theme';
 
 type OnClickHandler =
   React.DOMAttributes<HTMLDivElement>['onClick']
@@ -13,11 +13,14 @@ type OnClickHandler =
 
 export interface ITagProps {
   tag: ITag;
+  maxWidth?: number;
   onClick?: OnClickHandler;
   onRemove?: OnClickHandler;
 }
 
-const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) => {
+const getClassNames = (
+  tagColor: string, hasClick: boolean, hasRemove: boolean, maxWidth?: number,
+) => {
   const {
     fontFamily: { roboto },
     fontWeight: { medium },
@@ -55,6 +58,9 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
       marginLeft: '32px',
       marginTop: 'auto',
       userSelect: 'none',
+      maxWidth,
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
     },
     rightSpan: {
       display: 'flex',
@@ -67,18 +73,27 @@ const getClassNames = (tagColor: string, hasClick: boolean, hasRemove: boolean) 
   });
 };
 
-export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRemove }) => {
+export const Tag: React.VoidFunctionComponent<ITagProps> = ({
+  tag, onClick, onRemove, maxWidth,
+}) => {
   const {
     icon: { cross: Cross },
     palette: { justWhite },
   } = useTheme();
+
+  let innerMaxWidth: number | undefined;
+  if (maxWidth == null) {
+    innerMaxWidth = undefined;
+  } else {
+    innerMaxWidth = Math.max(0, maxWidth - 64);
+  }
 
   const {
     root,
     labelSpan,
     rightSpan,
     crossIcon,
-  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove));
+  } = getClassNames(tag.color, Boolean(onClick), Boolean(onRemove), innerMaxWidth);
 
   const onRemoveInternal = onRemove != null
     ? (ev: MouseEvent<HTMLDivElement>) => {
@@ -91,19 +106,28 @@ export const Tag: React.VoidFunctionComponent<ITagProps> = ({ tag, onClick, onRe
     <div className={root} onClick={onClick}>
       <span className={labelSpan}>{tag.label}</span>
       <span className={rightSpan} onClick={onRemoveInternal}>
-        {onRemove && <Cross size={16} className={crossIcon} color={justWhite} />}
+        {onRemove && (
+        <Cross
+          id='removeTagButton'
+          size={16}
+          className={crossIcon}
+          color={justWhite}
+        />
+        )}
       </span>
     </div>
   );
 };
 
 Tag.defaultProps = {
+  maxWidth: undefined,
   onClick: undefined,
   onRemove: undefined,
 };
 
 Tag.propTypes = {
   tag: (PropTypes.object as Requireable<ITag>).isRequired,
+  maxWidth: PropTypes.number,
   onClick: PropTypes.func,
   onRemove: PropTypes.func,
 };

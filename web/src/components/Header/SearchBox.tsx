@@ -6,7 +6,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useApp } from '../../AppContext';
 import { ITag } from '../../controllers/Tag';
 import { useTheme } from '../../theme';
-import { Tag } from '../Tag';
+import { Tag } from '../tag/Tag';
 
 const contentMargin = 8;
 
@@ -14,13 +14,14 @@ const getClassNames = () => {
   const {
     fontFamily: { ubuntu },
     fontWeight: { light },
+    fontSize: { small },
     palette: { cloudyDay, justWhite, sootyBee },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
 
   const searchTextStyle = {
     ...light,
     ...ubuntu,
-    fontSize: '16px',
+    ...small,
   };
 
   return mergeStyleSets({
@@ -30,7 +31,9 @@ const getClassNames = () => {
       cursor: 'text',
       display: 'flex',
       height: '32px',
+      width: '100%',
       maxWidth: '648px',
+      margin: 'auto',
       overflowX: 'scroll',
       scrollbarWidth: 'none',
       whiteSpace: 'pre',
@@ -221,7 +224,7 @@ export const SearchBox: React.VoidFunctionComponent = () => {
    * This is actually intentional, and I guarantee that none of the children nodes are modified.
    */
   return (
-    <div ref={rootRef} className={root} onClick={rootOnClick}>
+    <div id='searchContainer' ref={rootRef} className={root} onClick={rootOnClick}>
       <div className={content}>
         {tagQuery.map((tag) => <Tag key={tag.id} tag={tag} onRemove={tagOnRemove(tag)} />)}
         <span className={queryContainer}>

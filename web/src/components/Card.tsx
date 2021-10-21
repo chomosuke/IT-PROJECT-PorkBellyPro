@@ -7,7 +7,6 @@ import {
 } from '@fluentui/react';
 import { ICard } from '../controllers/Card';
 import { useHome } from '../HomeContext';
-import { cancelLoading } from './cardDetails/CardImageField';
 import { useApp } from '../AppContext';
 import { Theme, useTheme } from '../theme';
 
@@ -37,12 +36,13 @@ const getClassNames = (selected: boolean, theme: Theme) => {
 
   const fontStandard = {
     ...theme.fontFamily.roboto,
-    ...theme.fontSize.small,
+    ...theme.fontSize.standard,
     color: theme.palette.sootyBee,
   };
 
   return mergeStyleSets({
     root: {
+      position: 'relative',
       height,
       width,
       background: theme.palette.justWhite,
@@ -53,6 +53,7 @@ const getClassNames = (selected: boolean, theme: Theme) => {
         animationDuration: '0.2s',
         animationFillMode: 'forwards',
       },
+      userSelect: 'none',
     },
     cardContent: {
       height,
@@ -92,6 +93,16 @@ const getClassNames = (selected: boolean, theme: Theme) => {
       ...theme.fontWeight.medium,
       ...overflowCutOff,
     },
+    favoriteButton: {
+      position: 'absolute',
+      top: '8px',
+      left: '8px',
+      zIndex: '2',
+      cursor: 'pointer',
+      background: 'rgba(0, 0, 0, 0.4)',
+      padding: '4px',
+      ...theme.shape.shortShadow,
+    },
   });
 };
 
@@ -109,28 +120,30 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
     phone,
     jobTitle,
     image,
+    favorite,
   } = card;
   const { showCardDetail } = useApp();
   const { lockCard } = useHome();
   const theme = useTheme();
 
   const {
-    root, cardContent, target, imageContainer, mainLabel, subLabel, labelContainer,
+    root, cardContent, target, imageContainer, mainLabel, subLabel, labelContainer, favoriteButton,
   } = getClassNames(selected, theme);
 
   const ref = useRef<HTMLDivElement>(null);
 
   const doShowCardDetail = () => {
     showCardDetail(card);
-
-    // incase image was still loading when user clicked on another card
-    cancelLoading(true);
     lockCard(ref);
+  };
+
+  const favoriteOnClick = () => {
+    card.commit({ favorite: !favorite });
   };
 
   return (
     <div className={root} ref={ref}>
-      <Stack className={cardContent}>
+      <Stack className={cardContent} id='cardContent'>
         <div className={imageContainer}>
           {image != null && (
             <Image
@@ -150,6 +163,23 @@ export const Card: React.VoidFunctionComponent<ICardProps> = ({ card, selected }
         className={target}
         onClick={doShowCardDetail}
       />
+      {favorite
+        ? (
+          <theme.icon.isFavorite
+            size={32}
+            className={favoriteButton}
+            onClick={favoriteOnClick}
+            color={theme.palette.favorite}
+          />
+        )
+        : (
+          <theme.icon.notFavorite
+            size={32}
+            className={favoriteButton}
+            onClick={favoriteOnClick}
+            color={theme.palette.cloudyDay}
+          />
+        )}
     </div>
   );
 };

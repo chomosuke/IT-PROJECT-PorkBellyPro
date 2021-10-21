@@ -46,7 +46,6 @@ describe('login unit tests', () => {
     expect(res.cookie).toBeCalledWith('token', expect.any(String), {
       expires: expect.any(Date),
       httpOnly: true,
-      secure: true,
     });
     expect(res.cookie).toBeCalledTimes(1);
     const token = (res.cookie as jest.MockedFunction<typeof res.cookie>).mock.calls[0][1];

@@ -47,24 +47,4 @@ describe('CardNoteField tests', () => {
 </div>
 `);
   });
-
-  test('viewing', () => {
-    const json = create(
-      <CardNoteField
-        field={cardField}
-        editing={false}
-      />,
-    ).toJSON();
-    expect(json).toMatchInlineSnapshot(`
-<div
-  className="valueViewing-53"
->
-  <span
-    className="valueViewingText-67"
-  >
-    a value
-  </span>
-</div>
-`);
-  });
 });

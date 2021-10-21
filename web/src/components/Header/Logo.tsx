@@ -13,6 +13,7 @@ const getClassNames = (center: boolean) => {
   const {
     fontFamily: { roboto },
     fontWeight: { black },
+    fontSize: { title },
     palette: { justWhite },
   } = useTheme(); // eslint-disable-line react-hooks/rules-of-hooks
 
@@ -20,10 +21,10 @@ const getClassNames = (center: boolean) => {
     root: {
       ...roboto,
       ...black,
+      ...title,
       alignContent: 'center',
       color: justWhite,
       display: 'grid',
-      fontSize: '28px',
       height: '100%',
       justifySelf: center ? 'center' : undefined,
       userSelect: 'none',

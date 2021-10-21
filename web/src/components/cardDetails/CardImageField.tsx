@@ -7,10 +7,12 @@ import {
   Requireable, bool, object,
 } from 'prop-types';
 import Loader from 'react-loader-spinner';
+import { useBoolean } from '@fluentui/react-hooks';
 import { ICard } from '../../controllers/Card';
 import { useHome } from '../../HomeContext';
 import { Theme, useTheme } from '../../theme';
 import type { Message, Result } from './processImage';
+import { WarningDialog } from '../warningDialog';
 
 export interface ICardImageFieldProps {
   card: ICard;
@@ -19,68 +21,67 @@ export interface ICardImageFieldProps {
 
 const [imgWidth, imgHeight] = [600, 300];
 
-const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => mergeStyleSets({
-  root: {
-    position: 'relative',
-    margin: 'auto',
-    width: '100%',
-    height: cardDetailExpanded ? '300px' : '200px',
-    // subject to change.
-    maxWidth: '600px',
-  },
-  noImageDiv: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    backgroundColor: theme.palette.quartz,
-    ...theme.fontFamily.roboto,
-    ...theme.fontWeight.bold,
-    ...theme.fontSize.title,
-    color: theme.palette.cloudyDay,
-    borderRadius: '12px',
-  },
-  hide: {
-    display: 'none',
-  },
-  uploadImg: {
+const getClassNames = (theme: Theme, cardDetailExpanded: boolean) => {
+  const iconButton = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
     width: '48px',
     height: '48px',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    ...theme.shape.default,
-    position: 'absolute',
-    top: '16px',
-    right: '80px',
-  },
-  deleteImg: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    width: '48px',
-    height: '48px',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    ...theme.shape.default,
     border: 'none',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    color: theme.palette.cloudyDay,
+    ...theme.shape.default,
     position: 'absolute',
     top: '16px',
-    right: '16px',
-  },
-  spinnerDiv: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: '100%',
-  },
-});
+  };
+
+  return mergeStyleSets({
+    root: {
+      position: 'relative',
+      margin: 'auto',
+      width: '100%',
+      height: cardDetailExpanded ? '400px' : '300px',
+      userSelect: 'none',
+      maxWidth: '800px',
+    },
+    noImageDiv: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.palette.quartz,
+      ...theme.fontFamily.roboto,
+      ...theme.fontWeight.bold,
+      ...theme.fontSize.title,
+      color: theme.palette.cloudyDay,
+      borderRadius: '12px',
+      userSelect: 'none',
+    },
+    hide: {
+      display: 'none',
+    },
+    uploadImg: {
+      ...iconButton,
+      right: '80px',
+    },
+    deleteImg: {
+      ...iconButton,
+      right: '16px',
+    },
+    spinnerDiv: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      top: 0,
+      width: '100%',
+      height: '100%',
+    },
+  });
+};
 
 const imageStyles: IImageProps['styles'] = {
   root: {
@@ -112,6 +113,7 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   const { cardDetailExpanded } = useHome();
 
   const theme = useTheme();
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const {
     noImageDiv, root, uploadImg, deleteImg, hide, spinnerDiv,
@@ -143,51 +145,64 @@ export const CardImageField: React.VoidFunctionComponent<ICardImageFieldProps> =
   };
 
   return (
-    <div className={root}>
-      {image
-        ? (
-          <Image
-            styles={imageStyles}
-            src={image}
-            alt='business card'
-            imageFit={ImageFit.cover}
-          />
-        )
-        : (
-          <div className={noImageDiv}>
-            no image
+    <>
+      <WarningDialog
+        hideDialog={hideDialog}
+        closeButtonOnClick={toggleHideDialog}
+        closeButtonStr='Cancel'
+        okButtonOnClick={() => {
+          card.update({ image: null });
+          toggleHideDialog();
+        }}
+        okButtonStr='Yes, Delete'
+        title='Warning'
+        subText={'Deleted image won\'t be recoverable, are you sure you want to do that?'}
+      />
+      <div className={root}>
+        {image
+          ? (
+            <Image
+              styles={imageStyles}
+              src={image}
+              alt='business card'
+              imageFit={ImageFit.cover}
+            />
+          )
+          : (
+            <div className={noImageDiv}>
+              no image
+            </div>
+          )}
+        {editing && (
+          <>
+            <label htmlFor='upload' className={uploadImg}>
+              <input
+                id='upload'
+                className={hide}
+                type='file'
+                name='myImage'
+                accept='image/*'
+                onChange={onChangeImg}
+              />
+              <theme.icon.folderOpen size={28} />
+            </label>
+            <button
+              id='deleteImg'
+              type='button'
+              className={deleteImg}
+              onClick={toggleHideDialog}
+            >
+              <theme.icon.trashBold size={28} />
+            </button>
+          </>
+        )}
+        {loading && (
+          <div className={spinnerDiv}>
+            <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
           </div>
         )}
-      {editing && (
-      <>
-        <label htmlFor='upload' className={uploadImg}>
-          <input
-            id='upload'
-            className={hide}
-            type='file'
-            name='myImage'
-            accept='image/*'
-            onChange={onChangeImg}
-          />
-          <theme.icon.folderOpen size={28} />
-        </label>
-        <button
-          type='button'
-          className={deleteImg}
-          onClick={() => {
-            card.update({ image: null });
-          }}
-        >
-          <theme.icon.trash size={28} />
-        </button>
-      </>
-      )}
-      {loading && (
-      <div className={spinnerDiv}>
-        <Loader type='ThreeDots' color={theme.palette.deepSlate} width={100} height={100} />
       </div>
-      )}
-    </div>
+    </>
   );
 };
 

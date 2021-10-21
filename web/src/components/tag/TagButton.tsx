@@ -1,8 +1,8 @@
 import { DefaultButton, IButtonProps, mergeStyleSets } from '@fluentui/react';
 import PropTypes, { Requireable } from 'prop-types';
 import React from 'react';
-import { ITag } from '../controllers/Tag';
-import { useTheme } from '../theme';
+import { ITag } from '../../controllers/Tag';
+import { useTheme } from '../../theme';
 
 type OnClickHandler = IButtonProps['onClick'];
 

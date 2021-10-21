@@ -96,47 +96,21 @@ describe('CardExtraField tests', () => {
       fill="none"
       r="96"
       stroke="#ffffff"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="24"
+      strokeMiterlimit="10"
+      strokeWidth="16"
     />
     <line
       fill="none"
       stroke="#ffffff"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="24"
+      strokeWidth="16"
       x1="88"
       x2="168"
       y1="128"
       y2="128"
     />
   </svg>
-</div>
-`);
-  });
-
-  test('viewing', () => {
-    const json = create(
-      <CardExtraField
-        field={cardField}
-        editing={false}
-      />,
-    ).toJSON();
-    expect(json).toMatchInlineSnapshot(`
-<div
-  className="ms-Stack css-56"
->
-  <span
-    className="viewingKey-72"
-  >
-    a key
-  </span>
-  <span
-    className="viewingValue-73"
-  >
-    a value
-  </span>
 </div>
 `);
   });
