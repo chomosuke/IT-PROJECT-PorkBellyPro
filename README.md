@@ -51,6 +51,24 @@ this connection string is required to deploy the application
 # Source code
 This subdirectory holds the source code for our CRM.
 
+Our product can be deployed either to [Heroku](#deploy-to-heroku) or [any other host](#building).
+
+## Deploy to Heroku
+1. Log into Heroku and create an app for the deployment.
+![1](deploy-docs/1.png)
+1. Navigate to the settings page to add Config Vars.
+![2](deploy-docs/2.png)
+1. The following Config Vars are required:
+
+|Key|Value meaning|
+|-|-|
+|`DB_STRING`|The MongoDB connection string to your database.|
+|`SECRET_KEY`|Our server uses AES-256 to encrypt user session tokens, so it requires a 32-byte secret key to function. The server process expects the key to be encoded in Base64. You can easily generate a key by running `crypto.randomBytes(32).toString('base64')` in Node.js.|
+
+![3](deploy-docs/3.png)
+4. Finally clone our source code repository and choose a deployment method most appropriate for you to push to Heroku. The existing Procfile will automatically use the Config Vars added earlier to configure the server.
+![4](deploy-docs/4.png)
+
 ## Building
 - Clone the repository
   ```
