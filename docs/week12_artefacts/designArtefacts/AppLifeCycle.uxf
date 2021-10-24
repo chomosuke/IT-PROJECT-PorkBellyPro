@@ -1,0 +1,57 @@
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLSequenceAllInOne</id><coordinates><x>0</x><y>0</y><w>1400</w><h>1340</h></coordinates><panel_attributes>title=Application LifeCycle\nCalled on start to\ncreate AppContext
+desc=Primary operation flow
+autoTick=true
+overrideIds=false
+obj=App: Appcomponent~app ACTIVE 
+obj=&lt;&lt;State of ReactComponent&gt;&gt;\nComponentState: State~state CREATED_LATER
+obj=&lt;&lt;BackEnd&gt;&gt;\nServer~server
+
+found-&gt;app: Component\nCalled
+on=app
+  // state created
+  app-&gt;state
+  // updateMe 
+  app-&gt;app +:updateMe()
+  on=app
+    // run /api/me
+    app-&gt;&gt;&gt;app + :getMe()
+    on=app
+      // fetch from api
+      app-&gt;&gt;&gt;server :/api/me; on=server
+      off=server; server.&gt;app :{status, user}
+    off=app
+    // set user
+    app-&gt;&gt;&gt;app +: setUser(user)
+    on=app
+        app-&gt;&gt;&gt;state :setUserState; on=state
+        state-&gt;&gt;&gt;state + :setDetail
+        on=state
+        state.&gt;state +: detail=newDetail;off=state;
+        tick=
+        state-&gt;&gt;&gt;state + :setTagQuery
+        on=state
+        state.&gt;state+ :tags=tags.filter(...);off=state
+        tick=
+        state.&gt;state+ :userState=newState;off=state
+        tick=
+        state.&gt;app
+    off=app
+  off=app
+
+// implement user
+app-&gt;&gt;&gt;app+ :ImplementUser(setDetail, userState, setUser)
+on=app
+  ref=app app:Implement User
+  app.&gt;app + :userImpl:\n[user, tagsimpl] ;off=app
+tick=
+
+//create context
+app:{context: IAppContext\nuser: userImpl[0]}
+
+app-&gt;&gt;&gt;app + :override=\nImplementCardOverride(detail, setDetail,userImpl[1],setUser)
+tick=
+app-&gt;lost :render
+
+off=app
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>
