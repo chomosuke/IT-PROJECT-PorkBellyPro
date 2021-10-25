@@ -1,3 +1,17 @@
+# Source code
+This subdirectory holds the source code for our CRM.
+
+Our product can be deployed either to [Heroku](#deploy-to-heroku) or [any other host](#building).
+
+The product is created using the MERN tech stack, hence the following libraries are used:
+- React w/ FluentUI component library
+- Express
+- Node.js
+- NPM
+
+Typescript is the primary development language, and the application is compiled with webpack.
+To begin developing, run npm i in the root directory.
+
 # Setup Atlas database cluster + get the connection string
 
 1. Head over to https://www.mongodb.com/atlas/database
@@ -48,11 +62,9 @@
 
 this connection string is required to deploy the application
 
-# Source code
-This subdirectory holds the source code for our CRM.
+<br/>
 
-Our product can be deployed either to [Heroku](#deploy-to-heroku) or [any other host](#building).
-
+# Deployment Instructions
 ## Deploy to Heroku
 1. Log into Heroku and create an app for the deployment.
 ![1](deploy-docs/1.png)
