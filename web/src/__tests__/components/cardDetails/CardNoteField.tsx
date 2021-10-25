@@ -24,17 +24,17 @@ describe('CardNoteField tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-TextField ms-TextField--multiline ms-TextField--borderless root-56"
+  className="ms-TextField ms-TextField--multiline ms-TextField--borderless root-112"
 >
   <div
     className="ms-TextField-wrapper"
   >
     <div
-      className="ms-TextField-fieldGroup fieldGroup-57"
+      className="ms-TextField-fieldGroup fieldGroup-113"
     >
       <textarea
         aria-invalid={false}
-        className="ms-TextField-field ms-TextField--unresizable field-58"
+        className="ms-TextField-field ms-TextField--unresizable field-114"
         id="TextField0"
         onBlur={[Function]}
         onChange={[Function]}

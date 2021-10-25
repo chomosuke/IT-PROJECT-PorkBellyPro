@@ -17,28 +17,28 @@ describe('CardMandatoryField tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-55"
+  className="ms-Stack css-111"
 >
   <span
-    className="viewingKey-56"
+    className="viewingKey-112"
   >
     a key
   </span>
   <div
-    className="ms-StackItem css-57"
+    className="ms-StackItem css-113"
   >
     <div
-      className="ms-TextField ms-TextField--borderless root-59"
+      className="ms-TextField ms-TextField--borderless root-115"
     >
       <div
         className="ms-TextField-wrapper"
       >
         <div
-          className="ms-TextField-fieldGroup fieldGroup-60"
+          className="ms-TextField-fieldGroup fieldGroup-116"
         >
           <input
             aria-invalid={false}
-            className="ms-TextField-field field-61"
+            className="ms-TextField-field field-117"
             id="TextField0"
             onBlur={[Function]}
             onChange={[Function]}
@@ -65,15 +65,15 @@ describe('CardMandatoryField tests', () => {
     ).toJSON();
     expect(json).toMatchInlineSnapshot(`
 <div
-  className="ms-Stack css-55"
+  className="ms-Stack css-111"
 >
   <span
-    className="viewingKey-56"
+    className="viewingKey-112"
   >
     a key
   </span>
   <span
-    className="viewingValue-70"
+    className="viewingValue-126"
   >
     a value
   </span>

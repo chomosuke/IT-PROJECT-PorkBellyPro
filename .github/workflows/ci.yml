@@ -17,6 +17,13 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/build
+      - run: npm test
+  test-integration:
+    needs: build
+    runs-on: ubuntu-latest
     env:
       DB_TESTING_PATH: "mongodb://localhost:27017/integrationTests"
       SERVER_PORT: "8080"
@@ -32,8 +39,7 @@ jobs:
           # time for process to start server
           node ./.github/scripts/ping-backend.js
         shell: bash
-        
-      - run: npm test
+      - run: npm run test:integration
   test-acceptance:
     needs: build
     runs-on: ubuntu-latest

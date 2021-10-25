@@ -20,7 +20,8 @@
     "postinstall": "node-git-hooks",
     "start": "server -d dist",
     "test": "npm test --ws",
-    "test:acceptance": "npm run -w web test:acceptance"
+    "test:acceptance": "npm run -w web test:acceptance",
+    "test:integration": "npm run -w server test:integration"
   },
   "workspaces": [
     "server",
