@@ -69,7 +69,7 @@ async function main() {
 
   const app = express();
   const dist = express.static(resolve(distPath));
-  const db = await createConnection(`${conn}porkbellypro`, {
+  const db = await createConnection(conn, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
