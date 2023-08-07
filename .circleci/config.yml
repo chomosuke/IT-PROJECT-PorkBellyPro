@@ -44,7 +44,7 @@ workflows:
           # filters:
           #   branches:
           #     only: [master]
-      # - deploy-service-update:
-      #     requires: [build-and-push-image]
+      - deploy-service-update:
+          requires: [build-and-push-image]
 
 # vim: ts=2:sw=2:
